@@ -1,4 +1,15 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {}
+const withNextIntl = require('next-intl/plugin')();
+const nextConfig = {
+    images: {
+        remotePatterns: [
+            {
+                hostname: "mangadex.org"
+            }
+        ]
+    }
+}
 
-module.exports = nextConfig
+
+
+module.exports = withNextIntl(nextConfig);

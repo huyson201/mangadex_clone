@@ -1,0 +1,138 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+ 
+@layer base {
+  :root {
+
+    --banner-height: calc(13.5rem + var(--navbar-height));
+    --side-margin: 1.5rem;
+
+    --navbar-height: 3.5rem;
+    --navbar-index: 3;
+    
+    --head-search-index: 6;
+
+    --drawer-profile-min-width: 256px;
+    --drawer-profile-width: 320px;
+    --drawer-menu-width: 256px;
+    --drawer-index: 12;
+
+    
+    --status-yellow: 31 100% 71.2% ;
+    --status-blue: 191 97% 77% ;
+    --status-green: 80 250 123;
+
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --md-background: 231 14.9% 18.4%;
+
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+ 
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+ 
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+ 
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+ 
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+ 
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+ 
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+ 
+    --radius: 0.5rem;
+
+    --custom-accent: 230 14.8% 23.9%;
+    --custom-accent-hover: 219 14% 33.1%;
+  }
+ 
+  .dark {
+    --background: 231 15% 18%;
+    --foreground: 0 0% 100%;
+
+    
+    --button: 230 15% 24%;
+    --button-foreground: 0 0% 100% ;
+    --button-hover: 218 12.5% 25.1%;
+ 
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+ 
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+ 
+    --primary: 274 36% 61%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+ 
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+ 
+    --muted:230 14.8% 23.9%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --muted-contrast: 231 16.8% 37.3%;
+ 
+    --accent: 230 14.8% 23.9%;
+    --accent-hover: 219 14% 33.1%;
+    --accent-hover-2: 230 15.9% 30.8%;
+    --accent-foreground: 210 40% 98%;
+
+    --accent-2: 218 12.5% 25.1%;
+    --accent-10: 220 11.3% 20.8%;
+ 
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+ 
+    --border: 217.2 32.6% 17.5%;
+
+    --input: 230 14.8% 23.9%;
+    --input-foreground: 0 0% 100%;
+
+    --drawer: 230 14.8% 23.9% ;
+    --drawer-accent:220 11.3% 20.8% ;
+    --drawer-accent-2: 218 12% 25%;
+    --drawer-separator:0 0% 100%;
+
+    --ring: 212.7 26.8% 83.9%;
+    --backdrop: 0, 0, 0, 0.4;
+
+    --swiper-pagination-color: hsl(274 ,36% ,61%); 
+    --swiper-pagination-bullet-inactive-color: #808080e6;
+  }
+}
+ 
+@layer base {
+  * {
+    @apply border-border font-poppins;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+.slash {
+  font-family: 'Arial', sans-serif; 
+  display: inline-block;
+}
+
+.swiper-pagination{
+  display: none;
+} 
+@media (min-width: 640px) {
+  .swiper-pagination{
+    display: block;
+  }
+}

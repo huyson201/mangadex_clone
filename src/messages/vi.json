@@ -1,0 +1,44 @@
+{
+   
+  "Home": {
+    "titles":{
+      "popular": "Phổ Biến",
+      "latestList": "Mới Cập Nhật",
+      "seasonalList": "Theo Mùa",
+      "recentlyList": "Truyện Mới"
+
+    }
+  },
+  "search":{
+    "placeholder": "Tìm Kiếm",
+    "resultDefault": "Nhập từ khóa để tìm kiếm..."
+  },
+  "accountMenu":{
+    "defaultMenu": {
+      "guest": "Khách",
+      "settings": "Cài Đặt",
+      "themes": "Giao Diện",
+      "languages": "Ngôn Ngữ Hiển Thị",
+      "filter": "Lọc Nội Dung",
+      "signIn": "Đăng Nhập",
+      "register": "Đăng Ký"
+    },
+    "themeSelections":{
+      "title": "Chọn Chủ Đề",
+      "light": "Sáng",
+      "dark": "Tối",
+      "system": "Hệ Thống"
+    },
+    "languageSelections":{
+      "english": "Tiếng anh",
+      "vietnamese": "Tiếng việt",
+      "title": "Ngôn Ngữ Hiển Thị"
+    }
+  },
+  "drawerMenu":{
+    "home": "Trang chủ",
+    "title": "Tiêu đề",
+    "recently": "Truyện mới",
+    "latest": "Mới cập nhật"
+  }
+}
