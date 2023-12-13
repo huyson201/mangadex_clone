@@ -2,8 +2,8 @@ import React from "react";
 
 type Props = {};
 
-function page({}: Props) {
+const page = (props: Props) => {
     return <div>page</div>;
-}
+};
 
 export default page;

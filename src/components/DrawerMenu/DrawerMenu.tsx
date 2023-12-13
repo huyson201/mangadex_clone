@@ -56,9 +56,13 @@ function DrawerMenu({}: Props) {
                     <DrawerItem
                         title={t("recently")}
                         subItem
-                        href="/title/recent"
+                        href="/titles/recent"
                     />
-                    <DrawerItem title={t("latest")} subItem href="/latest" />
+                    <DrawerItem
+                        title={t("latest")}
+                        subItem
+                        href="/titles/latest"
+                    />
                 </div>
             </div>
             <Backdrop

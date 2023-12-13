@@ -3,13 +3,12 @@ import Link from "next/link";
 import React from "react";
 
 type Props = {};
-
 function ChapterItem({}: Props) {
     return (
-        <div>
+        <div className="bg-accent rounded">
             <Link
                 href={"#"}
-                className="flex w-full px-2 py-1.5 bg-accent hover:bg-accent-hover-2 transition-colors items-center justify-between"
+                className="flex w-full px-2 py-1.5 bg-accent hover:bg-accent-hover-2 transition-colors flex-wrap gap-y-1.5 items-center justify-between"
             >
                 <div className="text-sm font-semibold text-foreground">
                     Ch.55
