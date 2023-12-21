@@ -13,6 +13,8 @@ import { useStackMenu } from "@/contexts/StackMenuContext";
 import LanguageSelectionMenu, {
     Language_SELECTION_MENU_ID,
 } from "./LanguageSelectionMenu";
+import { useSession } from "next-auth/react";
+import Image from "next/image";
 
 type Props = {};
 
@@ -24,7 +26,7 @@ const Menu: Record<string, React.ComponentType> = {
 
 function AccountMenu({}: Props) {
     const stackMenu = useStackMenu();
-
+    const { status, data } = useSession();
     const Comp = Menu[stackMenu?.currentActive || ""] || undefined;
 
     return (
@@ -36,7 +38,18 @@ function AccountMenu({}: Props) {
                     className="rounded-full text-3xl"
                     onClick={() => stackMenu?.open()}
                 >
-                    <FiUser />
+                    {status === "authenticated" && data.user.verified && (
+                        <Image
+                            className="w-10 h-10 rounded-full"
+                            src={data.user.image}
+                            width={40}
+                            height={40}
+                            alt="avatar"
+                        />
+                    )}
+                    {(status === "unauthenticated" || !data?.user.verified) && (
+                        <FiUser />
+                    )}
                 </Button>
                 <div
                     className={cn(

@@ -2,15 +2,14 @@
 import React from "react";
 import Logo from "@/components/Logo/Logo";
 import { Button } from "@/components/ui/button";
-import { IoClose } from "react-icons/io5";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { FiHome } from "react-icons/fi";
-import { GoBook } from "react-icons/go";
 import { useDrawerMenu } from "@/contexts/DrawerMenuContext";
 import { usePathname } from "next/navigation";
 import Backdrop from "../Backdrop/Backdrop";
 import { useTranslations } from "next-intl";
+import { randomManga } from "@/actions/random-manga-action";
+import { BookOpen, Bookmark, Home, X } from "lucide-react";
 
 type Props = {};
 
@@ -37,7 +36,7 @@ function DrawerMenu({}: Props) {
                         size={"icon"}
                         onClick={() => setIsActive?.(false)}
                     >
-                        <IoClose />
+                        <X />
                     </Button>
                 </div>
                 <div className="px-4 pt-2">
@@ -45,14 +44,29 @@ function DrawerMenu({}: Props) {
                         title={t("home")}
                         exact
                         href="/"
-                        icon={<FiHome className={"text-2xl"} />}
+                        icon={<Home />}
                     />
                 </div>
                 <div className="px-4 pt-2">
                     <DrawerItem
-                        title={t("title")}
-                        icon={<GoBook className={"text-2xl"} />}
+                        title={t("follows")}
+                        exact
+                        href="/follows"
+                        icon={<Bookmark />}
                     />
+                    <DrawerItem
+                        title={t("library")}
+                        subItem
+                        href="/titles/recent"
+                    />
+                    <DrawerItem
+                        title={t("history")}
+                        subItem
+                        href="/titles/recent"
+                    />
+                </div>
+                <div className="px-4 pt-2">
+                    <DrawerItem title={t("title")} icon={<BookOpen />} />
                     <DrawerItem
                         title={t("recently")}
                         subItem
@@ -63,6 +77,11 @@ function DrawerMenu({}: Props) {
                         subItem
                         href="/titles/latest"
                     />
+                    <form action={randomManga}>
+                        <button className="px-4 active:bg-drawer-accent-2 hover:bg-drawer-accent transition-colors duration-300  capitalize text-sm  py-1 rounded gap-2 w-full flex items-center text-foreground">
+                            Random
+                        </button>
+                    </form>
                 </div>
             </div>
             <Backdrop

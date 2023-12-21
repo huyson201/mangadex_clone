@@ -11,7 +11,8 @@
     },
     "search":{
       "placeholder": "Search",
-      "resultDefault": "Enter a search query..."
+      "resultDefault": "Enter a search query...",
+      "noResult": "No results found."
     },
     "accountMenu":{
       "defaultMenu": {
@@ -39,6 +40,9 @@
       "home": "Home",
       "title": "Titles",
       "recently": "Recently added",
-      "latest": "Latest Updates"
+      "latest": "Latest Updates",
+      "follows": "Follows",
+      "history": "Reading History",
+      "library": "Library"
     }
 }

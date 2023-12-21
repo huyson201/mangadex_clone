@@ -1,28 +1,109 @@
-import { Clock, Eye } from "lucide-react";
+import { Clock, Eye, MessageSquare, User, Users } from "lucide-react";
 import Link from "next/link";
 import React from "react";
+import { Chapter } from "../../../types";
+import { getChapterTitle, timeAgoFormat } from "@/lib/utils";
+import { Button } from "../ui/button";
 
-type Props = {};
-function ChapterItem({}: Props) {
+type Props = {
+    chapter: Chapter;
+};
+function ChapterItem({ chapter }: Props) {
+    const scanlation_groups = chapter.relationships.filter(
+        (relation) => relation.type === "scanlation_group"
+    );
+    const user = chapter.relationships.find(
+        (relation) => relation.type === "user"
+    );
+    const displayTitle = getChapterTitle(chapter);
     return (
         <div className="bg-accent rounded">
-            <Link
-                href={"#"}
-                className="flex w-full px-2 py-1.5 bg-accent hover:bg-accent-hover-2 transition-colors flex-wrap gap-y-1.5 items-center justify-between"
-            >
-                <div className="text-sm font-semibold text-foreground">
-                    Ch.55
-                </div>
-                <div className="flex items-center gap-x-6">
-                    <div className="text-xs text-foreground font-normal flex items-center gap-1.5">
-                        <Clock size={16} /> 9 days ago
+            <div className="w-full px-2 py-1.5 bg-accent hover:bg-accent-hover-2 transition-colors  ">
+                <div className="sm:gap-x-6 flex  justify-between sm:justify-start">
+                    <Link
+                        href={"#"}
+                        className="sm:flex-1 flex items-center   text-xs sm:text-sm font-semibold text-foreground"
+                    >
+                        <div className="break-all line-clamp-1">
+                            {displayTitle}
+                        </div>
+                    </Link>
+                    <span className="sm:flex py-1 hidden whitespace-nowrap items-center gap-1  text-xs sm:text-sm ">
+                        <Clock size={16} />
+                        {timeAgoFormat(chapter.attributes.updatedAt)}
+                    </span>
+                    <div className="text-xs   text-foreground font-normal hidden sm:flex items-center gap-1">
+                        <Eye size={16} />
+                        N/A
                     </div>
-                    <div className="text-xs text-foreground font-normal flex items-center gap-1.5">
+                    <div className=" text-right sm:text-left sm:hidden block ">
+                        <Button
+                            className="w-auto gap-1.5 h-auto px-1.5 sm:py-1 py-0.5 hover:bg-customs-accent-hover"
+                            variant={"outline"}
+                            size={"xs"}
+                        >
+                            <MessageSquare size={16} />
+                        </Button>
+                    </div>
+                </div>
+                <div className="sm:gap-x-6 flex items-center justify-between sm:justify-start">
+                    <div className="sm:flex-1 whitespace-nowrap  text-xs sm:text-sm flex items-center  gap-1 text-foreground">
+                        <Users size={16} />
+                        {scanlation_groups.length > 0 ? (
+                            scanlation_groups.map((value) => (
+                                <Link
+                                    key={value.id}
+                                    href={"/"}
+                                    className="break-all line-clamp-1 px-1 rounded hover:bg-customs-accent-hover"
+                                >
+                                    {value.attributes?.name}
+                                </Link>
+                            ))
+                        ) : (
+                            <span className="break-all line-clamp-1 px-1 rounded hover:bg-customs-accent-hover">
+                                No Group
+                            </span>
+                        )}
+                    </div>
+                    <div className="hidden text-xs sm:text-sm sm:flex items-center  gap-1 text-foreground">
+                        <User size={16} />
+                        <Link
+                            href={"/"}
+                            className="break-all line-clamp-1  px-1 rounded hover:bg-customs-accent-hover"
+                        >
+                            {user?.attributes.username || "No User"}
+                        </Link>
+                    </div>
+                    <div className=" hidden sm:block text-right sm:text-left ">
+                        <Button
+                            className="w-auto gap-1.5 h-auto px-1.5 py-1 hover:bg-customs-accent-hover"
+                            variant={"outline"}
+                            size={"xs"}
+                        >
+                            <MessageSquare size={16} />
+                        </Button>
+                    </div>
+                    <div className="text-xs   text-foreground font-normal sm:hidden flex items-center gap-1">
                         <Eye size={16} />
                         N/A
                     </div>
                 </div>
-            </Link>
+                <div className="sm:gap-x-6 flex sm:hidden items-center  justify-between sm:justify-start">
+                    <div className=" text-xs sm:text-sm flex items-center  gap-1 text-foreground">
+                        <User size={16} />
+                        <Link
+                            href={"/"}
+                            className="break-all line-clamp-1  px-1 rounded hover:bg-customs-accent-hover"
+                        >
+                            {user?.attributes.username || "No User"}
+                        </Link>
+                    </div>
+                    <span className="flex py-1  whitespace-nowrap items-center gap-1  text-xs sm:text-sm ">
+                        <Clock size={16} />
+                        {timeAgoFormat(chapter.attributes.updatedAt)}
+                    </span>
+                </div>
+            </div>
         </div>
     );
 }

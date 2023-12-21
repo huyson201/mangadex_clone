@@ -17,7 +17,7 @@ const layout = ({ children }: Props) => {
                     className="group flex gap-4 items-center justify-center"
                 >
                     <Image src={logo} alt="logo" />
-                    <span className="group-hover:underline  decoration-[#ff6740] font-semibold text-[2rem]">
+                    <span className="group-hover:underline  decoration-[#ff6740] font-semibold text-3xl">
                         MangaDex
                     </span>
                 </Link>

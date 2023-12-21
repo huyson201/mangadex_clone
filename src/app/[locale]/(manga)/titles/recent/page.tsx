@@ -6,10 +6,38 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import RecentMangaGridItem from "@/components/ListMangaItems/RecentMangaGridItem";
 import RecentMangaStretchItem from "@/components/ListMangaItems/RecentMangaStretchItem";
 import RecentMangaListItem from "@/components/ListMangaItems/RecentMangaListItem";
+import {
+    getRecentlyAddedMangaList,
+    getStatisticsList,
+} from "@/services/mangadex";
+import Pagination from "@/components/Pagination/Pagination";
 
-type Props = {};
+type Props = {
+    searchParams: {
+        page: number;
+    };
+};
 
-const page = (props: Props) => {
+const page = async ({ searchParams: { page = 1 } }: Props) => {
+    const limit = 32;
+    const maxPage = 312;
+    const offset = (page - 1) * limit;
+    const recentListResponse = await getRecentlyAddedMangaList(limit, offset, [
+        "cover_art",
+    ]);
+
+    const recentAddedList = recentListResponse.result.data;
+
+    const statisticsResponse = await getStatisticsList(
+        "manga",
+        recentAddedList.map((value) => value.id)
+    );
+    const statistics = statisticsResponse.statistics;
+
+    const totalPage =
+        recentListResponse.result.total - limit < 10000
+            ? Math.ceil(recentListResponse.result.total / limit)
+            : maxPage;
     return (
         <Wrapper>
             <div className="flex items-center gap-6">
@@ -39,38 +67,40 @@ const page = (props: Props) => {
                     <div className="mt-4">
                         <TabsContent value="list">
                             <div className="space-y-2">
-                                <RecentMangaListItem />
-                                <RecentMangaListItem />
-                                <RecentMangaListItem />
-                                <RecentMangaListItem />
-                                <RecentMangaListItem />
-                                <RecentMangaListItem />
+                                {recentAddedList.map((manga) => (
+                                    <RecentMangaListItem
+                                        statistic={statistics[manga.id]}
+                                        manga={manga}
+                                        key={manga.id}
+                                    />
+                                ))}
                             </div>
                         </TabsContent>
                         <TabsContent value="stretch">
                             <div className="grid gap-2 grid-cols-1 md:grid-cols-2">
-                                <RecentMangaStretchItem />
-                                <RecentMangaStretchItem />
-                                <RecentMangaStretchItem />
-                                <RecentMangaStretchItem />
-                                <RecentMangaStretchItem />
-                                <RecentMangaStretchItem />
+                                {recentAddedList.map((manga) => (
+                                    <RecentMangaStretchItem
+                                        statistic={statistics[manga.id]}
+                                        manga={manga}
+                                        key={manga.id}
+                                    />
+                                ))}
                             </div>
                         </TabsContent>
                         <TabsContent value="grid">
                             <div className="grid gap-2 grid-cols-2 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3">
-                                <RecentMangaGridItem />
-                                <RecentMangaGridItem />
-                                <RecentMangaGridItem />
-                                <RecentMangaGridItem />
-                                <RecentMangaGridItem />
-                                <RecentMangaGridItem />
-                                <RecentMangaGridItem />
+                                {recentAddedList.map((manga) => (
+                                    <RecentMangaGridItem
+                                        manga={manga}
+                                        key={manga.id}
+                                    />
+                                ))}
                             </div>
                         </TabsContent>
                     </div>
                 </Tabs>
             </div>
+            <Pagination className="mt-4" totalPage={totalPage} />
         </Wrapper>
     );
 };

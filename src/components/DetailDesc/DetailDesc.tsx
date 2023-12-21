@@ -3,10 +3,13 @@ import React, { useEffect, useRef, useState } from "react";
 import { Button } from "../ui/button";
 import { ChevronsDown, ChevronsUp } from "lucide-react";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
 import DetailInfo from "./DetailInfo";
+import { Manga } from "../../../types";
 
-const DetailDesc = () => {
+interface DetailDescProps {
+    manga: Manga;
+}
+const DetailDesc = ({ manga }: DetailDescProps) => {
     const [isCollapsed, setIsCollapsed] = useState(true);
     const descRef = useRef<HTMLDivElement>(null);
 
@@ -31,17 +34,17 @@ const DetailDesc = () => {
                     { collapsed: isCollapsed }
                 )}
             >
-                <div className="text-sm ">
-                    Ganta Igarashi has been convicted of a crime that he
-                    hasn&apos;t committed, and sent to a new, privately owned
-                    and operated prison, where the inmates are the main
-                    attraction in a modern day twist to the gladiatorial
-                    coliseums of ancient times. Throw in a healthy dose of weird
-                    little girl, some new-found super powers, and a little
-                    conspiracy theory, and you have Deadman Wonderland.
+                <div>
+                    <div
+                        className="text-sm "
+                        dangerouslySetInnerHTML={{
+                            __html: manga.attributes.description.en,
+                        }}
+                    ></div>
                     <hr className="block w-full h-0 border-t border-foreground mt-4 opacity-10" />
                 </div>
-                <DetailInfo className="lg:hidden" />
+
+                <DetailInfo manga={manga} className="lg:hidden" />
             </div>
 
             <Button

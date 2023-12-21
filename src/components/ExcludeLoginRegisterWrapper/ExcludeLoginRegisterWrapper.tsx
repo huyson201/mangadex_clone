@@ -10,7 +10,7 @@ type Props = {
 const ExcludeLoginRegisterWrapper = ({ children }: Props) => {
     const pathname = usePathname();
     const { locale } = useParams();
-    const isMatch = ["/login", "/register"].some((value) =>
+    const isMatch = ["/login", "/register", "/verify-email"].some((value) =>
         pathname.replace(`/${locale}`, "").startsWith(value)
     );
 

@@ -18,9 +18,70 @@ import {
 } from "@/components/ui/dropdown-menu";
 import DetailDesc from "@/components/DetailDesc/DetailDesc";
 import ChapterList from "@/components/ChapterList/ChapterList";
-type Props = {};
+import { getImageUrl, getMangaById, getStatistics } from "@/services/mangadex";
+import { notFound } from "next/navigation";
+import { Relationship } from "../../../../../../../types";
+type Props = {
+    params: {
+        id: string;
+        name: string;
+    };
+};
 
-const page = (props: Props) => {
+const page = async ({ params }: Props) => {
+    const [manga, statisticsResult] = await Promise.all([
+        getMangaById(params.id, [
+            "artist",
+            "author",
+            "cover_art",
+            "creator",
+            "tag",
+            "manga",
+        ]),
+        getStatistics("manga", params.id),
+    ]);
+    if (!manga) notFound();
+
+    const statistics =
+        statisticsResult.result.statistics[
+            Object.keys(statisticsResult.result.statistics)[0]
+        ];
+
+    const coverArt = manga.result.data.relationships.find(
+        (relation) => relation.type === "cover_art"
+    );
+    const uniqueAuthorsAndArtist = manga.result.data.relationships
+        .filter(
+            (relation) =>
+                relation.type === "author" || relation.type === "artist"
+        )
+        .reduce((data: Relationship[], authorOrArtist) => {
+            //handle remove duplicate data
+            const exist = data.find(
+                (obj) => obj.attributes.name === authorOrArtist.attributes.name
+            );
+            if (exist) return data;
+            data.push(authorOrArtist);
+            return data;
+        }, []);
+
+    const altTitle =
+        manga.result.data.attributes.altTitles.length > 1
+            ? manga.result.data.attributes.altTitles[0][
+                  Object.keys(manga.result.data.attributes.altTitles[0])[0]
+              ]
+            : "";
+
+    const tagList = manga.result.data.attributes.tags.map((tag) => {
+        return (
+            <span
+                key={tag.id}
+                className="uppercase  text-[11px] text-foreground font-bold px-1.5 rounded-md bg-customs-accent"
+            >
+                {tag.attributes.name.en}
+            </span>
+        );
+    });
     return (
         <Wrapper className="mt-2">
             <div className=" md:px-4 flex gap-6">
@@ -28,8 +89,11 @@ const page = (props: Props) => {
                     <div
                         className="fixed  top-0 left-0 w-full h-[calc(var(--banner-height)_+_0.5rem)] "
                         style={{
-                            background:
-                                "no-repeat  center 25% / cover  url(https://mangadex.org/covers/b96e5e23-0017-4e89-a582-ddaa261bd21d/fa606719-a616-47f3-8ce8-bb31b8642242.jpg.256.jpg)",
+                            background: `no-repeat  center 25% / cover  url(${getImageUrl(
+                                "256",
+                                params.id,
+                                coverArt?.attributes.fileName
+                            )})`,
                         }}
                     ></div>
                     <div className="backdrop-blur-sm absolute top-0 left-0 right-0 bottom-0 bg-gradient-to-b from-md-background/80 to-md-background from-0% to-100% sm:bg-gradient-to-tr sm:from-black/60 sm:from-[44%] sm:to-transparent"></div>
@@ -37,7 +101,11 @@ const page = (props: Props) => {
                 <div
                     className="blur-xl hidden sm:block absolute min-h-[670px] w-full top-0 left-0  -z-[2]"
                     style={{
-                        background: `radial-gradient(circle at top, hsla(var(--md-background) / 0.8), hsla(var(--md-background)) 75%), no-repeat top 30% center / 100% url(https://mangadex.org/covers/b96e5e23-0017-4e89-a582-ddaa261bd21d/fa606719-a616-47f3-8ce8-bb31b8642242.jpg.256.jpg)`,
+                        background: `radial-gradient(circle at top, hsla(var(--md-background) / 0.8), hsla(var(--md-background)) 75%), no-repeat top 30% center / 100% url(${getImageUrl(
+                            "256",
+                            params.id,
+                            coverArt?.attributes.fileName
+                        )})`,
                     }}
                 ></div>
 
@@ -46,21 +114,25 @@ const page = (props: Props) => {
                         className="w-full rounded"
                         width={512}
                         height={725}
-                        src={
-                            "https://mangadex.org/covers/b96e5e23-0017-4e89-a582-ddaa261bd21d/fa606719-a616-47f3-8ce8-bb31b8642242.jpg.512.jpg"
-                        }
-                        alt="img"
+                        src={getImageUrl(
+                            "512",
+                            params.id,
+                            coverArt?.attributes.fileName
+                        )}
+                        alt="cover_art"
                     />
                 </div>
                 <div className="flex sm:h-full sm:min-h-[360px] flex-col w-[calc(100%_-_100px_-_1.5rem)] sm:w-[calc(100%_-_200px_-_1.5rem)]">
                     <h1 className="text-2xl sm:text-[2.5rem]/10  md:text-5xl/ font-bold line-clamp-2">
-                        Deadman Wonderland
+                        {manga.result.data.attributes.title.en}
                     </h1>
                     <div className="text-foreground text-base sm:text-xl line-clamp-2 mt-1">
-                        デッドマン・ワンダーランド
+                        {altTitle}
                     </div>
                     <div className="text-foreground sm:mt-auto text-xs sm:text-base font-normal">
-                        Kataoka Jinsei, Kondou Kazuma
+                        {uniqueAuthorsAndArtist
+                            .map((value) => value.attributes.name)
+                            .join(", ")}
                     </div>
                     <div className="hidden sm:block mt-5">
                         <div className="flex items-center gap-2 ">
@@ -81,29 +153,32 @@ const page = (props: Props) => {
                             <span className="uppercase  text-[11px] text-foreground font-bold px-1.5 rounded-md bg-status-yellow">
                                 Suggestive
                             </span>
-
-                            <span className="uppercase  text-[11px] text-foreground font-bold px-1.5 rounded-md bg-customs-accent">
-                                Action
-                            </span>
-                            <span className="uppercase  text-[11px] text-foreground font-bold px-1.5 rounded-md bg-customs-accent">
-                                Comedy
-                            </span>
+                            {tagList}
                         </div>
                         <div className="flex items-center gap-2 text-status-blue mt-2">
                             <span className="w-2 h-2 rounded-full bg-status-blue"></span>
                             <span className="uppercase sm:font-semibold text-foreground text-xs">
-                                PUBLICATION: 2006, COMPLETED
+                                PUBLICATION: {manga.result.data.attributes.year}
+                                ,{" "}
+                                <span>
+                                    {manga.result.data.attributes.status}
+                                </span>
                             </span>
                         </div>
                     </div>
                     <div className="flex mt-auto sm:mt-3  gap-2 items-baseline sm:text-base text-sm">
                         <span className="flex items-center gap-1 text-primary ">
                             <Star size={16} />
-                            8.5
+                            {statistics?.rating?.average?.toFixed(2) ||
+                                statistics?.rating?.bayesian?.toFixed(2)}
+                        </span>
+                        <span className="flex items-center gap-1 text-foreground  ">
+                            <Bookmark size={16} />
+                            {statistics?.follows || 0}
                         </span>
                         <span className="flex items-center gap-1 text-foreground  ">
                             <MessageSquare size={16} />
-                            25
+                            {statistics?.comments?.repliesCount || 0}
                         </span>
                         <span className="flex items-center gap-1 text-foreground  ">
                             <Eye size={16} />
@@ -117,19 +192,14 @@ const page = (props: Props) => {
                     <span className="uppercase  text-[11px] text-foreground font-semibold px-1.5 rounded-md bg-status-yellow">
                         Suggestive
                     </span>
-
-                    <span className="uppercase  text-[11px] text-foreground font-semibold px-1.5 rounded-md bg-customs-accent">
-                        Action
-                    </span>
-                    <span className="uppercase  text-[11px] text-foreground font-semibold px-1.5 rounded-md bg-customs-accent">
-                        Comedy
-                    </span>
+                    {tagList}
                 </div>
 
                 <div className="flex items-center gap-2 text-status-blue mt-2">
                     <span className="w-2 h-2 rounded-full bg-status-blue"></span>
                     <span className="uppercase text-foreground text-xs">
-                        PUBLICATION: 2006, COMPLETED
+                        PUBLICATION: {manga.result.data.attributes.year},{" "}
+                        <span>{manga.result.data.attributes.status}</span>
                     </span>
                 </div>
 
@@ -167,8 +237,8 @@ const page = (props: Props) => {
                     </Button>
                 </div>
             </div>
-            <DetailDesc />
-            <ChapterList />
+            <DetailDesc manga={manga.result.data} />
+            <ChapterList manga={manga.result.data} />
         </Wrapper>
     );
 };

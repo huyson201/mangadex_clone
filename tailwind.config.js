@@ -66,10 +66,11 @@ module.exports = {
           foreground: "hsl(var(--muted-foreground))",
           contrast: 'hsl(var(--muted-contrast))'
         },
-        accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
-        },
+        skeleton: "hsl(var(--skeleton-bg))",
+        // accent: {
+        //   DEFAULT: "hsl(var(--accent))",
+        //   foreground: "hsl(var(--accent-foreground))",
+        // },
         popover: {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",
@@ -96,6 +97,7 @@ module.exports = {
             2: "hsl(var(--accent-hover-2))",
           },
           2: "hsl(var(--accent-2))",
+          3: "hsl(var(--accent-3))",
           10: "hsl(var(--accent-10))"
 
         }
@@ -116,5 +118,5 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate"), require('tailwind-scrollbar')({ nocompatible: true }),],
 }

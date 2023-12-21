@@ -4,7 +4,7 @@
  
 @layer base {
   :root {
-
+    -webkit-tap-highlight-color: transparent;
     --banner-height: calc(13.5rem + var(--navbar-height));
     --side-margin: 1.5rem;
 
@@ -91,6 +91,7 @@
     --accent-foreground: 210 40% 98%;
 
     --accent-2: 218 12.5% 25.1%;
+    --accent-3: 219 13.5% 29.0%;
     --accent-10: 220 11.3% 20.8%;
  
     --destructive: 0 62.8% 30.6%;
@@ -105,6 +106,8 @@
     --drawer-accent:220 11.3% 20.8% ;
     --drawer-accent-2: 218 12% 25%;
     --drawer-separator:0 0% 100%;
+
+    --skeleton-bg: 231 16.8% 37.3%;
 
     --ring: 212.7 26.8% 83.9%;
     --backdrop: 0, 0, 0, 0.4;
@@ -131,6 +134,20 @@
 .swiper-pagination{
   display: none;
 } 
+.custom-scrollbar{
+  scrollbar-width: 8px;
+  scrollbar-color: transparent var(--bg-accent-2);
+  transition: all 150ms;
+  scrollbar-track-color: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar{
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb{
+  @apply rounded-full bg-accent-2 hover:bg-accent-3 transition-all;
+}
 @media (min-width: 640px) {
   .swiper-pagination{
     display: block;

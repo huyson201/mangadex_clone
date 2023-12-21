@@ -1,42 +1,116 @@
+import Image from "next/image";
+import Link from "next/link";
+import React from "react";
+import { FaRegCommentAlt } from "react-icons/fa";
+import { Button } from "../ui/button";
+import { FiUser } from "react-icons/fi";
+import { Chapter, Manga } from "../../../types";
+import {
+    getChapter,
+    getImageUrl,
+    getMangaById,
+    getStatistics,
+} from "@/services/mangadex";
+import {
+    getChapterTitle,
+    getDetailMangaLink,
+    slugify,
+    timeAgoFormat,
+} from "@/lib/utils";
+import { Users } from "lucide-react";
+type Props = {
+    chapter: Chapter;
+};
 
-import Image from 'next/image'
-import Link from 'next/link'
-import React from 'react'
-import { FaRegCommentAlt } from 'react-icons/fa'
-import { Button } from '../ui/button'
-import { FiUser } from 'react-icons/fi'
-type Props = {}
+async function LatestUpdateItem({ chapter }: Props) {
+    const mangaId = chapter.relationships.find(
+        (relation) => relation.type === "manga"
+    )!.id;
 
-function LatestUpdateItem({ }: Props) {
+    const [result, statistics] = await Promise.all([
+        getMangaById(mangaId, ["cover_art"]),
+        getStatistics("chapter", chapter.id),
+    ]);
+
+    const group = chapter.relationships.find(
+        (relation) => relation.type === "scanlation_group"
+    );
+
+    const manga = result!.result.data;
+    const coverArt = manga.relationships.find(
+        (relation) => relation.type === "cover_art"
+    );
     return (
         <div className="flex gap-x-2">
             <div className="w-14">
-                <Link href={"#"} className="block w-full">
-                    <Image src={"https://mangadex.org/covers/19daf6ef-6d95-46e5-9e1a-f4e5b655902f/944ad52b-5159-4eec-bd75-952d935d7853.jpg.256.jpg"}
-                        alt="manga-name" width={256} height={341} className="rounded shadow-md" />
+                <Link
+                    href={`/title/${manga.id}/${slugify(
+                        manga.attributes.title.en
+                    )}`}
+                    className="block w-full h-full "
+                >
+                    <Image
+                        src={getImageUrl(
+                            "256",
+                            manga.id,
+                            coverArt!.attributes.fileName
+                        )}
+                        alt="manga-name"
+                        width={256}
+                        height={341}
+                        className="rounded shadow-md h-full object-cover"
+                    />
                 </Link>
             </div>
             <div className="w-[calc(100%_-_56px)] space-y-1">
-                <Link href={"#"}><h6 className="line-clamp-1 break-all font-bold">Lily</h6></Link>
+                <Link href={getDetailMangaLink(manga)}>
+                    <h6 className="line-clamp-1 break-all font-bold">
+                        {manga.attributes.title.en}
+                    </h6>
+                </Link>
                 <div className="flex  w-full items-center justify-between">
-                    <span className="line-clamp-1"><Link href={"#"}>Vol. 1 Ch. 7</Link></span>
-                    <Button className="w-auto h-auto px-1.5 py-1 hover:bg-customs-accent-hover" variant={"outline"} size={"xs"}>
+                    <span className="line-clamp-1">
+                        <Link href={"#"}>{getChapterTitle(chapter)}</Link>
+                    </span>
+                    <Button
+                        className="w-auto gap-1.5 h-auto px-1.5 py-1 hover:bg-customs-accent-hover"
+                        variant={"outline"}
+                        size={"xs"}
+                    >
                         <FaRegCommentAlt />
+                        {statistics.result.statistics[
+                            Object.keys(statistics.result.statistics)[0]
+                        ]?.comments?.repliesCount && (
+                            <span>
+                                {
+                                    statistics.result.statistics[
+                                        Object.keys(
+                                            statistics.result.statistics
+                                        )[0]
+                                    ]?.comments?.repliesCount
+                                }
+                            </span>
+                        )}
                     </Button>
                 </div>
 
                 <div className="flex  w-full items-center justify-between">
                     <div className="flex items-center  gap-1 text-foreground">
-                        <FiUser />
-                        <Link href={"/"} className="text-sm inline-block px-1 rounded hover:bg-customs-accent-hover" >yuriemperor</Link>
+                        <Users />
+                        <Link
+                            href={"/"}
+                            className="text-sm inline-block px-1 rounded hover:bg-customs-accent-hover"
+                        >
+                            {!group ? "No Group" : group.attributes.name}
+                        </Link>
                     </div>
                     <span className="text-sm font-medium">
-                        21 minutes ago
+                        {timeAgoFormat(chapter.attributes.updatedAt)}
                     </span>
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
-export default LatestUpdateItem
+export default LatestUpdateItem;
