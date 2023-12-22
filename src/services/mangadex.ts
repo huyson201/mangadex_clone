@@ -1,11 +1,13 @@
 import { stringify } from "querystring";
 import {
+    Author,
     Chapter,
     Cover,
     Manga,
     MangaDexResponseSuccess,
     PaginationResponse,
     StatisticsResponse,
+    Tag,
 } from "../../types";
 import { getCurrentSeasonTimeString, getTimeAgo } from "@/lib/utils";
 
@@ -21,6 +23,31 @@ type IncludeOption =
 interface GetMangaOpts {
     includes: IncludeOption[];
 }
+export const getTags = async () => {
+    const url = `${base_url}/manga/tag`;
+    try {
+        const result = await fetch(url, {
+            method: "GET",
+            headers: {
+                "content-type": "application/json",
+            },
+            next: {
+                revalidate: 3600,
+            },
+        });
+
+        let jsonData = await result.json();
+
+        if (!result.ok) {
+            console.log(jsonData);
+            throw new Error("Something error");
+        }
+
+        return jsonData as PaginationResponse<Tag>;
+    } catch (error) {
+        throw error;
+    }
+};
 export const getPopularManga = async (includes?: IncludeOption[]) => {
     includes ??= ["artist", "author", "cover_art"];
     const currentYear = new Date().getFullYear();
@@ -486,6 +513,34 @@ export const searchMangaByTitle = async (
         }
 
         return jsonData as PaginationResponse<Manga>;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const findAuthorsOrArtist = async (
+    name: string,
+    offset = 0,
+    limit = 10
+) => {
+    const url = `${base_url}/author?name=${name}&offset=${offset}&limit=${limit}`;
+    try {
+        const result = await fetch(url, {
+            method: "GET",
+            headers: {
+                "content-type": "application/json",
+            },
+            cache: "no-cache",
+        });
+
+        let jsonData = await result.json();
+
+        if (!result.ok) {
+            if (result.status === 404) return null;
+            throw new Error("Something error");
+        }
+
+        return jsonData as PaginationResponse<Author>;
     } catch (error) {
         throw error;
     }

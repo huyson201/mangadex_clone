@@ -94,8 +94,9 @@
     --accent-3: 219 13.5% 29.0%;
     --accent-10: 220 11.3% 20.8%;
  
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --midTone:217 21.7% 58.4% ;
+    --destructive: 0 100% 62.5% / 0.2;
+    --destructive-foreground:  0 100% 62.5%;
  
     --border: 217.2 32.6% 17.5%;
 
@@ -147,6 +148,10 @@
 
 .custom-scrollbar::-webkit-scrollbar-thumb{
   @apply rounded-full bg-accent-2 hover:bg-accent-3 transition-all;
+}
+.PopoverContent {
+  width: 100%;
+  max-height: var(--radix-popover-content-available-height);
 }
 @media (min-width: 640px) {
   .swiper-pagination{

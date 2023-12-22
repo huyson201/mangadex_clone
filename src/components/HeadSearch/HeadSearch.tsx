@@ -40,7 +40,6 @@ function HeadSearch({}: Props) {
                 data!.data.map((manga) => manga.id)
             )
     );
-    console.log(!isLoading && !data);
     return (
         <div
             className={cn(

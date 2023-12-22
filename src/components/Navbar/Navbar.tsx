@@ -23,6 +23,7 @@ const Navbar = (props: Props) => {
             );
             navbarBgRef.current.style.opacity = opacity;
         };
+        handleScroll();
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
