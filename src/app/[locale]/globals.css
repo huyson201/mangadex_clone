@@ -10,6 +10,9 @@
 
     --navbar-height: 3.5rem;
     --navbar-index: 3;
+
+    --status-purple:125 64 255;
+    --status-grey: 196 196 196;
     
     --head-search-index: 6;
 
@@ -19,9 +22,7 @@
     --drawer-index: 12;
 
     
-    --status-yellow: 31 100% 71.2% ;
-    --status-blue: 191 97% 77% ;
-    --status-green: 80 250 123;
+   
 
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
@@ -61,9 +62,14 @@
   }
  
   .dark {
+
     --background: 231 15% 18%;
     --foreground: 0 0% 100%;
 
+    --status-yellow: 31 100% 71.2% ;
+    --status-blue: 191 97% 77% ;
+    --status-green: 80 250 123;
+    --status-red: 255 85 85;
     
     --button: 230 15% 24%;
     --button-foreground: 0 0% 100% ;

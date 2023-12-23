@@ -4,7 +4,7 @@ import React from "react";
 import { FaRegCommentAlt } from "react-icons/fa";
 import { Button } from "../ui/button";
 import { FiUser } from "react-icons/fi";
-import { Chapter, Manga } from "../../../types";
+import { Chapter, Manga, Statistic } from "../../../types";
 import {
     getChapter,
     getImageUrl,
@@ -20,17 +20,15 @@ import {
 import { Users } from "lucide-react";
 type Props = {
     chapter: Chapter;
+    statistic: Statistic;
 };
 
-async function LatestUpdateItem({ chapter }: Props) {
+async function LatestUpdateItem({ chapter, statistic }: Props) {
     const mangaId = chapter.relationships.find(
         (relation) => relation.type === "manga"
     )!.id;
 
-    const [result, statistics] = await Promise.all([
-        getMangaById(mangaId, ["cover_art"]),
-        getStatistics("chapter", chapter.id),
-    ]);
+    const [result] = await Promise.all([getMangaById(mangaId, ["cover_art"])]);
 
     const group = chapter.relationships.find(
         (relation) => relation.type === "scanlation_group"
@@ -78,18 +76,8 @@ async function LatestUpdateItem({ chapter }: Props) {
                         size={"xs"}
                     >
                         <FaRegCommentAlt />
-                        {statistics.result.statistics[
-                            Object.keys(statistics.result.statistics)[0]
-                        ]?.comments?.repliesCount && (
-                            <span>
-                                {
-                                    statistics.result.statistics[
-                                        Object.keys(
-                                            statistics.result.statistics
-                                        )[0]
-                                    ]?.comments?.repliesCount
-                                }
-                            </span>
+                        {statistic.comments?.repliesCount && (
+                            <span>{statistic.comments.repliesCount}</span>
                         )}
                     </Button>
                 </div>

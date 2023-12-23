@@ -9,7 +9,7 @@ import SearchResultSkeleton from "../skeletons/SearchResultSkeleton";
 import SearchResultItem from "./SearchResultItem";
 import { useDebounce } from "@/hooks/useDebounce";
 import useSwr from "swr";
-import { getStatisticsList, searchMangaByTitle } from "@/services/mangadex";
+import { advancedSearch, getStatisticsList } from "@/services/mangadex";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 type Props = {};
@@ -27,7 +27,10 @@ function HeadSearch({}: Props) {
 
     const { data, isLoading, error } = useSwr(
         debounceSearchKey !== "" ? `/search?title=${debounceSearchKey}` : null,
-        () => searchMangaByTitle(debounceSearchKey, ["cover_art"])
+        () =>
+            advancedSearch(debounceSearchKey, {
+                includes: ["cover_art"],
+            })
     );
 
     const { data: statisticsResult, isLoading: getStatisticsLoading } = useSwr(

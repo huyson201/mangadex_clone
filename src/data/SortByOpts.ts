@@ -1,22 +1,54 @@
 export const sortByData = [
     {
+        key: "Best Match",
+        value: "relevance.desc",
+    },
+    {
         key: "Latest Upload",
-        value: "latestUpload",
+        value: "latestUploadedChapter.desc",
     },
     {
         key: "Oldest Upload",
-        value: "oldestUpload",
+        value: "latestUploadedChapter.asc",
     },
     {
-        key: "Oldest Upload",
-        value: "oldestUpload",
+        key: "Title Ascending",
+        value: "title.asc",
     },
     {
-        key: "Oldest Upload",
-        value: "oldestUpload",
+        key: "Title Descending",
+        value: "title.desc",
     },
     {
-        key: "Oldest Upload",
-        value: "oldestUpload",
+        key: "Hightest Rating",
+        value: "rating.desc",
+    },
+    {
+        key: "Lowest Rating",
+        value: "rating.asc",
+    },
+    {
+        key: "Most Follows",
+        value: "followedCount.desc",
+    },
+    {
+        key: "Fewest Follows",
+        value: "followedCount.asc",
+    },
+    {
+        key: "Recently Added",
+        value: "createdAt.desc",
+    },
+    {
+        key: "Oldest Added",
+        value: "createdAt.asc",
+    },
+    {
+        key: "Year Ascending",
+        value: "year.asc",
+    },
+    {
+        key: "Year Descending",
+        value: "year.desc",
     },
 ];

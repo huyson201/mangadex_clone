@@ -43,6 +43,7 @@
       "latest": "Latest Updates",
       "follows": "Follows",
       "history": "Reading History",
-      "library": "Library"
+      "library": "Library",
+      "advancedSearch": "Advanced Search"
     }
 }

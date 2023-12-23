@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 type Props = {
     title?: string;
     data: SingleSelectionData[];
-    defaultActive?: string;
+    defaultValue?: string[];
     onSelect?: (data: any[]) => void;
 };
 
@@ -16,8 +16,16 @@ interface SingleSelectionData {
 }
 
 const MultipleSelection = forwardRef<{ reset: () => void }, Props>(
-    ({ data, onSelect }, ref) => {
-        const [currentKey, setCurrentKey] = useState<string[]>([]);
+    ({ data, onSelect, defaultValue }, ref) => {
+        const [currentKey, setCurrentKey] = useState<string[]>(() => {
+            if (defaultValue) {
+                console.log(defaultValue);
+                return data
+                    .filter((el) => defaultValue.includes(el.value))
+                    .map((el) => el.key);
+            }
+            return [];
+        });
         const [open, setOpen] = React.useState(false);
 
         const title = currentKey.length > 0 ? currentKey.join(", ") : "Any";
@@ -39,6 +47,7 @@ const MultipleSelection = forwardRef<{ reset: () => void }, Props>(
                     },
                 };
             },
+            // eslint-disable-next-line react-hooks/exhaustive-deps
             []
         );
 

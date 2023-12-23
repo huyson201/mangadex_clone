@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import queryString from "query-string";
 
 type Props = {
     className?: string;
@@ -15,6 +16,7 @@ const Pagination = ({ className, totalPage }: Props) => {
     const searchParams = useSearchParams();
     const currentPage = +(searchParams.get("page") || 1);
     const pagination = usePagination(currentPage, totalPage);
+    const query = queryString.parse(searchParams.toString());
 
     return (
         <div
@@ -25,7 +27,7 @@ const Pagination = ({ className, totalPage }: Props) => {
         >
             {currentPage > 1 && (
                 <Link
-                    href={{ query: { page: `${currentPage - 1}` } }}
+                    href={{ query: { ...query, page: `${currentPage - 1}` } }}
                     className="h-10 w-10 rounded-full transition cursor-pointer active:bg-button-hover hover:bg-button-hover/30 [&.active]:bg-primary   flex items-center justify-center text-foreground font-medium"
                 >
                     <ArrowLeft />
@@ -49,6 +51,7 @@ const Pagination = ({ className, totalPage }: Props) => {
                     <Link
                         href={{
                             query: {
+                                ...query,
                                 page: value,
                             },
                         }}
@@ -65,7 +68,7 @@ const Pagination = ({ className, totalPage }: Props) => {
             {currentPage < totalPage && (
                 <Link
                     href={{
-                        query: { page: `${currentPage + 1}` },
+                        query: { ...query, page: `${currentPage + 1}` },
                     }}
                     className="w-10 rounded-full transition cursor-pointer active:bg-button-hover hover:bg-button-hover/30  [&.active]:bg-primary  h-10 flex items-center justify-center text-foreground font-medium"
                 >

@@ -1,4 +1,4 @@
-import { stringify } from "querystring";
+import queryString from "query-string";
 import {
     Author,
     Chapter,
@@ -20,9 +20,70 @@ type IncludeOption =
     | "tag"
     | "creator"
     | "manga";
+interface GetMangaOption {
+    order: string;
+    authors: string[];
+    artists: string[];
+    year: number;
+    includedTags: string[];
+    excludedTags: string[];
+    status: string[];
+    publicationDemographic: string[];
+    includes: IncludeOption[];
+    offset: number;
+    limit: number;
+    title: string;
+    authorOrArtist: string;
+    includedTagsMode: string;
+    excludedTagsMode: string;
+    ids: string[];
+    createdAtSince: string;
+    updatedAtSince: string;
+    hasAvailableChapters: boolean | 0 | 1;
+    group: string;
+    availableTranslatedLanguage: string[];
+    originalLanguage: string[];
+    excludedOriginalLanguage: string[];
+}
 interface GetMangaOpts {
     includes: IncludeOption[];
 }
+export const getMangaList = async (options: Partial<GetMangaOption>) => {
+    const order = options?.order || "";
+    const [field, value] = order?.split(".");
+    const url = queryString.stringifyUrl(
+        {
+            url: `${base_url}manga`,
+            query: {
+                ...(options as any),
+                [`order[${field}]`]: value,
+                order: undefined,
+            },
+        },
+        { arrayFormat: "bracket", skipNull: true, skipEmptyString: true }
+    );
+
+    try {
+        const result = await fetch(url, {
+            method: "GET",
+            headers: {
+                "content-type": "application/json",
+            },
+            cache: "no-cache",
+        });
+
+        let jsonData = await result.json();
+
+        if (!result.ok) {
+            console.log(jsonData);
+            throw new Error("Something error");
+        }
+
+        return jsonData as PaginationResponse<Manga>;
+    } catch (error) {
+        throw error;
+    }
+};
 export const getTags = async () => {
     const url = `${base_url}/manga/tag`;
     try {
@@ -49,10 +110,157 @@ export const getTags = async () => {
     }
 };
 export const getPopularManga = async (includes?: IncludeOption[]) => {
-    includes ??= ["artist", "author", "cover_art"];
     const currentYear = new Date().getFullYear();
     const currentSeasonal = getCurrentSeasonTimeString();
-    const url = `${base_url}/manga?year=${currentYear}&updatedAtSince=${currentSeasonal}&order[followedCount]=desc&${includes
+
+    return getMangaList({
+        year: currentYear,
+        updatedAtSince: currentSeasonal,
+        order: "followedCount.desc",
+        includes: includes,
+    });
+};
+export const getRecentlyAddedMangaList = async (
+    limit = 10,
+    offset = 0,
+    includes?: IncludeOption[]
+) => {
+    const formattedDateTime: string = getTimeAgo(5);
+    try {
+        return getMangaList({
+            limit: limit,
+            offset: offset,
+            createdAtSince: formattedDateTime,
+            includes: includes,
+        });
+    } catch (error) {
+        throw error;
+    }
+};
+export const getRandomManga = async () => {
+    const url = `${base_url}/manga/random`;
+    try {
+        const result = await fetch(url, {
+            method: "GET",
+            headers: {
+                "content-type": "application/json",
+            },
+            cache: "no-cache",
+        });
+
+        let jsonData = await result.json();
+
+        if (!result.ok) {
+            if (result.status === 404) return null;
+            throw new Error("Something error");
+        }
+
+        return jsonData as MangaDexResponseSuccess<Manga>;
+    } catch (error) {
+        throw error;
+    }
+};
+export const getSeasonalMangaList = async (
+    limit = 10,
+    offset = 0,
+    includes?: IncludeOption[]
+) => {
+    const currentSeasonal = getCurrentSeasonTimeString();
+    return getMangaList({
+        limit: limit,
+        offset: offset,
+        hasAvailableChapters: 1,
+        updatedAtSince: currentSeasonal,
+        includes: includes,
+    });
+};
+export const getMangaById = async (id: string, includes?: IncludeOption[]) => {
+    const url = queryString.stringifyUrl(
+        {
+            url: `${base_url}manga/${id}`,
+            query: {
+                includes: includes,
+            },
+        },
+        {
+            arrayFormat: "bracket",
+            skipNull: true,
+            skipEmptyString: true,
+        }
+    );
+
+    try {
+        const result = await fetch(url, {
+            method: "GET",
+            headers: {
+                "content-type": "application/json",
+            },
+            // cache: "no-cache",
+        });
+
+        let jsonData = await result.json();
+
+        if (!result.ok) {
+            if (result.status === 404) return null;
+            throw new Error("Something error");
+        }
+
+        const resultData = jsonData as MangaDexResponseSuccess<Manga>;
+
+        return {
+            result: resultData,
+        };
+    } catch (error) {
+        throw error;
+    }
+};
+export const advancedSearch = async (
+    key?: string,
+    options?: Partial<GetMangaOption>
+) => {
+    return getMangaList({ ...options, title: key });
+};
+export const getLatestUpdateList = async (
+    offset = 0,
+    limit = 32,
+    includes?: ("manga" | "user" | "scanlation_group")[]
+) => {
+    const includesQuery = includes
+        ? includes.map((value) => `includes[]=${value}`).join("&")
+        : null;
+    const url = ` https://api.mangadex.org/chapter?order[updatedAt]=desc&limit=${limit}&offset=${offset}&includeEmptyPages=0${
+        includesQuery ? `&${includesQuery}` : ""
+    }`;
+
+    try {
+        const result = await fetch(url, {
+            method: "GET",
+            headers: {
+                "content-type": "application/json",
+            },
+            cache: "no-cache",
+        });
+
+        let jsonData = await result.json();
+
+        if (!result.ok) {
+            console.log(jsonData);
+            throw new Error("Something error");
+        }
+
+        return jsonData as PaginationResponse<Chapter>;
+    } catch (error) {
+        throw error;
+    }
+};
+export const getLatestUpdate = async (
+    limit = 10,
+    offset = 0,
+    includes?: IncludeOption[]
+) => {
+    includes ??= ["artist", "author", "cover_art", "creator"];
+
+    const url = `${base_url}/manga?limit=${limit}&offset=${offset}&hasAvailableChapters=1&${includes
         .map((opt) => `includes[]=${opt}`)
         .join("&")}`;
 
@@ -81,6 +289,73 @@ export const getPopularManga = async (includes?: IncludeOption[]) => {
         throw error;
     }
 };
+export const getStatisticsList = async (
+    type: "chapter" | "manga" | "group",
+    ids: string[]
+) => {
+    const url = queryString.stringifyUrl(
+        {
+            url: `${base_url}statistics/${type}`,
+            query: {
+                [type]: ids,
+            },
+        },
+        {
+            arrayFormat: "bracket",
+        }
+    );
+    const result = await fetch(url, {
+        method: "GET",
+        headers: {
+            "content-type": "application/json",
+        },
+        cache: "no-cache",
+    });
+
+    let jsonData = await result.json();
+
+    if (!result.ok) {
+        console.log(jsonData);
+        throw new Error("Something error");
+    }
+
+    return jsonData as StatisticsResponse;
+};
+export const findAuthorsOrArtist = async (
+    name: string,
+    offset = 0,
+    limit = 10
+) => {
+    const url = queryString.stringifyUrl({
+        url: `${base_url}author`,
+        query: {
+            name,
+            offset,
+            limit,
+        },
+    });
+    try {
+        const result = await fetch(url, {
+            method: "GET",
+            headers: {
+                "content-type": "application/json",
+            },
+            cache: "no-cache",
+        });
+
+        let jsonData = await result.json();
+
+        if (!result.ok) {
+            if (result.status === 404) return null;
+            throw new Error("Something error");
+        }
+
+        return jsonData as PaginationResponse<Author>;
+    } catch (error) {
+        throw error;
+    }
+};
+
 export const getCoverArt = async (coverId: string) => {
     const url = `${base_url}/cover/${coverId}`;
     try {
@@ -134,43 +409,6 @@ export const getImageUrl = (
     return `https://uploads.mangadex.org/covers/${mangaId}/${fileOpt}`;
 };
 
-export const getLatestUpdate = async (
-    limit = 10,
-    offset = 0,
-    includes?: IncludeOption[]
-) => {
-    includes ??= ["artist", "author", "cover_art", "creator"];
-
-    const url = `${base_url}/manga?limit=${limit}&offset=${offset}&hasAvailableChapters=1&${includes
-        .map((opt) => `includes[]=${opt}`)
-        .join("&")}`;
-
-    try {
-        const result = await fetch(url, {
-            method: "GET",
-            headers: {
-                "content-type": "application/json",
-            },
-            cache: "no-cache",
-        });
-
-        let jsonData = await result.json();
-
-        if (!result.ok) {
-            console.log(jsonData);
-            throw new Error("Something error");
-        }
-
-        const resultData = jsonData as PaginationResponse<Manga>;
-
-        return {
-            result: resultData as PaginationResponse<Manga>,
-        };
-    } catch (error) {
-        throw error;
-    }
-};
-
 export const getChapter = async (
     chapterId: string,
     includes?: ("manga" | "scanlation_group" | "user")[]
@@ -213,335 +451,26 @@ export const getStatistics = async (
 ) => {
     const url = `${base_url}/statistics/${type}/${id}`;
 
-    try {
-        const result = await fetch(url, {
-            method: "GET",
-            headers: {
-                "content-type": "application/json",
-            },
-            // cache: "no-cache",
-        });
+    const result = await fetch(url, {
+        method: "GET",
+        headers: {
+            "content-type": "application/json",
+        },
+        next: {
+            revalidate: 3600,
+        },
+    });
 
-        let jsonData = await result.json();
+    let jsonData = await result.json();
 
-        if (!result.ok) {
-            console.log(jsonData);
-            throw new Error("Something error");
-        }
-
-        const resultData = jsonData as StatisticsResponse;
-
-        return {
-            result: resultData,
-        };
-    } catch (error) {
-        throw error;
+    if (!result.ok) {
+        console.log(jsonData);
+        throw new Error("Something error");
     }
-};
-export const getStatisticsList = async (
-    type: "chapter" | "manga" | "group",
-    ids: string[]
-) => {
-    const query = ids.map((id) => `${type}[]=${id}`).join("&");
-    const url = `${base_url}/statistics/${type}?${query}`;
-    try {
-        const result = await fetch(url, {
-            method: "GET",
-            headers: {
-                "content-type": "application/json",
-            },
-            cache: "no-cache",
-        });
 
-        let jsonData = await result.json();
+    const resultData = jsonData as StatisticsResponse;
 
-        if (!result.ok) {
-            console.log(jsonData);
-            throw new Error("Something error");
-        }
-
-        return jsonData as StatisticsResponse;
-    } catch (error) {
-        throw error;
-    }
-};
-export const getRecentlyAddedMangaList = async (
-    limit = 10,
-    offset = 0,
-    includes?: IncludeOption[]
-) => {
-    const includesQuery = includes
-        ? includes.map((value) => `includes[]=${value}`).join("&")
-        : null;
-
-    const formattedDateTime: string = getTimeAgo(5);
-
-    const url = `${base_url}/manga?limit=${limit}&offset=${offset}&createdAtSince=${formattedDateTime}${
-        includesQuery ? `&${includesQuery}` : ""
-    }`;
-
-    try {
-        const result = await fetch(url, {
-            method: "GET",
-            headers: {
-                "content-type": "application/json",
-            },
-            // cache: "no-cache",
-        });
-
-        let jsonData = await result.json();
-
-        if (!result.ok) {
-            console.log(jsonData);
-            throw new Error("Something error");
-        }
-
-        const resultData = jsonData as PaginationResponse<Manga>;
-
-        return {
-            result: resultData as PaginationResponse<Manga>,
-        };
-    } catch (error) {
-        throw error;
-    }
-};
-
-export const getSeasonalMangaList = async (
-    limit = 10,
-    offset = 0,
-    includes?: IncludeOption[]
-) => {
-    const includesQuery = includes
-        ? includes.map((value) => `includes[]=${value}`).join("&")
-        : null;
-
-    const currentSeasonal = getCurrentSeasonTimeString();
-
-    const url = `${base_url}/manga?limit=${limit}&offset=${offset}&hasAvailableChapters=1&updatedAtSince=${currentSeasonal}${
-        includesQuery ? `&${includesQuery}` : ""
-    }`;
-
-    try {
-        const result = await fetch(url, {
-            method: "GET",
-            headers: {
-                "content-type": "application/json",
-            },
-            // cache: "no-cache",
-        });
-
-        let jsonData = await result.json();
-
-        if (!result.ok) {
-            console.log(jsonData);
-            throw new Error("Something error");
-        }
-
-        const resultData = jsonData as PaginationResponse<Manga>;
-
-        return {
-            result: resultData as PaginationResponse<Manga>,
-        };
-    } catch (error) {
-        throw error;
-    }
-};
-
-export const getMangaById = async (id: string, includes?: IncludeOption[]) => {
-    const includesQuery = includes
-        ? includes.map((value) => `includes[]=${value}`).join("&")
-        : null;
-
-    const url = `${base_url}/manga/${id}${
-        includesQuery ? `?${includesQuery}` : ""
-    }`;
-
-    try {
-        const result = await fetch(url, {
-            method: "GET",
-            headers: {
-                "content-type": "application/json",
-            },
-            // cache: "no-cache",
-        });
-
-        let jsonData = await result.json();
-
-        if (!result.ok) {
-            if (result.status === 404) return null;
-            throw new Error("Something error");
-        }
-
-        const resultData = jsonData as MangaDexResponseSuccess<Manga>;
-
-        return {
-            result: resultData,
-        };
-    } catch (error) {
-        throw error;
-    }
-};
-
-export const getLatestUpdateChapters = async (
-    mangaId: string,
-    lastChapterId: string,
-    includes?: ("manga" | "scanlation_group" | "user")[]
-) => {
-    const includesQuery = includes
-        ? includes.map((value) => `includes[]=${value}`).join("&")
-        : null;
-
-    try {
-        const lastChapter = await getChapter(lastChapterId);
-
-        const date = new Date(lastChapter.result.data.attributes.updatedAt);
-        date.setUTCHours(0, 0, 0, 0);
-
-        const url = `${base_url}/manga/${mangaId}/feed?limit=4&order[updatedAt]=desc${
-            includesQuery ? `&${includesQuery}` : ""
-        }&updatedAtSince=${date.toISOString().slice(0, 19)}`;
-
-        const result = await fetch(url, {
-            method: "GET",
-            headers: {
-                "content-type": "application/json",
-            },
-            cache: "no-cache",
-        });
-
-        let jsonData = await result.json();
-
-        if (!result.ok) {
-            console.log(jsonData);
-            throw new Error("Something error");
-        }
-
-        const resultData = jsonData as PaginationResponse<Chapter>;
-        return {
-            result: resultData,
-        };
-    } catch (error) {
-        throw error;
-    }
-};
-
-export const getLatestUpdateList = async (
-    offset = 0,
-    limit = 32,
-    includes?: ("manga" | "user" | "scanlation_group")[]
-) => {
-    const includesQuery = includes
-        ? includes.map((value) => `includes[]=${value}`).join("&")
-        : null;
-    const url = ` https://api.mangadex.org/chapter?order[updatedAt]=desc&limit=${limit}&offset=${offset}&includeEmptyPages=0${
-        includesQuery ? `&${includesQuery}` : ""
-    }`;
-
-    try {
-        const result = await fetch(url, {
-            method: "GET",
-            headers: {
-                "content-type": "application/json",
-            },
-            cache: "no-cache",
-        });
-
-        let jsonData = await result.json();
-
-        if (!result.ok) {
-            console.log(jsonData);
-            throw new Error("Something error");
-        }
-
-        return jsonData as PaginationResponse<Chapter>;
-    } catch (error) {
-        throw error;
-    }
-};
-
-export const getRandomManga = async () => {
-    const url = `${base_url}/manga/random`;
-    try {
-        const result = await fetch(url, {
-            method: "GET",
-            headers: {
-                "content-type": "application/json",
-            },
-            cache: "no-cache",
-        });
-
-        let jsonData = await result.json();
-
-        if (!result.ok) {
-            if (result.status === 404) return null;
-            throw new Error("Something error");
-        }
-
-        return jsonData as MangaDexResponseSuccess<Manga>;
-    } catch (error) {
-        throw error;
-    }
-};
-
-export const searchMangaByTitle = async (
-    title: string,
-    includes?: IncludeOption[],
-    offset = 0,
-    limit = 10
-) => {
-    const includesQuery = includes
-        ? includes.map((value) => `includes[]=${value}`).join("&")
-        : null;
-
-    const url = `${base_url}/manga?offset=${offset}&limit=${limit}&order[followedCount]=desc&title=${title}${
-        includesQuery ? `&${includesQuery}` : ""
-    }`;
-    try {
-        const result = await fetch(url, {
-            method: "GET",
-            headers: {
-                "content-type": "application/json",
-            },
-            cache: "no-cache",
-        });
-
-        let jsonData = await result.json();
-
-        if (!result.ok) {
-            console.log(jsonData);
-            throw new Error("Something error");
-        }
-
-        return jsonData as PaginationResponse<Manga>;
-    } catch (error) {
-        throw error;
-    }
-};
-
-export const findAuthorsOrArtist = async (
-    name: string,
-    offset = 0,
-    limit = 10
-) => {
-    const url = `${base_url}/author?name=${name}&offset=${offset}&limit=${limit}`;
-    try {
-        const result = await fetch(url, {
-            method: "GET",
-            headers: {
-                "content-type": "application/json",
-            },
-            cache: "no-cache",
-        });
-
-        let jsonData = await result.json();
-
-        if (!result.ok) {
-            if (result.status === 404) return null;
-            throw new Error("Something error");
-        }
-
-        return jsonData as PaginationResponse<Author>;
-    } catch (error) {
-        throw error;
-    }
+    return {
+        result: resultData,
+    };
 };

@@ -3,8 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useMemo } from "react";
 import useSWR from "swr";
-import { Cover, Manga } from "../../../types";
-import { getCoverArt, getImageUrl } from "@/services/mangadex";
+import { Manga } from "../../../types";
+import { getImageUrl } from "@/services/mangadex";
 import { slugify } from "@/lib/utils";
 import Tag from "../Tag/Tag";
 type Props = {
@@ -69,7 +69,7 @@ function HeroSlide({ manga }: Props) {
                         <div className="tags md:flex gap-1.5 mt-3 hidden overflow-hidden max-h-[18px] flex-wrap">
                             {manga.attributes.contentRating ===
                                 "suggestive" && (
-                                <Tag className="px-1.5" status={"warning"}>
+                                <Tag className="px-1.5" variant={"warning"}>
                                     Suggestive
                                 </Tag>
                             )}
@@ -104,7 +104,7 @@ function HeroSlide({ manga }: Props) {
                 <Wrapper className="mt-2">
                     <div className="tags flex gap-1.5 mt-2 md:hidden flex-wrap overflow-hidden max-h-[18px] gap-y-3">
                         {manga.attributes.contentRating === "suggestive" && (
-                            <Tag className="px-1.5" status={"warning"}>
+                            <Tag className="px-1.5" variant={"warning"}>
                                 Suggestive
                             </Tag>
                         )}

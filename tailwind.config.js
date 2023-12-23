@@ -38,7 +38,10 @@ module.exports = {
         status: {
           yellow: "hsl(var(--status-yellow))",
           blue: 'hsl(var(--status-blue))',
-          green: 'rgb(var(--status-green))'
+          green: 'rgb(var(--status-green))',
+          red: 'rgb(var(--status-red))',
+          purple: 'rgb(var(--status-purple))',
+          gray: 'rgb(var(--status-gray))',
         },
         input: {
           DEFAULT: "hsl(var(--input))",

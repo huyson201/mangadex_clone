@@ -10,6 +10,7 @@ import Backdrop from "../Backdrop/Backdrop";
 import { useTranslations } from "next-intl";
 import { randomManga } from "@/actions/random-manga-action";
 import { BookOpen, Bookmark, Home, X } from "lucide-react";
+import { ADVANCED_SEARCH_URL } from "@/constants";
 
 type Props = {};
 
@@ -67,6 +68,11 @@ function DrawerMenu({}: Props) {
                 </div>
                 <div className="px-4 pt-2">
                     <DrawerItem title={t("title")} icon={<BookOpen />} />
+                    <DrawerItem
+                        title={t("advancedSearch")}
+                        subItem
+                        href={ADVANCED_SEARCH_URL}
+                    />
                     <DrawerItem
                         title={t("recently")}
                         subItem

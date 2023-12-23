@@ -6,10 +6,15 @@ import { Manga, Statistic } from "../../../types";
 import {
     getCoverArtFromManga,
     getDataByLocale,
+    getDetailMangaLink,
     getMangaTitle,
     getTagName,
 } from "@/lib/manga";
 import { getImageUrl } from "@/services/mangadex";
+import { formatNumber } from "@/lib/utils";
+import Tag from "../Tag/Tag";
+import MangaStatus from "../MangaStatus/MangaStatus";
+import TagCollapse from "../Tag/TagCollapse";
 
 type Props = {
     manga: Manga;
@@ -22,9 +27,9 @@ function RecentMangaStretchItem({ manga, statistic }: Props) {
 
     return (
         <div className="flex gap-2 bg-accent rounded p-2">
-            <Link href={"#"} className="block w-[80px] sm:w-[150px] ">
+            <Link href={getDetailMangaLink(manga)} className="block w-1/4   ">
                 <Image
-                    className="w-full rounded "
+                    className=" object-cover w-full  rounded "
                     src={getImageUrl(
                         "512",
                         manga.id,
@@ -35,11 +40,14 @@ function RecentMangaStretchItem({ manga, statistic }: Props) {
                     height={728}
                 />
             </Link>
-            <div className="flex-1">
-                <div className="text-base font-bold  text-foreground">
+            <div className="w-3/4">
+                <Link
+                    href={getDetailMangaLink(manga)}
+                    className="text-base line-clamp-2 font-bold  text-foreground"
+                >
                     {title}
-                </div>
-                <div className="flex flex-wrap gap-y-2 items-center justify-between mt-2">
+                </Link>
+                <div className="flex  gap-y-2 items-center justify-between mt-2">
                     <span className="text-sm flex items-center gap-1.5">
                         <Star size={16} />
                         {statistic?.rating?.average?.toFixed(2) ||
@@ -48,7 +56,7 @@ function RecentMangaStretchItem({ manga, statistic }: Props) {
                     </span>
                     <span className="text-sm flex items-center gap-1.5">
                         <Bookmark size={16} />
-                        {statistic?.follows || ""}
+                        {formatNumber(statistic?.follows || 0) || ""}
                     </span>
                     <span className="text-sm flex items-center gap-1.5">
                         <Eye size={16} />
@@ -58,29 +66,39 @@ function RecentMangaStretchItem({ manga, statistic }: Props) {
                         <MessageSquare size={16} />
                         {statistic?.comments?.repliesCount || ""}
                     </span>
-                    <span className=" rounded hidden sm:flex bg-accent-10 px-1.5 py-1  items-center gap-1.5">
-                        <span className="inline-block rounded-full w-2 h-2 bg-status-green"></span>
-                        <span className="text-xs ">
-                            {manga.attributes.status}
-                        </span>
-                    </span>
+                    <MangaStatus
+                        className="sm:flex hidden"
+                        variant={manga.attributes.status}
+                        title={manga.attributes.status}
+                    />
                 </div>
-                <div className="flex items-center gap-2 flex-wrap mt-2">
-                    <span className=" rounded flex sm:hidden bg-accent-10 px-1.5 sm:py-1  items-center gap-1.5">
-                        <span className="inline-block rounded-full w-2 h-2 bg-status-green"></span>
-                        <span className="text-xs ">Ongoing</span>
-                    </span>
+                <TagCollapse>
+                    <MangaStatus
+                        className="flex sm:hidden"
+                        variant={manga.attributes.status}
+                        title={manga.attributes.status}
+                    />
+                    {manga.attributes.contentRating === "suggestive" && (
+                        <Tag variant={"warning"} className="px-1">
+                            {manga.attributes.contentRating}
+                        </Tag>
+                    )}
 
                     {manga.attributes.tags.map((tag) => (
-                        <Link
+                        <Tag
+                            className="px-1"
                             key={tag.id}
-                            href={"#"}
-                            className="text-[0.625rem] font-semibold uppercase text-foreground"
+                            variant={
+                                tag.attributes.group === "content"
+                                    ? "danger"
+                                    : "none"
+                            }
                         >
-                            {getTagName(tag)}
-                        </Link>
+                            <Link href={"#"}>{getTagName(tag)}</Link>
+                        </Tag>
                     ))}
-                </div>
+                </TagCollapse>
+
                 <div className="text-sm mt-2 line-clamp-5 md:line-clamp-6 ">
                     {getDataByLocale(manga.attributes.description)}
                 </div>

@@ -16,6 +16,7 @@ type Props = {
     onSearchChange?: (value: string) => void;
     onSelect?: (value: any[]) => void;
     defaultSearchValue?: string;
+    defaultSelected?: string[];
 };
 
 interface SingleSelectionData {
@@ -24,8 +25,17 @@ interface SingleSelectionData {
 }
 
 const SearchSelection = forwardRef<{ reset: () => void }, Props>(
-    ({ data, onSearchChange, onSelect, defaultSearchValue = "" }, ref) => {
-        const [currentKey, setCurrentKey] = useState<string[]>([]);
+    (
+        {
+            data,
+            onSearchChange,
+            onSelect,
+            defaultSearchValue = "",
+            defaultSelected = [],
+        },
+        ref
+    ) => {
+        const [currentKey, setCurrentKey] = useState<string[]>(defaultSelected);
         const [open, setOpen] = React.useState(false);
 
         const title = currentKey.length > 0 ? currentKey.join(", ") : "Any";

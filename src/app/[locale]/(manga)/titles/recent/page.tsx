@@ -26,7 +26,7 @@ const page = async ({ searchParams: { page = 1 } }: Props) => {
         "cover_art",
     ]);
 
-    const recentAddedList = recentListResponse.result.data;
+    const recentAddedList = recentListResponse.data;
 
     const statisticsResponse = await getStatisticsList(
         "manga",
@@ -35,8 +35,8 @@ const page = async ({ searchParams: { page = 1 } }: Props) => {
     const statistics = statisticsResponse.statistics;
 
     const totalPage =
-        recentListResponse.result.total - limit < 10000
-            ? Math.ceil(recentListResponse.result.total / limit)
+        recentListResponse.total - limit < 10000
+            ? Math.ceil(recentListResponse.total / limit)
             : maxPage;
     return (
         <Wrapper>

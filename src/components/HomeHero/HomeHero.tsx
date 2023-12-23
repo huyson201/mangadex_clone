@@ -19,6 +19,7 @@ const HomeHero = ({ mangaList }: Props) => {
     const t = useTranslations("Home");
     const swiperRef = useRef<SwiperType>();
     const [slideIndex, setSlideIndex] = useState(0);
+    console.log(mangaList.forEach((value) => value.relationships));
     return (
         <div className="relative">
             <Wrapper className="text-foreground text-xl sm:text-2xl font-medium absolute z-[2]  w-full left-0 top-[calc(var(--navbar-height))]">

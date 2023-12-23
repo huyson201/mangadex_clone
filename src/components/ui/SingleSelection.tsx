@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 type Props = {
     title?: string;
     data: SingleSelectionData[];
-    defaultActive?: string;
+    defaultValue?: string;
     onSelect?: (value: any) => void;
 };
 
@@ -16,8 +16,15 @@ interface SingleSelectionData {
 }
 
 const SingleSelection = forwardRef<{ reset: () => void }, Props>(
-    ({ data, onSelect, defaultActive = "none" }, ref) => {
-        const [currentKey, setCurrentKey] = useState<string>(defaultActive);
+    ({ data, onSelect, defaultValue }, ref) => {
+        const [currentKey, setCurrentKey] = useState<string>(() => {
+            if (defaultValue) {
+                return (
+                    data.find((el) => el.value === defaultValue)?.key || "None"
+                );
+            }
+            return "None";
+        });
         const [open, setOpen] = React.useState(false);
 
         // remove duplicate data
@@ -32,11 +39,12 @@ const SingleSelection = forwardRef<{ reset: () => void }, Props>(
             () => {
                 return {
                     reset() {
-                        setCurrentKey("none");
+                        setCurrentKey(defaultValue || "None");
                         onSelect?.("");
                     },
                 };
             },
+            // eslint-disable-next-line react-hooks/exhaustive-deps
             []
         );
 
@@ -90,7 +98,6 @@ const SingleSelectionItem = ({
     onSelect?: (key: string, value: any) => void;
 }) => {
     const handleSelect = () => {
-        console.log("select");
         onSelect?.(keyValue, value);
     };
     return (
