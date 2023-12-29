@@ -1,37 +1,84 @@
 "use client";
 import usePagination from "@/hooks/usePagination";
-import React from "react";
+import React, { useState } from "react";
 import { cn } from "@/lib/utils";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-import Link from "next/link";
+import Link, { LinkProps } from "next/link";
 import queryString from "query-string";
 
 type Props = {
     className?: string;
     totalPage: number;
-};
+} & (
+    | {
+          asLink: true;
+          defaultCurrent?: never;
+          onChange?: never;
+      }
+    | {
+          asLink?: never;
+          defaultCurrent: number;
+          onChange: (page: number) => void;
+      }
+);
 
-const Pagination = ({ className, totalPage }: Props) => {
+const Pagination = ({
+    className,
+    totalPage,
+    defaultCurrent,
+    asLink,
+    onChange,
+}: Props) => {
     const searchParams = useSearchParams();
+    const [currentPageState, setCurrentPageState] = useState(
+        defaultCurrent || 1
+    );
     const currentPage = +(searchParams.get("page") || 1);
-    const pagination = usePagination(currentPage, totalPage);
+    const pagination = usePagination(
+        asLink ? currentPage : currentPageState,
+        totalPage
+    );
     const query = queryString.parse(searchParams.toString());
+
+    const Comp = asLink ? Link : "span";
+
+    const showPrev = asLink ? currentPage > 1 : currentPageState > 1;
+    const showNext = asLink
+        ? currentPage < totalPage
+        : currentPageState < totalPage;
+    const handleOnchange = (page: number) => {
+        setCurrentPageState(page);
+        onChange?.(page);
+    };
 
     return (
         <div
             className={cn(
-                "flex flex-wrap gap-y-1 w-full items-center justify-center gap-2",
+                " flex-wrap gap-y-1 w-full items-center justify-center gap-2",
+                totalPage === 1 ? "hidden" : "flex",
                 className
             )}
         >
-            {currentPage > 1 && (
-                <Link
-                    href={{ query: { ...query, page: `${currentPage - 1}` } }}
+            {showPrev && (
+                <Comp
+                    {...(asLink
+                        ? {
+                              href: {
+                                  query: {
+                                      ...query,
+                                      page: `${currentPage - 1}`,
+                                  },
+                              },
+                          }
+                        : ({
+                              onClick: () =>
+                                  handleOnchange(currentPageState - 1),
+                          } as any))}
                     className="h-10 w-10 rounded-full transition cursor-pointer active:bg-button-hover hover:bg-button-hover/30 [&.active]:bg-primary   flex items-center justify-center text-foreground font-medium"
                 >
                     <ArrowLeft />
-                </Link>
+                </Comp>
             )}
 
             {pagination.map((value, idx) => {
@@ -48,32 +95,52 @@ const Pagination = ({ className, totalPage }: Props) => {
                     );
                 }
                 return (
-                    <Link
-                        href={{
-                            query: {
-                                ...query,
-                                page: value,
-                            },
-                        }}
+                    <Comp
+                        {...(asLink
+                            ? {
+                                  href: {
+                                      query: {
+                                          ...query,
+                                          page: value,
+                                      },
+                                  },
+                              }
+                            : ({
+                                  onClick: () => handleOnchange(value),
+                              } as any))}
                         key={`${value}-${idx}`}
                         className={cn(
                             "px-4 transition cursor-pointer active:bg-button-hover hover:bg-button-hover/30 rounded [&.active]:bg-primary  h-10 flex items-center justify-center text-foreground font-medium",
-                            { active: currentPage === value }
+                            {
+                                active: asLink
+                                    ? currentPage === value
+                                    : currentPageState === value,
+                            }
                         )}
                     >
                         {value}
-                    </Link>
+                    </Comp>
                 );
             })}
-            {currentPage < totalPage && (
-                <Link
-                    href={{
-                        query: { ...query, page: `${currentPage + 1}` },
-                    }}
+            {showNext && (
+                <Comp
+                    {...(asLink
+                        ? {
+                              href: {
+                                  query: {
+                                      ...query,
+                                      page: `${currentPage + 1}`,
+                                  },
+                              },
+                          }
+                        : ({
+                              onClick: () =>
+                                  handleOnchange(currentPageState - 1),
+                          } as any))}
                     className="w-10 rounded-full transition cursor-pointer active:bg-button-hover hover:bg-button-hover/30  [&.active]:bg-primary  h-10 flex items-center justify-center text-foreground font-medium"
                 >
                     <ArrowRight />
-                </Link>
+                </Comp>
             )}
         </div>
     );

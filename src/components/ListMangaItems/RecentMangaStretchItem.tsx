@@ -7,8 +7,10 @@ import {
     getCoverArtFromManga,
     getDataByLocale,
     getDetailMangaLink,
+    getLangFlagUrl,
     getMangaTitle,
     getTagName,
+    getTagsWithGroupContent,
 } from "@/lib/manga";
 import { getImageUrl } from "@/services/mangadex";
 import { formatNumber } from "@/lib/utils";
@@ -24,12 +26,13 @@ type Props = {
 function RecentMangaStretchItem({ manga, statistic }: Props) {
     const coverArt = getCoverArtFromManga(manga);
     const title = getMangaTitle(manga);
-
+    const contentTag = getTagsWithGroupContent(manga.attributes.tags);
+    const flag = getLangFlagUrl(manga.attributes.originalLanguage);
     return (
         <div className="flex gap-2 bg-accent rounded p-2">
             <Link href={getDetailMangaLink(manga)} className="block w-1/4   ">
                 <Image
-                    className=" object-cover w-full  rounded "
+                    className=" object-cover w-full  rounded  "
                     src={getImageUrl(
                         "512",
                         manga.id,
@@ -45,6 +48,15 @@ function RecentMangaStretchItem({ manga, statistic }: Props) {
                     href={getDetailMangaLink(manga)}
                     className="text-base line-clamp-2 font-bold  text-foreground"
                 >
+                    {flag && (
+                        <Image
+                            src={flag}
+                            width={24}
+                            height={24}
+                            className="inline-block mr-1"
+                            alt={manga.attributes.originalLanguage}
+                        />
+                    )}
                     {title}
                 </Link>
                 <div className="flex  gap-y-2 items-center justify-between mt-2">
@@ -72,7 +84,7 @@ function RecentMangaStretchItem({ manga, statistic }: Props) {
                         title={manga.attributes.status}
                     />
                 </div>
-                <TagCollapse>
+                <TagCollapse variant={"collapse"} className="mt-2">
                     <MangaStatus
                         className="flex sm:hidden"
                         variant={manga.attributes.status}
@@ -83,20 +95,20 @@ function RecentMangaStretchItem({ manga, statistic }: Props) {
                             {manga.attributes.contentRating}
                         </Tag>
                     )}
-
-                    {manga.attributes.tags.map((tag) => (
-                        <Tag
-                            className="px-1"
-                            key={tag.id}
-                            variant={
-                                tag.attributes.group === "content"
-                                    ? "danger"
-                                    : "none"
-                            }
-                        >
+                    {contentTag.map((tag) => (
+                        <Tag className="px-1" key={tag.id} variant={"danger"}>
                             <Link href={"#"}>{getTagName(tag)}</Link>
                         </Tag>
                     ))}
+
+                    {manga.attributes.tags.map((tag) => {
+                        if (tag.attributes.group === "content") return null;
+                        return (
+                            <Tag className="px-1" key={tag.id} variant={"none"}>
+                                <Link href={"#"}>{getTagName(tag)}</Link>
+                            </Tag>
+                        );
+                    })}
                 </TagCollapse>
 
                 <div className="text-sm mt-2 line-clamp-5 md:line-clamp-6 ">

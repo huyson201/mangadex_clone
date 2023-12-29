@@ -16,15 +16,17 @@ import { cn } from "@/lib/utils";
 import { Tag } from "../../../types";
 type Props = {
     onSelect?: (data: { includes: string[]; excludes: string[] }) => void;
+    defaultValue?: { id: string; state: "include" | "exclude" }[];
 };
 
 const FilterTag = forwardRef<{ reset: () => void }, Props>(
-    ({ onSelect }, ref) => {
+    ({ onSelect, defaultValue = [] }, ref) => {
         const [open, setOpen] = React.useState(false);
         const [searchKey, setSearchKey] = useState("");
-        const [selectedData, setSelectedData] = useState<
-            { id: string; state: "include" | "exclude" }[]
-        >([]);
+        const [selectedData, setSelectedData] =
+            useState<{ id: string; state: "include" | "exclude" }[]>(
+                defaultValue
+            );
 
         const { data, isLoading } = useSWR("/manga/tag", () => getTags());
 
@@ -180,6 +182,7 @@ const FilterTag = forwardRef<{ reset: () => void }, Props>(
                 existIncludes && existExcludes ? " And " : " "
             }${existExcludes ? `Excludes ${excludesTitle}` : ""}`;
         }, [selectedData, data]);
+
         return (
             <ComboBox
                 open={open}
@@ -205,6 +208,7 @@ const FilterTag = forwardRef<{ reset: () => void }, Props>(
                     <Button
                         className="flex mt-2 w-full "
                         variant={"destructive"}
+                        onClick={() => setSelectedData([])}
                     >
                         Reset
                     </Button>

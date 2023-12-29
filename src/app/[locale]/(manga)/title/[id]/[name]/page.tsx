@@ -1,13 +1,6 @@
 import { Button } from "@/components/ui/button";
 import Wrapper from "@/layouts/Wrapper/Wrapper";
-import {
-    BookOpen,
-    Bookmark,
-    Eye,
-    MessageSquare,
-    MoreHorizontal,
-    Star,
-} from "lucide-react";
+import { BookOpen, Bookmark, MoreHorizontal } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 import {
@@ -21,6 +14,15 @@ import ChapterList from "@/components/ChapterList/ChapterList";
 import { getImageUrl, getMangaById, getStatistics } from "@/services/mangadex";
 import { notFound } from "next/navigation";
 import { Relationship } from "../../../../../../../types";
+import {
+    getCoverArtFromManga,
+    getDataByLocale,
+    getMangaTitle,
+} from "@/lib/manga";
+import StatisticInfo from "@/components/StatisticInfo/StatisticInfo";
+import { cn } from "@/lib/utils";
+import { statusDotVariants } from "@/components/MangaStatus/MangaStatus";
+import engtl from "@/assets/engtl.svg";
 type Props = {
     params: {
         id: string;
@@ -42,14 +44,9 @@ const page = async ({ params }: Props) => {
     ]);
     if (!manga) notFound();
 
-    const statistics =
-        statisticsResult.result.statistics[
-            Object.keys(statisticsResult.result.statistics)[0]
-        ];
+    const statistics = statisticsResult.result.statistics[manga.result.data.id];
+    const coverArt = getCoverArtFromManga(manga.result.data);
 
-    const coverArt = manga.result.data.relationships.find(
-        (relation) => relation.type === "cover_art"
-    );
     const uniqueAuthorsAndArtist = manga.result.data.relationships
         .filter(
             (relation) =>
@@ -67,9 +64,7 @@ const page = async ({ params }: Props) => {
 
     const altTitle =
         manga.result.data.attributes.altTitles.length > 1
-            ? manga.result.data.attributes.altTitles[0][
-                  Object.keys(manga.result.data.attributes.altTitles[0])[0]
-              ]
+            ? getDataByLocale(manga.result.data.attributes.altTitles[0])
             : "";
 
     const tagList = manga.result.data.attributes.tags.map((tag) => {
@@ -111,7 +106,7 @@ const page = async ({ params }: Props) => {
 
                 <div className="w-[100px] sm:w-[200px]">
                     <Image
-                        className="w-full rounded"
+                        className="w-full h-[144px] sm:h-[290px] object-cover rounded"
                         width={512}
                         height={725}
                         src={getImageUrl(
@@ -123,8 +118,8 @@ const page = async ({ params }: Props) => {
                     />
                 </div>
                 <div className="flex sm:h-full sm:min-h-[360px] flex-col w-[calc(100%_-_100px_-_1.5rem)] sm:w-[calc(100%_-_200px_-_1.5rem)]">
-                    <h1 className="text-2xl sm:text-[2.5rem]/10  md:text-5xl/ font-bold line-clamp-2">
-                        {manga.result.data.attributes.title.en}
+                    <h1 className="text-2xl sm:text-[2.5rem]/10  md:text-5xl font-bold line-clamp-2">
+                        {getMangaTitle(manga.result.data)}
                     </h1>
                     <div className="text-foreground text-base sm:text-xl line-clamp-2 mt-1">
                         {altTitle}
@@ -156,7 +151,14 @@ const page = async ({ params }: Props) => {
                             {tagList}
                         </div>
                         <div className="flex items-center gap-2 text-status-blue mt-2">
-                            <span className="w-2 h-2 rounded-full bg-status-blue"></span>
+                            <span
+                                className={cn(
+                                    statusDotVariants({
+                                        variant:
+                                            manga.result.data.attributes.status,
+                                    })
+                                )}
+                            ></span>
                             <span className="uppercase sm:font-semibold text-foreground text-xs">
                                 PUBLICATION: {manga.result.data.attributes.year}
                                 ,{" "}
@@ -166,25 +168,10 @@ const page = async ({ params }: Props) => {
                             </span>
                         </div>
                     </div>
-                    <div className="flex mt-auto sm:mt-3  gap-2 items-baseline sm:text-base text-sm">
-                        <span className="flex items-center gap-1 text-primary ">
-                            <Star size={16} />
-                            {statistics?.rating?.average?.toFixed(2) ||
-                                statistics?.rating?.bayesian?.toFixed(2)}
-                        </span>
-                        <span className="flex items-center gap-1 text-foreground  ">
-                            <Bookmark size={16} />
-                            {statistics?.follows || 0}
-                        </span>
-                        <span className="flex items-center gap-1 text-foreground  ">
-                            <MessageSquare size={16} />
-                            {statistics?.comments?.repliesCount || 0}
-                        </span>
-                        <span className="flex items-center gap-1 text-foreground  ">
-                            <Eye size={16} />
-                            N/A
-                        </span>
-                    </div>
+                    <StatisticInfo
+                        className="flex-wrap gap-y-1 mt-4 sm sm:gap-y-2"
+                        statistics={statistics}
+                    />
                 </div>
             </div>
             <div className="sm:hidden">
@@ -196,7 +183,13 @@ const page = async ({ params }: Props) => {
                 </div>
 
                 <div className="flex items-center gap-2 text-status-blue mt-2">
-                    <span className="w-2 h-2 rounded-full bg-status-blue"></span>
+                    <span
+                        className={cn(
+                            statusDotVariants({
+                                variant: manga.result.data.attributes.status,
+                            })
+                        )}
+                    ></span>
                     <span className="uppercase text-foreground text-xs">
                         PUBLICATION: {manga.result.data.attributes.year},{" "}
                         <span>{manga.result.data.attributes.status}</span>

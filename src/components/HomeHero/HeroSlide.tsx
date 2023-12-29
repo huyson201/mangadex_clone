@@ -7,6 +7,7 @@ import { Manga } from "../../../types";
 import { getImageUrl } from "@/services/mangadex";
 import { slugify } from "@/lib/utils";
 import Tag from "../Tag/Tag";
+import TagCollapse from "../Tag/TagCollapse";
 type Props = {
     manga: Manga;
 };
@@ -102,7 +103,10 @@ function HeroSlide({ manga }: Props) {
                     </div>
                 </Wrapper>
                 <Wrapper className="mt-2">
-                    <div className="tags flex gap-1.5 mt-2 md:hidden flex-wrap overflow-hidden max-h-[18px] gap-y-3">
+                    <TagCollapse
+                        variant={"hidden"}
+                        className="gap-x-1.5 mt-2 md:hidden  gap-y-3"
+                    >
                         {manga.attributes.contentRating === "suggestive" && (
                             <Tag className="px-1.5" variant={"warning"}>
                                 Suggestive
@@ -116,7 +120,7 @@ function HeroSlide({ manga }: Props) {
                                 </Tag>
                             );
                         })}
-                    </div>
+                    </TagCollapse>
                 </Wrapper>
             </div>
         </Link>

@@ -10,7 +10,8 @@ const nextConfig = {
             },
             {
                 hostname: "uploads.mangadex.org"
-            }
+            },
+            { hostname: "t0.gstatic.com" }
         ]
     },
 

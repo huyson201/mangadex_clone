@@ -9,7 +9,7 @@ import { usePathname } from "next/navigation";
 import Backdrop from "../Backdrop/Backdrop";
 import { useTranslations } from "next-intl";
 import { randomManga } from "@/actions/random-manga-action";
-import { BookOpen, Bookmark, Home, X } from "lucide-react";
+import { BookOpen, Bookmark, Home, Users, X } from "lucide-react";
 import { ADVANCED_SEARCH_URL } from "@/constants";
 
 type Props = {};
@@ -71,6 +71,7 @@ function DrawerMenu({}: Props) {
                     <DrawerItem
                         title={t("advancedSearch")}
                         subItem
+                        exact
                         href={ADVANCED_SEARCH_URL}
                     />
                     <DrawerItem
@@ -88,6 +89,17 @@ function DrawerMenu({}: Props) {
                             Random
                         </button>
                     </form>
+                </div>
+                <div className="px-4 pt-2">
+                    <DrawerItem title={t("community")} icon={<Users />} />
+                    <DrawerItem
+                        title={t("forums")}
+                        subItem
+                        exact
+                        href={"https://forums.mangadex.org/"}
+                    />
+                    <DrawerItem title={t("groups")} subItem href="/groups" />
+                    <DrawerItem title={t("users")} subItem href="/users" />
                 </div>
             </div>
             <Backdrop

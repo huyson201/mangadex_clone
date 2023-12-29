@@ -1,7 +1,7 @@
 import React from "react";
 import { cva, VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
-const tagVariants = cva(
+export const tagVariants = cva(
     "uppercase text-[0.625rem] inline-block text-foreground font-semibold  rounded-md",
     {
         variants: {

@@ -86,7 +86,7 @@ async function page({ searchParams: { page = 1 } }: Props) {
                     </div>
                 </Tabs>
             </div>
-            <Pagination className="mt-4" totalPage={maxPage} />
+            <Pagination asLink className="mt-4" totalPage={maxPage} />
         </Wrapper>
     );
 }

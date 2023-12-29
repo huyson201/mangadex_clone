@@ -1,5 +1,12 @@
 "use client";
-import React, { FormEvent, useCallback, useRef, useState } from "react";
+import React, {
+    FormEvent,
+    useCallback,
+    useMemo,
+    useEffect,
+    useRef,
+    useState,
+} from "react";
 import MultipleSelection from "../ui/MultipleSelection";
 import FilterTag from "../FilterTag/FilterTag";
 import SingleSelection from "../ui/SingleSelection";
@@ -15,8 +22,13 @@ import { useSearchFilter } from "@/contexts/SearchFilterContext";
 import { redirect, useRouter, useSearchParams } from "next/navigation";
 import queryString from "query-string";
 import { ADVANCED_SEARCH_URL } from "@/constants";
+import SingleFilter from "./SingleFilter";
+import MultipleFilter from "./MultipleFilter";
 
 type Props = {};
+const parseArray = (value?: string | string[]) => {
+    return value ? (Array.isArray(value) ? value : [value]) : [];
+};
 
 export interface FilterData {
     order: string;
@@ -27,59 +39,42 @@ export interface FilterData {
     status: string[];
     authors: string[];
     artists: string[];
-    year: number;
+    year: string;
 }
 const SearchFilter = ({}: Props) => {
     const searchParams = useSearchParams();
-    const [data, setData] = useState<Partial<FilterData>>(() => {
-        const parsed = queryString.parse(searchParams.toString(), {
-            arrayFormat: "comma",
-        }) as Partial<FilterData>;
-
-        console.log(parsed);
-
-        return {
-            order: parsed.order,
-            excludes: parsed.excludes,
-            includes: parsed.includes,
-            status: parsed.status,
-            rating: parsed.rating,
-            artists: parsed.artists,
-            authors: parsed.authors,
-            demos: parsed.demos,
-            year: parsed.year,
-        };
-    });
+    const [data, setData] = useState<Partial<FilterData>>({});
     const [searchKey, setSearchKey] = useState("");
 
     const searchFilters = useSearchFilter();
     const router = useRouter();
 
-    const authorSearchRef = useRef<{ reset: () => void }>(null);
-    const artistSearchRef = useRef<{ reset: () => void }>(null);
-    const ratingSelectRef = useRef<{ reset: () => void }>(null);
-    const statusSelectRef = useRef<{ reset: () => void }>(null);
-    const demosSelectRef = useRef<{ reset: () => void }>(null);
-    const sortSelectRef = useRef<{ reset: () => void }>(null);
     const filterTagsRef = useRef<{ reset: () => void }>(null);
 
+    const defaultValue = useMemo(() => {
+        console.log("parsed");
+        const parsed = queryString.parse(searchParams.toString(), {
+            arrayFormat: "comma",
+        }) as Partial<FilterData>;
+
+        const parsedValue = {
+            order: parsed.order,
+            excludes: parseArray(parsed.excludes),
+            includes: parseArray(parsed.includes),
+            status: parseArray(parsed.status),
+            rating: parseArray(parsed.rating),
+            artists: parseArray(parsed.artists),
+            authors: parseArray(parsed.authors),
+            demos: parseArray(parsed.demos),
+            year: parsed.year,
+        };
+        setData({ ...parsedValue });
+        return parsedValue;
+    }, [searchParams]);
+
     const handleReset = () => {
-        authorSearchRef.current?.reset();
-        artistSearchRef.current?.reset();
-        ratingSelectRef.current?.reset();
-        statusSelectRef.current?.reset();
-        demosSelectRef.current?.reset();
-        sortSelectRef.current?.reset();
-        filterTagsRef.current?.reset();
         router.push(ADVANCED_SEARCH_URL);
     };
-
-    const handleAuthorsChange = useCallback((data: string[]) => {
-        setData((prev) => ({ ...prev, authors: data }));
-    }, []);
-    const handleArtistsChange = useCallback((data: string[]) => {
-        setData((prev) => ({ ...prev, artists: data }));
-    }, []);
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
@@ -97,6 +92,17 @@ const SearchFilter = ({}: Props) => {
         );
         router.push(`?${query}`);
     };
+    const includesDefault =
+        data.includes?.map((id) => ({
+            id,
+            state: "include" as "include" | "exclude",
+        })) || [];
+    const excludesDefault =
+        data.excludes?.map((id) => ({
+            id,
+            state: "exclude" as "include" | "exclude",
+        })) || [];
+
     return (
         <>
             <div className="flex gap-x-2">
@@ -130,7 +136,8 @@ const SearchFilter = ({}: Props) => {
                     </Button>
                 </div>
             </div>
-            <div
+            <form
+                onSubmit={handleSubmit}
                 className={cn(
                     "fixed duration-500 top-0 h-screen md:h-auto custom-scrollbar overflow-auto bg-background px-4 py-4  transition-all w-full left-0 z-[20] md:py-0 md:px-0 md:overflow-hidden md:static",
                     searchFilters?.show
@@ -158,14 +165,14 @@ const SearchFilter = ({}: Props) => {
                 >
                     <div>
                         <FilterOptionTitle title={"Sort by"} />
-                        <SingleSelection
+                        <SingleFilter
+                            key={defaultValue.order}
                             data={sortByData}
-                            ref={sortSelectRef}
-                            defaultValue={data.order}
-                            onSelect={(value) =>
+                            defaultValue={defaultValue.order || ""}
+                            onChange={(value) =>
                                 setData((prev) => ({
                                     ...prev,
-                                    order: value as string,
+                                    order: value,
                                 }))
                             }
                         />
@@ -173,6 +180,10 @@ const SearchFilter = ({}: Props) => {
                     <div>
                         <FilterOptionTitle title={"Filter Tags"} />
                         <FilterTag
+                            defaultValue={[
+                                ...includesDefault,
+                                ...excludesDefault,
+                            ]}
                             ref={filterTagsRef}
                             onSelect={(data) =>
                                 setData((prev) => ({
@@ -185,26 +196,25 @@ const SearchFilter = ({}: Props) => {
                     </div>
                     <div>
                         <FilterOptionTitle title={"Content Rating"} />
-
-                        <MultipleSelection
-                            ref={ratingSelectRef}
+                        <MultipleFilter
+                            key={defaultValue.rating?.join(",")}
                             data={contentRating}
-                            defaultValue={data.rating}
-                            onSelect={(data) =>
+                            defaultValue={defaultValue.rating || []}
+                            onChange={(data) =>
                                 setData((prev) => ({
                                     ...prev,
-                                    rating: data as string[],
+                                    rating: data,
                                 }))
                             }
                         />
                     </div>
                     <div>
                         <FilterOptionTitle title={"Magazine Demographic"} />
-                        <MultipleSelection
-                            ref={demosSelectRef}
+                        <MultipleFilter
+                            key={defaultValue.demos?.join(",")}
                             data={demographics}
-                            defaultValue={data.demos}
-                            onSelect={(data) =>
+                            defaultValue={defaultValue.demos || []}
+                            onChange={(data) =>
                                 setData((prev) => ({
                                     ...prev,
                                     demos: data as string[],
@@ -214,11 +224,11 @@ const SearchFilter = ({}: Props) => {
                     </div>
                     <div>
                         <FilterOptionTitle title={"Publication Status"} />
-                        <MultipleSelection
-                            defaultValue={data.status}
-                            ref={statusSelectRef}
+                        <MultipleFilter
+                            key={defaultValue.status?.join(",")}
                             data={publicStatus}
-                            onSelect={(data) =>
+                            defaultValue={defaultValue.status || []}
+                            onChange={(data) =>
                                 setData((prev) => ({
                                     ...prev,
                                     status: data as string[],
@@ -231,35 +241,41 @@ const SearchFilter = ({}: Props) => {
 
                         <AuthorOrArtistFilter
                             type="author"
-                            key={"author"}
-                            ref={authorSearchRef}
-                            onChange={handleAuthorsChange}
+                            key={defaultValue.authors?.join(",")}
+                            defaultValue={defaultValue.authors}
+                            onChange={(data) =>
+                                setData((prev) => ({ ...prev, authors: data }))
+                            }
                         />
                     </div>
                     <div>
                         <FilterOptionTitle title={"Artist"} />
                         <AuthorOrArtistFilter
-                            ref={artistSearchRef}
+                            defaultValue={defaultValue.artists}
                             type="artist"
-                            key={"artist"}
-                            onChange={handleArtistsChange}
+                            key={defaultValue.artists?.join(",")}
+                            onChange={(data) =>
+                                setData((prev) => ({ ...prev, artists: data }))
+                            }
                         />
                     </div>
                     <div>
                         <FilterOptionTitle title={"Publication year"} />
                         <NumberInput
+                            key={defaultValue.year}
                             defaultValue={data.year}
-                            onChange={(data) =>
+                            onChange={(data) => {
                                 setData((prev) => ({
                                     ...prev,
                                     year: data,
-                                }))
-                            }
+                                }));
+                            }}
                         />
                     </div>
                 </div>
                 <div className="flex flex-col md:flex-row mt-6 gap-4 justify-end items-center">
                     <Button
+                        type="button"
                         onClick={handleReset}
                         className="rounded w-full md:w-auto order-2 md:order-1"
                         variant={"destructive"}
@@ -267,7 +283,6 @@ const SearchFilter = ({}: Props) => {
                         Reset Filters
                     </Button>
                     <Button
-                        onClick={submit}
                         type="submit"
                         className="rounded gap-4 w-full md:w-auto order-1 md:order-2"
                         variant={"primary"}
@@ -276,7 +291,7 @@ const SearchFilter = ({}: Props) => {
                         Search
                     </Button>
                 </div>
-            </div>
+            </form>
         </>
     );
 };

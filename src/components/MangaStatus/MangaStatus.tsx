@@ -24,7 +24,7 @@ const MangaStatus = ({ variant, title, className }: Props) => {
     return (
         <span
             className={cn(
-                "rounded flex  bg-accent-10 px-1.5 sm:py-1  items-center gap-1.5",
+                "rounded inline-flex  bg-accent-10 px-1.5 sm:py-1  items-center gap-1.5",
                 className
             )}
         >

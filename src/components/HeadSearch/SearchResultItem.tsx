@@ -9,6 +9,8 @@ import {
     getMangaTitle,
 } from "@/lib/manga";
 import { getImageUrl } from "@/services/mangadex";
+import MangaStatus from "../MangaStatus/MangaStatus";
+import { formatNumber } from "@/lib/utils";
 
 type Props = {
     manga: Manga;
@@ -45,7 +47,7 @@ function SearchResultItem({ manga, statistic }: Props) {
                         </span>
                         <span className="text-sm flex items-center gap-1.5">
                             <Bookmark size={16} />
-                            {statistic?.follows || ""}
+                            {formatNumber(statistic?.follows || 0) || ""}
                         </span>
                         <span className="text-sm flex items-center gap-1.5">
                             <Eye size={16} />
@@ -53,16 +55,16 @@ function SearchResultItem({ manga, statistic }: Props) {
                         </span>
                         <span className="text-sm flex items-center gap-1.5">
                             <MessageSquare size={16} />
-                            {statistic?.comments?.repliesCount || ""}
+                            {formatNumber(
+                                statistic?.comments?.repliesCount || 0
+                            ) || ""}
                         </span>
                     </div>
                     <div>
-                        <span className=" rounded inline-flex bg-accent-10 px-1.5 py-1  items-center gap-1.5">
-                            <span className="inline-block rounded-full w-2 h-2 bg-status-green"></span>
-                            <span className="text-xs ">
-                                {manga.attributes.status}
-                            </span>
-                        </span>
+                        <MangaStatus
+                            variant={manga.attributes.status}
+                            title={manga.attributes.status}
+                        />
                     </div>
                 </div>
             </div>

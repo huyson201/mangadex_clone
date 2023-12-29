@@ -1,5 +1,5 @@
 "use client";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import HeadSearchForm from "./HeadSearchForm";
 import { cn } from "@/lib/utils";
 import { useHeadSearch } from "@/contexts/HeadSearchContext";
@@ -12,12 +12,22 @@ import useSwr from "swr";
 import { advancedSearch, getStatisticsList } from "@/services/mangadex";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { ADVANCED_SEARCH_URL } from "@/constants";
+import { usePathname, useSearchParams } from "next/navigation";
 type Props = {};
 
 function HeadSearch({}: Props) {
     const headSearchState = useHeadSearch();
     const [searchKey, setSearchKey] = useState("");
     const t = useTranslations("search");
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
+
+    useEffect(() => {
+        headSearchState?.setIsActive?.(false);
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [pathname, searchParams]);
 
     const debounceSearchKey = useDebounce(searchKey, 500);
 
@@ -86,7 +96,9 @@ function HeadSearch({}: Props) {
                             <div>
                                 <div className="text-lg font-bold flex items-center justify-between">
                                     Manga
-                                    <Link href={"#"}>
+                                    <Link
+                                        href={`${ADVANCED_SEARCH_URL}?q=${debounceSearchKey}`}
+                                    >
                                         <ArrowRight />
                                     </Link>
                                 </div>

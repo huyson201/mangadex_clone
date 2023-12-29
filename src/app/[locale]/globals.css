@@ -11,6 +11,12 @@
     --navbar-height: 3.5rem;
     --navbar-index: 3;
 
+    --chapter-progress-height: 2.5rem;
+
+    --status-yellow: 32 100% 42.7% ;
+    --status-blue: 0 201 245 ;
+    --status-green: 84 208 0;
+    --status-red: 255 64 64;
     --status-purple:125 64 255;
     --status-grey: 196 196 196;
     
@@ -97,6 +103,7 @@
     --accent-foreground: 210 40% 98%;
 
     --accent-2: 218 12.5% 25.1%;
+    --accent-2-hover: 73 81 96;
     --accent-3: 219 13.5% 29.0%;
     --accent-10: 220 11.3% 20.8%;
  

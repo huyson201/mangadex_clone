@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 const { fontFamily } = require("tailwindcss/defaultTheme")
-
+const plugin = require('tailwindcss/plugin')
 module.exports = {
   darkMode: ["class"],
   content: [
@@ -98,9 +98,15 @@ module.exports = {
           DEFAULT: "hsl(var(--accent))",
           hover: {
             DEFAULT: "hsl(var(--accent-hover))",
-            2: "hsl(var(--accent-hover-2))",
+            2: {
+              DEFAULT: "hsl(var(--accent-hover-2))",
+            },
           },
-          2: "hsl(var(--accent-2))",
+          2: {
+            DEFAULT: "hsl(var(--accent-2))",
+            hover: "rgb(var(--accent-2-hover))"
+
+          },
           3: "hsl(var(--accent-3))",
           10: "hsl(var(--accent-10))"
 
@@ -115,12 +121,39 @@ module.exports = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: 0 },
         },
+
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "loader-spin": "spin  1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite"
       },
     },
   },
-  plugins: [require("tailwindcss-animate"), require('tailwind-scrollbar')({ nocompatible: true }),],
+  plugins: [
+    require("tailwindcss-animate"),
+    require('tailwind-scrollbar')({ nocompatible: true }),
+    plugin(function ({ matchUtilities, theme }) {
+      matchUtilities({
+        "animate-delay": (value) => {
+          return {
+            animationDelay: value
+          }
+        }
+      }, {
+        values: theme('animationDelay')
+      }, {
+        theme: {
+          100: "100ms",
+          200: "200ms",
+          300: "300ms",
+          400: "400ms",
+          500: "500ms",
+          600: "600ms",
+          700: "700ms",
+          800: "800ms",
+          900: "900ms",
+        }
+      })
+    })],
 }

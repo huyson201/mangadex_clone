@@ -12,7 +12,6 @@ interface DetailDescProps {
 const DetailDesc = ({ manga }: DetailDescProps) => {
     const [isCollapsed, setIsCollapsed] = useState(true);
     const descRef = useRef<HTMLDivElement>(null);
-
     useEffect(() => {
         if (!descRef.current) return;
         if (!isCollapsed) {

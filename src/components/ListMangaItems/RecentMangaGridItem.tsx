@@ -5,6 +5,7 @@ import { Manga } from "../../../types";
 import {
     getCoverArtFromManga,
     getDetailMangaLink,
+    getLangFlagUrl,
     getMangaTitle,
 } from "@/lib/manga";
 import { getImageUrl } from "@/services/mangadex";
@@ -16,6 +17,7 @@ type Props = {
 function RecentMangaGridItem({ manga }: Props) {
     const coverArt = getCoverArtFromManga(manga);
     const title = getMangaTitle(manga);
+    const flag = getLangFlagUrl(manga.attributes.originalLanguage);
 
     return (
         <div>
@@ -35,6 +37,15 @@ function RecentMangaGridItem({ manga }: Props) {
                     height={728}
                 />
                 <div className="absolute bottom-0 w-full bg-gradient-to-t from-black/80 px-2 text-sm to-transparent py-3">
+                    {flag && (
+                        <Image
+                            className="inline-block mr-1"
+                            src={flag}
+                            alt={manga.attributes.originalLanguage}
+                            width={24}
+                            height={24}
+                        />
+                    )}
                     <span>{title}</span>
                 </div>
             </Link>

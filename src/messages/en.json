@@ -1,49 +1,51 @@
 {
-   
-    "Home": {
-      "titles":{
-        "popular": "Popular New Titles",
-        "latestList": "Latest Updates",
-        "seasonalList": "Seasonal",
-        "recentlyList": "Recently Added"
-
-      }
-    },
-    "search":{
-      "placeholder": "Search",
-      "resultDefault": "Enter a search query...",
-      "noResult": "No results found."
-    },
-    "accountMenu":{
-      "defaultMenu": {
-        "guest": "Guest",
-        "settings": "Settings",
-        "themes": "Themes",
-        "languages": "Interface Languages",
-        "filter": "Content Filter",
-        "signIn": "Sign In",
-        "register": "Register"
-      },
-      "themeSelections":{
-        "title": "Select Theme",
-        "light": "Light",
-        "dark": "Dark",
-        "system": "System"
-      },
-      "languageSelections":{
-        "english": "English",
-        "vietnamese": "Vietnamese",
-        "title": "Interface Language"
-      }
-    },
-    "drawerMenu":{
-      "home": "Home",
-      "title": "Titles",
-      "recently": "Recently added",
-      "latest": "Latest Updates",
-      "follows": "Follows",
-      "history": "Reading History",
-      "library": "Library",
-      "advancedSearch": "Advanced Search"
+  "Home": {
+    "titles": {
+      "popular": "Popular New Titles",
+      "latestList": "Latest Updates",
+      "seasonalList": "Seasonal",
+      "recentlyList": "Recently Added"
     }
+  },
+  "search": {
+    "placeholder": "Search",
+    "resultDefault": "Enter a search query...",
+    "noResult": "No results found."
+  },
+  "accountMenu": {
+    "defaultMenu": {
+      "guest": "Guest",
+      "settings": "Settings",
+      "themes": "Themes",
+      "languages": "Interface Languages",
+      "filter": "Content Filter",
+      "signIn": "Sign In",
+      "register": "Register"
+    },
+    "themeSelections": {
+      "title": "Select Theme",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    },
+    "languageSelections": {
+      "english": "English",
+      "vietnamese": "Vietnamese",
+      "title": "Interface Language"
+    }
+  },
+  "drawerMenu": {
+    "home": "Home",
+    "title": "Titles",
+    "recently": "Recently added",
+    "latest": "Latest Updates",
+    "follows": "Follows",
+    "history": "Reading History",
+    "library": "Library",
+    "advancedSearch": "Advanced Search",
+    "community": "community",
+    "forums": "forums",
+    "groups": "groups",
+    "users": "users"
+  }
 }

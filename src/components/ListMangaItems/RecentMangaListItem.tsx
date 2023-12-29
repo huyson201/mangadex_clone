@@ -7,10 +7,16 @@ import {
     getCoverArtFromManga,
     getDataByLocale,
     getDetailMangaLink,
+    getLangFlagUrl,
     getMangaTitle,
     getTagName,
+    getTagsWithGroupContent,
 } from "@/lib/manga";
 import { getImageUrl } from "@/services/mangadex";
+import { cn } from "@/lib/utils";
+import Tag, { tagVariants } from "../Tag/Tag";
+import TagCollapse from "../Tag/TagCollapse";
+import MangaStatus from "../MangaStatus/MangaStatus";
 
 type Props = {
     manga: Manga;
@@ -20,6 +26,9 @@ type Props = {
 function RecentMangaListItem({ manga, statistic }: Props) {
     const coverArt = getCoverArtFromManga(manga);
     const title = getMangaTitle(manga);
+    const tagsWithGroupContent = getTagsWithGroupContent(manga.attributes.tags);
+    const flag = getLangFlagUrl(manga.attributes.originalLanguage);
+
     return (
         <div className="p-2 rounded bg-accent grid gap-x-2 grid-rows-[auto_1fr_auto] sm:grid-rows-[auto_auto_1fr] sm:grid-cols-[84px_1fr_auto] grid-cols-[64px_1fr_auto]">
             <Link
@@ -44,7 +53,18 @@ function RecentMangaListItem({ manga, statistic }: Props) {
                         className="font-bold text-foreground"
                         href={getDetailMangaLink(manga)}
                     >
-                        <div className="break-all line-clamp-1">{title}</div>
+                        <div className="break-all line-clamp-1">
+                            {flag && (
+                                <Image
+                                    src={flag}
+                                    width={24}
+                                    height={24}
+                                    className="inline-block mr-1"
+                                    alt={manga.attributes.originalLanguage}
+                                />
+                            )}
+                            {title}
+                        </div>
                     </Link>
                     <div className="flex  gap-y-2 gap-2 items-center justify-between">
                         <span className="text-sm flex items-center gap-1.5">
@@ -65,33 +85,57 @@ function RecentMangaListItem({ manga, statistic }: Props) {
                             <MessageSquare size={16} />
                             {statistic?.comments?.repliesCount || ""}
                         </span>
-                        <span className=" rounded hidden sm:flex bg-accent-10 px-1.5 py-1  items-center gap-1.5">
-                            <span className="inline-block rounded-full w-2 h-2 bg-status-green"></span>
-                            <span className="text-xs ">
-                                {manga.attributes.status}
-                            </span>
-                        </span>
+
+                        <MangaStatus
+                            className="hidden sm:flex"
+                            variant={manga.attributes.status}
+                            title={manga.attributes.status}
+                        />
                     </div>
                 </div>
             </div>
-            <div>
-                <div className="flex col-span-2 items-center gap-2 flex-wrap mt-2">
-                    <span className=" rounded flex sm:hidden bg-accent-10 px-1.5 sm:py-1  items-center gap-1.5">
-                        <span className="inline-block rounded-full w-2 h-2 bg-status-green"></span>
-                        <span className="text-xs ">
-                            {manga.attributes.status}
-                        </span>
-                    </span>
-                    {manga.attributes.tags.map((tag) => (
-                        <Link
-                            key={tag.id}
-                            href={"#"}
-                            className="text-[0.625rem] font-semibold uppercase text-foreground"
-                        >
-                            {getTagName(tag)}
-                        </Link>
-                    ))}
-                </div>
+            <div className="col-span-2">
+                <TagCollapse className="mt-2" variant={"normal"}>
+                    <div className="flex  items-center gap-2 flex-wrap mt-2">
+                        <MangaStatus
+                            variant={manga.attributes.status}
+                            title={manga.attributes.status}
+                            className="sm:hidden"
+                        />
+                        {manga.attributes.contentRating === "suggestive" && (
+                            <Tag className="px-1" variant={"warning"}>
+                                Suggestive
+                            </Tag>
+                        )}
+                        {tagsWithGroupContent.map((tag) => (
+                            <Link
+                                href={"#"}
+                                key={tag.id}
+                                className={cn(
+                                    tagVariants({ variant: "danger" }),
+                                    "px-1"
+                                )}
+                            >
+                                {getTagName(tag)}
+                            </Link>
+                        ))}
+
+                        {manga.attributes.tags.map((tag) => {
+                            if (tag.attributes.group === "content") return null;
+                            return (
+                                <Link
+                                    href={"#"}
+                                    key={tag.id}
+                                    className={cn(
+                                        tagVariants({ variant: "none" })
+                                    )}
+                                >
+                                    {getTagName(tag)}
+                                </Link>
+                            );
+                        })}
+                    </div>
+                </TagCollapse>
             </div>
             <div className="col-span-3 sm:col-span-2 text-sm mt-2 line-clamp-4">
                 {getDataByLocale(manga.attributes.description)}

@@ -1,5 +1,9 @@
 export const sortByData = [
     {
+        key: "Any",
+        value: "",
+    },
+    {
         key: "Best Match",
         value: "relevance.desc",
     },

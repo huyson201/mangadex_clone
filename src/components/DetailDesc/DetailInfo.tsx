@@ -1,8 +1,9 @@
-import { cn } from "@/lib/utils";
+import { cn, getLangFlagUrl, getStatisticsLink } from "@/lib/utils";
 import Link from "next/link";
 import React from "react";
 import { Manga } from "../../../types";
-
+import Image from "next/image";
+import mangaLinkIcons from "@/data/mangaLinkIcon.json";
 type Props = {
     className?: string;
     manga: Manga;
@@ -24,6 +25,7 @@ const DetailInfo = ({ manga, className }: Props) => {
     const formats = manga.attributes.tags.filter(
         (tag) => tag.attributes.group === "format"
     );
+    const links = getStatisticsLink(manga.attributes.links);
 
     return (
         <div className={cn("flex flex-wrap gap-4", className)}>
@@ -117,13 +119,73 @@ const DetailInfo = ({ manga, className }: Props) => {
                     </div>
                 </div>
             )}
+            {links.readOrBuy.length > 1 && (
+                <div>
+                    <div className=" font-bold">Read or Buy</div>
+                    <div className="flex items-center flex-wrap gap-2">
+                        {links.readOrBuy.map((value) => (
+                            <Link
+                                key={value.key}
+                                className="bg-accent hover:bg-primary text-xs rounded py-1 px-2 mt-2 inline-flex gap-1 transition-colors"
+                                href={value.link}
+                            >
+                                <Image
+                                    src={
+                                        value.key === "engtl"
+                                            ? `${mangaLinkIcons[value.key]}${
+                                                  value.link
+                                              }`
+                                            : mangaLinkIcons[value.key]
+                                    }
+                                    width={16}
+                                    height={16}
+                                    alt={value.key}
+                                />
+                                {value.name}
+                            </Link>
+                        ))}
+                    </div>
+                </div>
+            )}
+            {links.track.length > 1 && (
+                <div>
+                    <div className=" font-bold">Track</div>
+                    <div className="flex items-center flex-wrap gap-2">
+                        {links.track.map((value) => (
+                            <Link
+                                key={value.key}
+                                className="bg-accent hover:bg-primary text-xs rounded py-1 px-2 mt-2 inline-flex gap-1 transition-colors"
+                                href={value.link}
+                            >
+                                <Image
+                                    src={mangaLinkIcons[value.key]}
+                                    width={16}
+                                    height={16}
+                                    alt={value.key}
+                                />
+                                {value.name}
+                            </Link>
+                        ))}
+                    </div>
+                </div>
+            )}
             <div className="w-full">
                 <div className=" font-bold">Alternative Titles</div>
                 <div className="text-sm divide-y-2 divide-accent">
                     {manga.attributes.altTitles.map((title, index) => {
                         const key = Object.keys(title)[0];
+                        const flag = getLangFlagUrl(key);
                         return (
-                            <div className="py-1.5" key={key + index}>
+                            <div
+                                className="py-1.5 flex items-center gap-2"
+                                key={key + index}
+                            >
+                                <Image
+                                    width={24}
+                                    height={24}
+                                    src={flag || ""}
+                                    alt={key}
+                                />
                                 {title[key]}
                             </div>
                         );

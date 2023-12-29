@@ -1,7 +1,9 @@
 import queryString from "query-string";
 import {
+    AtHomeResponse,
     Author,
     Chapter,
+    ContentRating,
     Cover,
     Manga,
     MangaDexResponseSuccess,
@@ -12,6 +14,8 @@ import {
 import { getCurrentSeasonTimeString, getTimeAgo } from "@/lib/utils";
 
 export const base_url = "https://api.mangadex.org/";
+const chapterIncludesOption = ["manga", "scanlation_group", "user"] as const;
+type ChapterIncludesOpts = (typeof chapterIncludesOption)[number];
 
 type IncludeOption =
     | "artist"
@@ -112,10 +116,10 @@ export const getTags = async () => {
 export const getPopularManga = async (includes?: IncludeOption[]) => {
     const currentYear = new Date().getFullYear();
     const currentSeasonal = getCurrentSeasonTimeString();
-
+    const formattedDateTime: string = getTimeAgo(5);
     return getMangaList({
         year: currentYear,
-        updatedAtSince: currentSeasonal,
+        updatedAtSince: formattedDateTime,
         order: "followedCount.desc",
         includes: includes,
     });
@@ -323,17 +327,22 @@ export const getStatisticsList = async (
 };
 export const findAuthorsOrArtist = async (
     name: string,
+    ids?: string[],
     offset = 0,
     limit = 10
 ) => {
-    const url = queryString.stringifyUrl({
-        url: `${base_url}author`,
-        query: {
-            name,
-            offset,
-            limit,
+    const url = queryString.stringifyUrl(
+        {
+            url: `${base_url}author`,
+            query: {
+                name,
+                offset,
+                limit,
+                ids,
+            },
         },
-    });
+        { arrayFormat: "bracket", skipEmptyString: true, skipNull: true }
+    );
     try {
         const result = await fetch(url, {
             method: "GET",
@@ -367,14 +376,7 @@ export const getCoverArt = async (coverId: string) => {
         });
 
         let jsonData = await result.json();
-        if (result.ok) {
-            return {
-                result: jsonData as MangaDexResponseSuccess<Cover>,
-            };
-        }
-        return {
-            error: jsonData,
-        };
+        return jsonData as MangaDexResponseSuccess<Cover>;
     } catch (error) {
         throw error;
     }
@@ -473,4 +475,97 @@ export const getStatistics = async (
     return {
         result: resultData,
     };
+};
+
+interface MangaFeedOption {
+    limit: number;
+    offset: number;
+    translatedLanguage: string[];
+    originalLanguage: string[];
+    excludedOriginalLanguage: string[];
+    contentRating: ContentRating[];
+    excludedGroups: string[];
+    excludedUploaders: string[];
+    includeFutureUpdates: 0 | 1;
+    createdAtSince: string;
+    updatedAtSince: string;
+    publishAtSince: string;
+    includes: ChapterIncludesOpts[];
+    includeEmptyPages: 0 | 1;
+    includeFuturePublishAt: 0 | 1;
+    includeExternalUrl: 0 | 1;
+    order:
+        | "createdAt.desc"
+        | "createdAt.asc"
+        | "updatedAt.desc"
+        | "updatedAt.asc"
+        | "volume.desc"
+        | "volume.asc"
+        | "chapter.desc"
+        | "chapter.asc";
+}
+
+export const getMangaFeed = async (
+    mangaId: string,
+    options: Partial<MangaFeedOption>
+) => {
+    const order = options?.order || "";
+    const [field, value] = order?.split(".");
+    const url = queryString.stringifyUrl(
+        {
+            url: `${base_url}manga/${mangaId}/feed`,
+            query: { ...options, [`order[${field}]`]: value, order: undefined },
+        },
+        {
+            arrayFormat: "bracket",
+            skipEmptyString: true,
+            skipNull: true,
+        }
+    );
+
+    try {
+        const res = await fetch(url, {
+            method: "GET",
+            headers: {
+                "content-type": "application/json",
+            },
+            next: {
+                revalidate: 3600,
+            },
+        });
+
+        let jsonData = await res.json();
+        return jsonData as PaginationResponse<Chapter>;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
+
+export const getAtHome = async (chapterId: string, forcePort443?: boolean) => {
+    const url = queryString.stringifyUrl({
+        url: `${base_url}at-home/server/${chapterId}`,
+        query: { forcePort443 },
+    });
+    try {
+        const res = await fetch(url, {
+            method: "GET",
+            headers: {
+                "content-type": "application/json",
+            },
+            next: {
+                revalidate: 3600,
+            },
+        });
+        let jsonData = await res.json();
+        if (!res.ok) {
+            console.log(jsonData);
+            throw new Error("Something error!");
+        }
+
+        return jsonData as AtHomeResponse;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
 };

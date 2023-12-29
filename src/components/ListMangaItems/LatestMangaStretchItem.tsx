@@ -13,7 +13,7 @@ type Props = {
 
 const LatestMangaStretchItem = async ({ manga, chapters }: Props) => {
     const mangaWithCoverArt = await getMangaById(manga.id, ["cover_art"]);
-    const coverAt = mangaWithCoverArt?.result.data.relationships.find(
+    const coverArt = mangaWithCoverArt?.result.data.relationships.find(
         (relation) => relation.type === "cover_art"
     );
 
@@ -27,7 +27,7 @@ const LatestMangaStretchItem = async ({ manga, chapters }: Props) => {
                         src={getImageUrl(
                             "256",
                             manga.id,
-                            coverAt?.attributes.fileName
+                            coverArt?.attributes.fileName
                         )}
                         width={512}
                         height={728}

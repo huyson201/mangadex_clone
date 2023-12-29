@@ -1,0 +1,282 @@
+[
+	{
+		"code": "sq",
+		"name": "Albanian",
+		"flag": "https://mangadex.org/img/flags/sq.svg"
+	},
+	{
+		"code": "ar",
+		"name": "Arabic",
+		"flag": "https://mangadex.org/img/flags/sa.svg"
+	},
+	{
+		"code": "az",
+		"name": "Azerbaijani",
+		"flag": "https://mangadex.org/img/flags/az.svg"
+	},
+	{
+		"code": "bn",
+		"name": "Bengali",
+		"flag": "https://mangadex.org/img/flags/bd.svg"
+	},
+	{
+		"code": "bg",
+		"name": "Bulgarian",
+		"flag": "https://mangadex.org/img/flags/bg.svg"
+	},
+	{
+		"code": "my",
+		"name": "Burmese",
+		"flag": "https://mangadex.org/img/flags/mm.svg"
+	},
+	{
+		"code": "ca",
+		"name": "Catalan",
+		"flag": "https://mangadex.org/img/flags/ad.svg"
+	},
+	{
+		"code": "zh",
+		"name": "Chinese (Simplified)",
+		"flag": "https://mangadex.org/img/flags/cn.svg"
+	},
+	{
+		"code": "zh-ro",
+		"name": "Chinese (Simplified)",
+		"flag": "https://mangadex.org/img/flags/cn.svg"
+	},
+	{
+		"code": "zh-hk",
+		"name": "Chinese (Traditional)",
+		"flag": "https://mangadex.org/img/flags/hk.svg"
+	},
+	{
+		"code": "hr",
+		"name": "Croatian",
+		"flag": "https://mangadex.org/img/flags/hr.svg"
+	},
+	{
+		"code": "cs",
+		"name": "Czech",
+		"flag": "https://mangadex.org/img/flags/cz.svg"
+	},
+	{
+		"code": "da",
+		"name": "Danish",
+		"flag": "https://mangadex.org/img/flags/dk.svg"
+	},
+	{
+		"code": "nl",
+		"name": "Dutch",
+		"flag": "https://mangadex.org/img/flags/nl.svg"
+	},
+	{
+		"code": "en",
+		"name": "English",
+		"flag": "https://mangadex.org/img/flags/gb.svg"
+	},
+	{
+		"code": "eo",
+		"name": "Esperanto",
+		"flag": "https://mangadex.org/img/flags/eo.svg"
+	},
+	{
+		"code": "et",
+		"name": "Estonian",
+		"flag": "https://mangadex.org/img/flags/et.svg"
+	},
+	{
+		"code": "tl",
+		"name": "Filipino",
+		"flag": "https://mangadex.org/img/flags/ph.svg"
+	},
+	{
+		"code": "fi",
+		"name": "Finnish",
+		"flag": "https://mangadex.org/img/flags/fi.svg"
+	},
+	{
+		"code": "fr",
+		"name": "French",
+		"flag": "https://mangadex.org/img/flags/fr.svg"
+	},
+	{
+		"code": "ka",
+		"name": "Georgian",
+		"flag": "https://mangadex.org/img/flags/ka.svg"
+	},
+	{
+		"code": "de",
+		"name": "German",
+		"flag": "https://mangadex.org/img/flags/de.svg"
+	},
+	{
+		"code": "el",
+		"name": "Greek",
+		"flag": "https://mangadex.org/img/flags/gr.svg"
+	},
+	{
+		"code": "he",
+		"name": "Hebrew",
+		"flag": "https://mangadex.org/img/flags/il.svg"
+	},
+	{
+		"code": "hi",
+		"name": "Hindi",
+		"flag": "https://mangadex.org/img/flags/in.svg"
+	},
+	{
+		"code": "hu",
+		"name": "Hungarian",
+		"flag": "https://mangadex.org/img/flags/hu.svg"
+	},
+	{
+		"code": "id",
+		"name": "Indonesian",
+		"flag": "https://mangadex.org/img/flags/id.svg"
+	},
+	{
+		"code": "it",
+		"name": "Italian",
+		"flag": "https://mangadex.org/img/flags/it.svg"
+	},
+	{
+		"code": "ja",
+		"name": "Japanese",
+		"flag": "https://mangadex.org/img/flags/jp.svg"
+	},
+	{
+		"code": "ja-ro",
+		"name": "Japanese",
+		"flag": "https://mangadex.org/img/flags/jp.svg"
+	},
+	{
+		"code": "kk",
+		"name": "Kazakh",
+		"flag": "https://mangadex.org/img/flags/kz.svg"
+	},
+	{
+		"code": "ko",
+		"name": "Korean",
+		"flag": "https://mangadex.org/img/flags/kr.svg"
+	},
+	{
+		"code": "ko-ro",
+		"name": "Korean",
+		"flag": "https://mangadex.org/img/flags/kr.svg"
+	},
+	{
+		"code": "la",
+		"name": "Latin",
+		"flag": "https://mangadex.org/img/flags/ri.svg"
+	},
+	{
+		"code": "lt",
+		"name": "Lithuanian",
+		"flag": "https://mangadex.org/img/flags/lt.svg"
+	},
+	{
+		"code": "ms",
+		"name": "Malay",
+		"flag": "https://mangadex.org/img/flags/my.svg"
+	},
+	{
+		"code": "mn",
+		"name": "Mongolian",
+		"flag": "https://mangadex.org/img/flags/mn.svg"
+	},
+	{
+		"code": "ne",
+		"name": "Nepali",
+		"flag": "https://mangadex.org/img/flags/np.svg"
+	},
+	{
+		"code": "no",
+		"name": "Norwegian",
+		"flag": "https://mangadex.org/img/flags/no.svg"
+	},
+	{
+		"code": "fa",
+		"name": "Persian",
+		"flag": "https://mangadex.org/img/flags/ir.svg"
+	},
+	{
+		"code": "pl",
+		"name": "Polish",
+		"flag": "https://mangadex.org/img/flags/pl.svg"
+	},
+	{
+		"code": "pt",
+		"name": "Portuguese",
+		"flag": "https://mangadex.org/img/flags/pt.svg"
+	},
+	{
+		"code": "pt-br",
+		"name": "Portuguese (Br)",
+		"flag": "https://mangadex.org/img/flags/br.svg"
+	},
+	{
+		"code": "ro",
+		"name": "Romanian",
+		"flag": "https://mangadex.org/img/flags/ro.svg"
+	},
+	{
+		"code": "ru",
+		"name": "Russian",
+		"flag": "https://mangadex.org/img/flags/ru.svg"
+	},
+	{
+		"code": "sr",
+		"name": "Serbian",
+		"flag": "https://mangadex.org/img/flags/rs.svg"
+	},
+	{
+		"code": "sk",
+		"name": "Slovak",
+		"flag": "https://mangadex.org/img/flags/sk.svg"
+	},
+	{
+		"code": "es",
+		"name": "Spanish",
+		"flag": "https://mangadex.org/img/flags/es.svg"
+	},
+	{
+		"code": "es-la",
+		"name": "Spanish (LATAM)",
+		"flag": "https://mangadex.org/img/flags/mx.svg"
+	},
+	{
+		"code": "sv",
+		"name": "Swedish",
+		"flag": "https://mangadex.org/img/flags/se.svg"
+	},
+	{
+		"code": "ta",
+		"name": "Tamil",
+		"flag": "https://mangadex.org/img/flags/tam.svg"
+	},
+	{
+		"code": "te",
+		"name": "Telugu",
+		"flag": "https://mangadex.org/img/flags/tel.svg"
+	},
+	{
+		"code": "th",
+		"name": "Thai",
+		"flag": "https://mangadex.org/img/flags/th.svg"
+	},
+	{
+		"code": "tr",
+		"name": "Turkish",
+		"flag": "https://mangadex.org/img/flags/tr.svg"
+	},
+	{
+		"code": "uk",
+		"name": "Ukrainian",
+		"flag": "https://mangadex.org/img/flags/ua.svg"
+	},
+	{
+		"code": "vi",
+		"name": "Vietnamese",
+		"flag": "https://mangadex.org/img/flags/vn.svg"
+	}
+]

@@ -193,3 +193,22 @@ interface Author {
     };
     relationships: Relationship[];
 }
+
+const contentRating = [
+    "safe",
+    "suggestive",
+    "erotica",
+    "pornographic",
+] as const;
+
+type ContentRating = (typeof contentRating)[number];
+
+interface AtHomeResponse {
+    result: "ok" | "error";
+    baseUrl: string;
+    chapter: {
+        hash: string;
+        data: string[];
+        dataSaver: string[];
+    };
+}

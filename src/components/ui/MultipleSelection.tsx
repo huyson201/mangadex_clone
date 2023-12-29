@@ -5,18 +5,19 @@ import { cn } from "@/lib/utils";
 
 type Props = {
     title?: string;
-    data: SingleSelectionData[];
+    data: Data[];
     defaultValue?: string[];
     onSelect?: (data: any[]) => void;
+    renderItem?: (data: Data, isActive: boolean) => React.JSX.Element;
 };
 
-interface SingleSelectionData {
+interface Data {
     key: string;
     value: any;
 }
 
 const MultipleSelection = forwardRef<{ reset: () => void }, Props>(
-    ({ data, onSelect, defaultValue }, ref) => {
+    ({ data, onSelect, defaultValue, renderItem }, ref) => {
         const [currentKey, setCurrentKey] = useState<string[]>(() => {
             if (defaultValue) {
                 console.log(defaultValue);
@@ -31,7 +32,7 @@ const MultipleSelection = forwardRef<{ reset: () => void }, Props>(
         const title = currentKey.length > 0 ? currentKey.join(", ") : "Any";
 
         // remove duplicate data
-        data = data.reduce((prev: SingleSelectionData[], value) => {
+        data = data.reduce((prev: Data[], value) => {
             const isExist = prev.some((el) => compareKey(el.key, value.key));
             if (!isExist) prev.push(value);
             return prev;
@@ -50,6 +51,35 @@ const MultipleSelection = forwardRef<{ reset: () => void }, Props>(
             // eslint-disable-next-line react-hooks/exhaustive-deps
             []
         );
+
+        const render = () => {
+            return data.map((el) => {
+                const isActive = currentKey.some((key) =>
+                    compareKey(key, el.key)
+                );
+
+                if (!renderItem) {
+                    return (
+                        <MultipleSelectionItem
+                            onSelect={(key, value) => handleSelectData(key)}
+                            key={el.key}
+                            keyValue={el.key}
+                            value={el.value}
+                            active={isActive}
+                        />
+                    );
+                }
+                const onClick = () => {
+                    handleSelectData(el.key);
+                };
+                const child = renderItem(el, isActive);
+                return React.cloneElement(child, {
+                    ...child.props,
+                    onClick,
+                    key: el.key,
+                });
+            });
+        };
 
         const handleOpenChange = () => {
             setOpen((prev) => !prev);
@@ -81,7 +111,7 @@ const MultipleSelection = forwardRef<{ reset: () => void }, Props>(
                 contentClass="max-h-[256px] overflow-auto custom-scrollbar w-[var(--radix-popover-trigger-width)]"
             >
                 <div className="pl-2 space-y-2">
-                    {data.map((el) => {
+                    {/* {data.map((el) => {
                         const isActive = currentKey.some((key) =>
                             compareKey(key, el.key)
                         );
@@ -94,7 +124,8 @@ const MultipleSelection = forwardRef<{ reset: () => void }, Props>(
                                 active={isActive}
                             />
                         );
-                    })}
+                    })} */}
+                    {render()}
                 </div>
             </ComboBox>
         );

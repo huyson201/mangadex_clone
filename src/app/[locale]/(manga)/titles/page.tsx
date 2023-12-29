@@ -2,6 +2,7 @@ import BackNavigation from "@/components/BackNavigation/BackNavigation";
 import RecentMangaGridItem from "@/components/ListMangaItems/RecentMangaGridItem";
 import RecentMangaListItem from "@/components/ListMangaItems/RecentMangaListItem";
 import RecentMangaStretchItem from "@/components/ListMangaItems/RecentMangaStretchItem";
+import NotfoundData from "@/components/NotFoundData/NotfoundData";
 import Pagination from "@/components/Pagination/Pagination";
 import OpenFilterButton from "@/components/SearchFilter/OpenFilterButton";
 import SearchFilter from "@/components/SearchFilter/SearchFilter";
@@ -97,6 +98,8 @@ const page = async ({ searchParams: { page = 1, ...searchParams } }: Props) => {
                             </div>
                             <div className="mt-4">
                                 <TabsContent value="list">
+                                    {data.data.length === 0 && <NotfoundData />}
+
                                     <div className="space-y-2">
                                         {data.data.map((manga) => (
                                             <RecentMangaListItem
@@ -109,6 +112,8 @@ const page = async ({ searchParams: { page = 1, ...searchParams } }: Props) => {
                                 </TabsContent>
 
                                 <TabsContent value="stretch">
+                                    {data.data.length === 0 && <NotfoundData />}
+
                                     <div className="grid gap-2 grid-cols-1 md:grid-cols-2">
                                         {data.data.map((manga) => (
                                             <RecentMangaStretchItem
@@ -120,6 +125,8 @@ const page = async ({ searchParams: { page = 1, ...searchParams } }: Props) => {
                                     </div>
                                 </TabsContent>
                                 <TabsContent value="grid">
+                                    {data.data.length === 0 && <NotfoundData />}
+
                                     <div className="grid gap-2 grid-cols-2 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3">
                                         {data.data.map((manga) => (
                                             <RecentMangaGridItem
@@ -134,7 +141,7 @@ const page = async ({ searchParams: { page = 1, ...searchParams } }: Props) => {
                     </div>
                 </SearchFilterProvider>
             </div>
-            <Pagination className="mt-4" totalPage={totalPage} />
+            <Pagination asLink className="mt-4" totalPage={totalPage} />
         </Wrapper>
     );
 };
