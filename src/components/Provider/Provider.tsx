@@ -11,6 +11,7 @@ import {
 import React from "react";
 import { SessionProvider } from "next-auth/react";
 import { Session } from "next-auth/types";
+import { ChapterMenuProvider } from "@/contexts/ChapterMenuContext";
 
 type Props = {
     children?: any;
@@ -28,9 +29,11 @@ const Provider = ({ session, locale, messages, children }: Props) => {
                     messages={messages}
                     timeZone={TIME_ZONE}
                 >
-                    <HeadSearchProvider>
-                        <DrawerMenuProvider>{children}</DrawerMenuProvider>
-                    </HeadSearchProvider>
+                    <ChapterMenuProvider>
+                        <HeadSearchProvider>
+                            <DrawerMenuProvider>{children}</DrawerMenuProvider>
+                        </HeadSearchProvider>
+                    </ChapterMenuProvider>
                 </NextIntlClientProvider>
             </SessionProvider>
         </>

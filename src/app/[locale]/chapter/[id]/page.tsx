@@ -1,6 +1,6 @@
 import React from "react";
 import ChapterContent from "@/components/chapter/ChapterContent";
-import { getAtHome } from "@/services/mangadex";
+import { getAtHome, getChapter } from "@/services/mangadex";
 
 type Props = {
     params: {
@@ -9,11 +9,14 @@ type Props = {
 };
 
 const page = async ({ params: { id } }: Props) => {
-    const atHome = await getAtHome(id);
+    const [atHome, chapter] = await Promise.all([
+        getAtHome(id),
+        getChapter(id, ["manga", "scanlation_group", "user"]),
+    ]);
     return (
-        <div className="pt-[calc(var(--navbar-height)_+_1rem)]">
-            <ChapterContent data={atHome} />
-        </div>
+        <>
+            <ChapterContent data={atHome} chapter={chapter.result.data} />
+        </>
     );
 };
 

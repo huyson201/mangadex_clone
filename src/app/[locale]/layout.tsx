@@ -38,9 +38,11 @@ export default async function RootLayout({
                 )}
             >
                 <Provider session={session} locale={locale} messages={messages}>
+                    <ExcludeLoginRegisterWrapper>
+                        <Navbar />
+                    </ExcludeLoginRegisterWrapper>
                     <div className="flex">
                         <ExcludeLoginRegisterWrapper>
-                            <Navbar />
                             <DrawerMenu />
                         </ExcludeLoginRegisterWrapper>
                         <div className="ml-auto  h-screen transition-all w-full lg:peer-[&.active]/drawer:w-[calc(100%_-_var(--drawer-menu-width))]">

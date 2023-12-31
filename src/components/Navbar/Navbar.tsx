@@ -11,10 +11,21 @@ import { useDrawerMenu } from "@/contexts/DrawerMenuContext";
 type Props = {};
 import AccountMenu from "../AccountMenu/AccountMenu";
 import StackMenuProvider from "@/contexts/StackMenuContext";
+import { useChapterMenu } from "@/contexts/ChapterMenuContext";
+import { usePathname } from "next/navigation";
+import { READ_CHAPTER_URL } from "@/constants";
 const Navbar = (props: Props) => {
     const drawerMenu = useDrawerMenu();
     const navbarBgRef = useRef<HTMLDivElement>(null);
+    const { headerType } = useChapterMenu();
+    const pathname = usePathname();
     useEffect(() => {
+        if (pathname.startsWith(READ_CHAPTER_URL) && headerType === "hidden") {
+            if (!navbarBgRef.current) return;
+            navbarBgRef.current.style.opacity = `1`;
+            return;
+        }
+
         const handleScroll = () => {
             if (!navbarBgRef.current) return;
             const displayPoint = 64;
@@ -26,12 +37,24 @@ const Navbar = (props: Props) => {
         handleScroll();
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
+    }, [headerType, pathname]);
     return (
-        <div className="h-[var(--navbar-height)] w-full fixed top-0 left-0 z-[var(--navbar-index)]">
+        <div
+            className={cn(
+                "h-[var(--navbar-height)] w-full fixed top-0 left-0 z-[var(--navbar-index)]",
+                pathname.startsWith(READ_CHAPTER_URL) && headerType === "hidden"
+                    ? "relative"
+                    : "fixed"
+            )}
+        >
             <div
                 ref={navbarBgRef}
-                className="absolute transition-opacity opacity-0 top-0 left-0 right-0 bottom-0 bg-background border-b border-primary"
+                className={cn(
+                    "absolute transition-opacity opacity-0 top-0 left-0 right-0 bottom-0 bg-background ",
+                    (!pathname.startsWith(READ_CHAPTER_URL) ||
+                        headerType === "shown") &&
+                        "border-b border-primary"
+                )}
             ></div>
             <Wrapper className={cn("flex items-center h-full relative z-[2]")}>
                 <Button

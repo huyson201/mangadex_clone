@@ -569,3 +569,60 @@ export const getAtHome = async (chapterId: string, forcePort443?: boolean) => {
         throw error;
     }
 };
+
+export const getMangaAggregate = async (
+    mangaId: string,
+    options?: {
+        translatedLanguage?: string[];
+        groups?: string[];
+    }
+) => {
+    const url = queryString.stringifyUrl(
+        {
+            url: `${base_url}manga/${mangaId}/aggregate`,
+            query: options,
+        },
+        { arrayFormat: "bracket", skipNull: true, skipEmptyString: true }
+    );
+
+    try {
+        const res = await fetch(url, {
+            method: "GET",
+            headers: {
+                "content-type": "application/json",
+            },
+            next: {
+                revalidate: 3600,
+            },
+        });
+
+        let jsonData = await res.json();
+        if (!res.ok) {
+            console.log(jsonData);
+            throw new Error("Something error!");
+        }
+
+        return jsonData as MangaAggregateResponse;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
+
+type MangaAggregateResponse = {
+    result: string;
+    volumes: {
+        [key: string | number]: {
+            volume: string;
+            count: number;
+            chapters: {
+                [key: string | number]: {
+                    chapter: string;
+                    id: string;
+                    other: string[];
+                    count: number;
+                };
+            };
+        };
+    };
+};
