@@ -5,7 +5,7 @@ import React, { useMemo } from "react";
 import useSWR from "swr";
 import { Manga } from "../../../types";
 import { getImageUrl } from "@/services/mangadex";
-import { slugify } from "@/lib/utils";
+import { getLangFlagUrl, slugify } from "@/lib/utils";
 import Tag from "../Tag/Tag";
 import TagCollapse from "../Tag/TagCollapse";
 type Props = {
@@ -30,6 +30,7 @@ function HeroSlide({ manga }: Props) {
             (relation) => relation.type === "artist"
         );
     }, [manga]);
+    const languageFlag = getLangFlagUrl(manga.attributes.originalLanguage);
 
     return (
         <Link
@@ -50,7 +51,7 @@ function HeroSlide({ manga }: Props) {
             <div className="absolute top-0 left-0 right-0 bottom-0 bg-gradient-to-b from-md-background/60 to-md-background"></div>
             <div className="absolute w-full h-[70%]   sm:h-[65%] md:h-[77%] bottom-0 mb-7 lg:mb-0">
                 <Wrapper className="md:pb-6 pt-6 md:pt-8 flex gap-4">
-                    <div className="block w-[112px] md:h-[278px] md:w-[200px]">
+                    <div className="relative block w-[112px] md:h-[278px] md:w-[200px]">
                         <Image
                             className="w-full md:h-full object-cover rounded-lg"
                             src={getImageUrl(
@@ -62,6 +63,15 @@ function HeroSlide({ manga }: Props) {
                             width={512}
                             height={726}
                         />
+                        {languageFlag && (
+                            <Image
+                                className="absolute bottom-2 right-2"
+                                src={languageFlag}
+                                width={24}
+                                height={24}
+                                alt={manga.attributes.originalLanguage}
+                            />
+                        )}
                     </div>
                     <div className="flex flex-col w-[calc(100%_-_112px)] md:w-[calc(100%_-_200px)] ">
                         <h3 className="text-foreground font-bold text-xl lg:text-4xl line-clamp-5 sm:line-clamp-2 ">

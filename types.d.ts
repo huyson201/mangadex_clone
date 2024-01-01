@@ -113,7 +113,7 @@ interface Chapter {
 
         title: string | null;
 
-        translatedLanguage: id;
+        translatedLanguage: string;
 
         externalUrl: string | null;
 

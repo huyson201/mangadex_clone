@@ -10,7 +10,7 @@ import Backdrop from "../Backdrop/Backdrop";
 import { useTranslations } from "next-intl";
 import { randomManga } from "@/actions/random-manga-action";
 import { BookOpen, Bookmark, Home, Users, X } from "lucide-react";
-import { ADVANCED_SEARCH_URL } from "@/constants";
+import { ADVANCED_SEARCH_URL, READING_HISTORY_URL } from "@/constants";
 
 type Props = {};
 
@@ -63,7 +63,7 @@ function DrawerMenu({}: Props) {
                     <DrawerItem
                         title={t("history")}
                         subItem
-                        href="/titles/recent"
+                        href={READING_HISTORY_URL}
                     />
                 </div>
                 <div className="px-4 pt-2">

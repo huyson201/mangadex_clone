@@ -50,18 +50,6 @@ export default async function Home() {
                 <Wrapper>
                     <h2 className="text-xl sm:text-2xl font-semibold flex items-center justify-between">
                         <span>{t("titles.seasonalList")}</span>
-                        <Link
-                            href={"/titles"}
-                            className={cn(
-                                buttonVariants({
-                                    variant: "outline",
-                                    size: "icon",
-                                }),
-                                "rounded-full text-xl"
-                            )}
-                        >
-                            <FaArrowRight />
-                        </Link>
                     </h2>
                 </Wrapper>
                 <div className="mt-4">

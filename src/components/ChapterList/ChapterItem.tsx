@@ -2,7 +2,12 @@ import { Clock, Eye, MessageSquare, User, Users } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import { Chapter } from "../../../types";
-import { getChapterTitle, getLangFlagUrl, timeAgoFormat } from "@/lib/utils";
+import {
+    getChapterTitle,
+    getDetailChapterLink,
+    getLangFlagUrl,
+    timeAgoFormat,
+} from "@/lib/utils";
 import { Button } from "../ui/button";
 import Image from "next/image";
 
@@ -24,15 +29,18 @@ function ChapterItem({ chapter }: Props) {
             <div className="w-full px-2 py-1.5 bg-accent hover:bg-accent-hover-2 transition-colors  ">
                 <div className="sm:gap-x-6 flex  justify-between sm:justify-start">
                     <Link
-                        href={"#"}
+                        href={getDetailChapterLink(chapter)}
                         className="sm:flex-1 flex items-center  gap-2  text-xs sm:text-sm font-semibold text-foreground"
                     >
-                        <Image
-                            src={flagUrl || ""}
-                            width={24}
-                            height={24}
-                            alt={chapter.attributes.translatedLanguage}
-                        />
+                        {flagUrl && (
+                            <Image
+                                className="w-5 sm:w-6"
+                                src={flagUrl}
+                                width={24}
+                                height={24}
+                                alt={chapter.attributes.translatedLanguage}
+                            />
+                        )}
 
                         <div className="break-all line-clamp-1">
                             {displayTitle}

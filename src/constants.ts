@@ -7,3 +7,5 @@ export const SING_UP_URL = "/register";
 export const VERIFY_MAIL_URL = "/verify-email";
 export const ADVANCED_SEARCH_URL = "/titles";
 export const READ_CHAPTER_URL = "/chapter";
+export const READING_HISTORY_URL = "/my/history";
+export const READING_HISTORY_KEY = "md.history";

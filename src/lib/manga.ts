@@ -1,3 +1,4 @@
+import { READ_CHAPTER_URL } from "@/constants";
 import { Chapter, Manga, Tag } from "../../types";
 import { slugify } from "./utils";
 import flags from "@/data/flag.json";
@@ -12,7 +13,9 @@ export const getMangaTitle = (manga: Manga, locale = "en") => {
 export const getDetailMangaLink = (manga: Manga) => {
     return `/title/${manga.id}/${slugify(getMangaTitle(manga))}`;
 };
-
+export const getDetailChapterLink = (chapter: Chapter) => {
+    return `${READ_CHAPTER_URL}/${chapter.id}`;
+};
 export const getCoverArtFromManga = (manga: Manga) => {
     return manga.relationships.find(
         (relation) => relation.type === "cover_art"

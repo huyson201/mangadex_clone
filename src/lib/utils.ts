@@ -104,11 +104,15 @@ export function getCurrentSeasonTimeString() {
         const startMonth = 6;
         return `${date.getFullYear()}-${startMonth}-01T00:00:00`;
     } else if (currentMonth >= 9 && currentMonth <= 11) {
-        const startMonth = 11;
+        const startMonth = 9;
         return `${date.getFullYear()}-${startMonth}-01T00:00:00`;
     } else {
         const startMonth = 12;
-        return `${date.getFullYear()}-${startMonth}-01T00:00:00`;
+        let year = date.getFullYear();
+        if (currentMonth >= 1 && currentMonth <= 2) {
+            year--;
+        }
+        return `${year}-${startMonth}-01T00:00:00`;
     }
 }
 

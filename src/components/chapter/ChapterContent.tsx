@@ -3,15 +3,18 @@ import { Button } from "@/components/ui/button";
 import Wrapper from "@/layouts/Wrapper/Wrapper";
 import { ChevronLeft, Users } from "lucide-react";
 import Link from "next/link";
-import React, { CSSProperties, useRef, useState } from "react";
+import React, { CSSProperties, useEffect, useRef, useState } from "react";
 import { AtHomeResponse, Chapter } from "../../../types";
 import Image from "next/image";
-import { cn } from "@/lib/utils";
+import { cn, getDataByLocale, getMangaTitle } from "@/lib/utils";
 import ChapterSingleRead from "./chapterSingleRead";
 import ChapterLongStripRead from "./ChapterLongStripRead";
 import ChapterMenu from "./ChapterMenu";
 import { PageType, useChapterMenu } from "@/contexts/ChapterMenuContext";
 import ChapterProgress from "./ChapterProgress";
+import { useLocalStorage } from "@/hooks";
+import { READING_HISTORY_KEY } from "@/constants";
+import { ReadingHistoryItem } from "@/app/[locale]/(manga)/my/history/HistoryContent";
 
 export interface MyCustomCSS extends CSSProperties {
     "--current-progress": number | string;
@@ -32,6 +35,38 @@ const ChapterContent = ({ data, chapter }: Props) => {
         slideToIndex: (index: number) => void;
     }>(null);
 
+    const chapterGroup = chapter.relationships.find(
+        (relation) => relation.type === "scanlation_group"
+    );
+    const manga = chapter.relationships.find(
+        (relation) => relation.type === "manga"
+    );
+    const { data: history, setData } =
+        useLocalStorage<ReadingHistoryItem[]>(READING_HISTORY_KEY);
+
+    useEffect(() => {
+        if (!manga) return;
+
+        const newData = history ? [...history] : [];
+
+        const index = newData.findIndex(
+            (item) => item.chapterId === chapter.id
+        );
+
+        if (index !== -1) {
+            newData.splice(index, 1);
+        }
+
+        const historyItem: ReadingHistoryItem = {
+            mangaId: manga.id,
+            chapterId: chapter.id,
+            date: new Date(),
+        };
+
+        newData.push(historyItem);
+        setData(newData);
+    }, []);
+
     return (
         <div
             className={cn(
@@ -46,7 +81,7 @@ const ChapterContent = ({ data, chapter }: Props) => {
                 </div>
                 <h1 className="text-center sm:text-left">
                     <Link href={"#"} className="text-primary">
-                        Hanninmae no Koibito
+                        {getDataByLocale(manga?.attributes.title)}
                     </Link>
                 </h1>
                 <div className="grid grid-cols-3 gap-x-2 mt-1.5">
@@ -71,7 +106,7 @@ const ChapterContent = ({ data, chapter }: Props) => {
                         href={"#"}
                         className="rounded hover:bg-accent-2-hover px-1 text-sm"
                     >
-                        NKP : Nerjemah Kalo Pengen
+                        {chapterGroup?.attributes.name}
                     </Link>
                 </div>
             </Wrapper>

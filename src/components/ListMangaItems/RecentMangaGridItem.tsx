@@ -39,7 +39,7 @@ function RecentMangaGridItem({ manga }: Props) {
                 <div className="absolute bottom-0 w-full bg-gradient-to-t from-black/80 px-2 text-sm to-transparent py-3">
                     {flag && (
                         <Image
-                            className="inline-block mr-1"
+                            className="inline-block mr-1 w-6 h-6"
                             src={flag}
                             alt={manga.attributes.originalLanguage}
                             width={24}

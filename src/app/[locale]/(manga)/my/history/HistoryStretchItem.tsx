@@ -1,24 +1,22 @@
-import Image from "next/image";
 import React from "react";
+import { Chapter, Manga } from "../../../../../../types";
+import { getDetailMangaLink, getLangFlagUrl, getMangaTitle } from "@/lib/manga";
 import Link from "next/link";
-import ChapterItem from "../ChapterList/ChapterItem";
-import { Chapter, Manga } from "../../../types";
-import { getImageUrl, getMangaById } from "@/services/mangadex";
-import { getDetailMangaLink, getLangFlagUrl, getMangaTitle } from "@/lib/utils";
+import Image from "next/image";
+import { getImageUrl } from "@/services/mangadex";
+import ChapterItem from "@/components/ChapterList/ChapterItem";
+
 type Props = {
     manga: Manga;
     chapters: Chapter[];
 };
 
-const LatestMangaStretchItem = async ({ manga, chapters }: Props) => {
-    const mangaWithCoverArt = await getMangaById(manga.id, ["cover_art"]);
-    const coverArt = mangaWithCoverArt?.result.data.relationships.find(
+const HistoryStretchItem = ({ manga, chapters }: Props) => {
+    const title = getMangaTitle(manga);
+    const coverArt = manga.relationships.find(
         (relation) => relation.type === "cover_art"
     );
-
-    const title = getMangaTitle(manga);
     const flag = getLangFlagUrl(manga.attributes.originalLanguage);
-
     return (
         <div className="bg-accent p-2 rounded  grid grid-rows-[auto_1fr]  grid-cols-[50px_1fr] sm:grid-cols-[140px_1fr] gap-x-1 sm:gap-x-3">
             <div className="order-2 sm:order-1 sm:row-span-2">
@@ -66,4 +64,4 @@ const LatestMangaStretchItem = async ({ manga, chapters }: Props) => {
     );
 };
 
-export default LatestMangaStretchItem;
+export default HistoryStretchItem;

@@ -16,6 +16,23 @@ import { getCurrentSeasonTimeString, getTimeAgo } from "@/lib/utils";
 export const base_url = "https://api.mangadex.org/";
 const chapterIncludesOption = ["manga", "scanlation_group", "user"] as const;
 type ChapterIncludesOpts = (typeof chapterIncludesOption)[number];
+type MangaAggregateResponse = {
+    result: string;
+    volumes: {
+        [key: string | number]: {
+            volume: string;
+            count: number;
+            chapters: {
+                [key: string | number]: {
+                    chapter: string;
+                    id: string;
+                    other: string[];
+                    count: number;
+                };
+            };
+        };
+    };
+};
 
 type IncludeOption =
     | "artist"
@@ -115,8 +132,7 @@ export const getTags = async () => {
 };
 export const getPopularManga = async (includes?: IncludeOption[]) => {
     const currentYear = new Date().getFullYear();
-    const currentSeasonal = getCurrentSeasonTimeString();
-    const formattedDateTime: string = getTimeAgo(5);
+    const formattedDateTime: string = getTimeAgo(7);
     return getMangaList({
         year: currentYear,
         updatedAtSince: formattedDateTime,
@@ -257,39 +273,17 @@ export const getLatestUpdateList = async (
         throw error;
     }
 };
-export const getLatestUpdate = async (
-    limit = 10,
-    offset = 0,
-    includes?: IncludeOption[]
-) => {
-    includes ??= ["artist", "author", "cover_art", "creator"];
-
-    const url = `${base_url}/manga?limit=${limit}&offset=${offset}&hasAvailableChapters=1&${includes
-        .map((opt) => `includes[]=${opt}`)
-        .join("&")}`;
-
+export const getHomeLatestUpdate = async () => {
     try {
-        const result = await fetch(url, {
-            method: "GET",
-            headers: {
-                "content-type": "application/json",
-            },
-            cache: "no-cache",
+        const result = await getMangaList({
+            limit: 12,
+            offset: 0,
+            hasAvailableChapters: 1,
+            includes: ["artist", "author", "cover_art", "creator"],
         });
-
-        let jsonData = await result.json();
-
-        if (!result.ok) {
-            console.log(jsonData);
-            throw new Error("Something error");
-        }
-
-        const resultData = jsonData as PaginationResponse<Manga>;
-
-        return {
-            result: resultData as PaginationResponse<Manga>,
-        };
+        return result;
     } catch (error) {
+        console.log(error);
         throw error;
     }
 };
@@ -609,20 +603,73 @@ export const getMangaAggregate = async (
     }
 };
 
-type MangaAggregateResponse = {
-    result: string;
-    volumes: {
-        [key: string | number]: {
-            volume: string;
-            count: number;
-            chapters: {
-                [key: string | number]: {
-                    chapter: string;
-                    id: string;
-                    other: string[];
-                    count: number;
-                };
-            };
-        };
-    };
+type GetChaptersOptions = {
+    limit: number;
+    offset: number;
+    ids: string[];
+    title: string;
+    groups: string[];
+    manga: string;
+    volume: string[];
+    chapter: string | string[];
+    translatedLanguage: string[];
+    originalLanguage: string[];
+    excludedOriginalLanguage: string[];
+    includeEmptyPages: 0 | 1;
+    includeFuturePublishAt: 0 | 1;
+    includeExternalUrl: 0 | 1;
+    createdAtSince: string;
+    updatedAtSince: string;
+    publishAtSince: string;
+    includes: ("manga" | "user" | "scanlation_group")[];
+    order:
+        | "createdAt.desc"
+        | "createdAt.asc"
+        | "updatedAt.desc"
+        | "updatedAt.asc"
+        | "publishAt.desc"
+        | "publishAt.asc"
+        | "chapter.asc"
+        | "chapter.desc"
+        | "volume.desc"
+        | "volume.asc"
+        | "readableAt.desc"
+        | "readableAt.asc";
+};
+export const getChapters = async (opts?: Partial<GetChaptersOptions>) => {
+    const order = opts?.order || "";
+    const [field, value] = order?.split(".");
+    const url = queryString.stringifyUrl(
+        {
+            url: `${base_url}chapter`,
+            query: {
+                ...opts,
+                order: undefined,
+                [`order[${field}]`]: value,
+            },
+        },
+        { arrayFormat: "bracket", skipEmptyString: true, skipNull: true }
+    );
+
+    try {
+        const result = await fetch(url, {
+            method: "GET",
+            headers: {
+                "content-type": "application/json",
+            },
+            cache: "no-cache",
+        });
+
+        let jsonData = await result.json();
+
+        if (!result.ok) {
+            console.log(jsonData);
+            throw new Error("Something error");
+        }
+
+        return jsonData as PaginationResponse<Chapter>;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
 };

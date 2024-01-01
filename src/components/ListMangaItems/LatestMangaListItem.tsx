@@ -1,18 +1,18 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import jpFlag from "@/assets/flags/jp.svg";
 import ChapterItem from "../ChapterList/ChapterItem";
 import { Chapter, Manga } from "../../../types";
-import { getDetailMangaLink, getMangaTitle } from "@/lib/utils";
+import { getDetailMangaLink, getLangFlagUrl, getMangaTitle } from "@/lib/utils";
 
 type Props = {
     manga: Manga;
     chapters: Chapter[];
 };
 
-async function LatestMangaListitem({ manga, chapters }: Props) {
+function LatestMangaListitem({ manga, chapters }: Props) {
     const title = getMangaTitle(manga);
+    const flag = getLangFlagUrl(manga.attributes.originalLanguage);
 
     return (
         <div className="bg-accent p-2 rounded ">
@@ -21,12 +21,16 @@ async function LatestMangaListitem({ manga, chapters }: Props) {
                     href={getDetailMangaLink(manga)}
                     className="font-bold text-sm sm:text-base pb-1 border-b border-[rgba(128,128,128,0.5)]  flex items-center gap-2"
                 >
-                    <Image
-                        className="w-6 "
-                        src={jpFlag}
-                        alt={`${title}`}
-                    ></Image>
-                    {Object.values(title)}
+                    {flag && (
+                        <Image
+                            className="w-6"
+                            src={flag}
+                            width={24}
+                            height={24}
+                            alt={title}
+                        ></Image>
+                    )}
+                    {title}
                 </Link>
             </div>
             <div className="divide-y divide-background">

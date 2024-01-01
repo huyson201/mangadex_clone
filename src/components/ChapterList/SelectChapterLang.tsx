@@ -88,6 +88,7 @@ const SelectChapterLang = ({
                                         height={24}
                                         src={lang.flag}
                                         alt={lang.name}
+                                        className="w-auto h-auto"
                                     />
                                     <div className="break-all line-clamp-1">
                                         {lang.name}

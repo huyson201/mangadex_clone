@@ -180,12 +180,16 @@ const DetailInfo = ({ manga, className }: Props) => {
                                 className="py-1.5 flex items-center gap-2"
                                 key={key + index}
                             >
-                                <Image
-                                    width={24}
-                                    height={24}
-                                    src={flag || ""}
-                                    alt={key}
-                                />
+                                {flag && (
+                                    <Image
+                                        width={24}
+                                        height={24}
+                                        src={flag}
+                                        alt={key}
+                                        className="w-auto h-auto"
+                                    />
+                                )}
+
                                 {title[key]}
                             </div>
                         );
