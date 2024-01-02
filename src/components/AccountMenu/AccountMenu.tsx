@@ -53,7 +53,7 @@ function AccountMenu({}: Props) {
                 </Button>
                 <div
                     className={cn(
-                        `fixed md:max-h-[500px] overflow-y-auto md:absolute top-0 md:top-full transition-transform md:h-auto right-0 md:right-[var(--side-margin)] z-[var(--drawer-index)] h-full min-w-[var(--drawer-profile-min-width)] p-6 w-full max-w-[var(--drawer-profile-width)] bg-drawer md:rounded-md`,
+                        `fixed md:max-h-[500px] custom-scrollbar overflow-y-auto md:absolute top-0 md:top-full transition-transform md:h-auto right-0 md:right-[var(--side-margin)] z-[var(--drawer-index)] h-full min-w-[var(--drawer-profile-min-width)] p-6 w-full max-w-[var(--drawer-profile-width)] bg-drawer md:rounded-md`,
                         !stackMenu?.isActive
                             ? "translate-x-full md:translate-x-0 md:scale-105 md:opacity-0 md:invisible"
                             : "translate-x-0 md:scale-100 md:opacity-100 md:visible"

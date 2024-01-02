@@ -35,7 +35,7 @@ const DetailDesc = ({ manga }: DetailDescProps) => {
             >
                 <div>
                     <div
-                        className="text-sm "
+                        className="text-sm break-all"
                         dangerouslySetInnerHTML={{
                             __html: manga.attributes.description.en,
                         }}

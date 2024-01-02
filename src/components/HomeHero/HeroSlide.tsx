@@ -5,7 +5,7 @@ import React, { useMemo } from "react";
 import useSWR from "swr";
 import { Manga } from "../../../types";
 import { getImageUrl } from "@/services/mangadex";
-import { getLangFlagUrl, slugify } from "@/lib/utils";
+import { getDataByLocale, getLangFlagUrl, slugify } from "@/lib/utils";
 import Tag from "../Tag/Tag";
 import TagCollapse from "../Tag/TagCollapse";
 type Props = {
@@ -98,7 +98,9 @@ function HeroSlide({ manga }: Props) {
                                 className="mt-3 text-sm line-clamp-3 md:line-clamp-4 lg:line-clamp-6"
                                 dangerouslySetInnerHTML={{
                                     __html:
-                                        manga.attributes.description.en || "",
+                                        getDataByLocale(
+                                            manga.attributes.description
+                                        ) || "",
                                 }}
                             ></div>
                         </div>

@@ -1,19 +1,18 @@
 import { JWT } from "next-auth/jwt";
 import NextAuth from "next-auth";
-import { Auth, BackendToken } from "./type";
 import { IUser } from "./src/models/user";
 
 declare module "next-auth" {
-    interface Session {
+    export interface Session {
         user: Omit<IUser, "password"> & { _id: string };
     }
 }
 
 declare module "next-auth/jwt" {
-    interface JWT extends Omit<IUser & { _id: string }, "password"> {}
+    export interface JWT extends Omit<IUser & { _id: string }, "password"> {}
 }
 
-interface Tag {
+export interface Tag {
     id: string;
     type: string;
     attributes: {
@@ -26,7 +25,7 @@ interface Tag {
     };
     relationships: Relationship[];
 }
-interface Relationship {
+export interface Relationship {
     id: string;
     type: string;
     related?:
@@ -48,7 +47,7 @@ interface Relationship {
         | "serialization";
     attributes?: any | null;
 }
-interface Manga {
+export interface Manga {
     id: string;
     type: string;
     attributes: {
@@ -80,7 +79,7 @@ interface Manga {
     relationships: Relationship[];
 }
 
-interface Cover {
+export interface Cover {
     id: string;
     type: string;
     attributes: {
@@ -101,7 +100,7 @@ interface Cover {
     relationships: Relationship[];
 }
 
-interface Chapter {
+export interface Chapter {
     id: string;
 
     type: string;
@@ -131,16 +130,16 @@ interface Chapter {
     };
     relationships: Relationship[];
 }
-interface MangaDexResponseSuccess<T> {
+export interface MangaDexResponseSuccess<T> {
     result: string;
     response: string;
     data: T;
 }
-interface Statistics {
+export interface Statistics {
     [key: string]: Statistic;
 }
 
-interface Statistic {
+export interface Statistic {
     comments: {
         threadId: number;
         repliesCount: number;
@@ -155,11 +154,11 @@ interface Statistic {
     follows: number | null;
 }
 
-interface StatisticsResponse {
+export interface StatisticsResponse {
     result: string;
     statistics: Statistics;
 }
-interface PaginationResponse<T> {
+export interface PaginationResponse<T> {
     result: "ok" | "error";
     response: string;
     data: T[];
@@ -168,7 +167,7 @@ interface PaginationResponse<T> {
     total: number;
 }
 
-interface Author {
+export interface Author {
     id: string;
     type: string;
     attributes: {
@@ -201,9 +200,9 @@ const contentRating = [
     "pornographic",
 ] as const;
 
-type ContentRating = (typeof contentRating)[number];
+export type ContentRating = (typeof contentRating)[number];
 
-interface AtHomeResponse {
+export interface AtHomeResponse {
     result: "ok" | "error";
     baseUrl: string;
     chapter: {
@@ -212,3 +211,13 @@ interface AtHomeResponse {
         dataSaver: string[];
     };
 }
+export const readingStatusData = [
+    "none",
+    "reading",
+    "on hold",
+    "dropped",
+    "plan to read",
+    "completed",
+    "re-reading",
+] as const;
+export type ReadingStatus = (typeof readingStatusData)[number];

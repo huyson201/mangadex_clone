@@ -39,7 +39,6 @@ async function LatestUpdateItem({ statistic, manga }: Props) {
     const coverArt = manga.relationships.find(
         (relation) => relation.type === "cover_art"
     );
-    const langFlagUrl = getLangFlagUrl(manga.attributes.originalLanguage);
     const chapterLang = getLangFlagUrl(chapter.attributes.translatedLanguage);
     return (
         <div className="flex gap-x-2">
@@ -66,14 +65,6 @@ async function LatestUpdateItem({ statistic, manga }: Props) {
                     href={getDetailMangaLink(manga)}
                     className="gap-x-1 inline-flex"
                 >
-                    {langFlagUrl && (
-                        <Image
-                            src={langFlagUrl}
-                            width={24}
-                            height={24}
-                            alt={manga.attributes.originalLanguage}
-                        />
-                    )}
                     <h6 className="line-clamp-1 break-all font-bold">
                         {getMangaTitle(manga)}
                     </h6>

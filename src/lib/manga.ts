@@ -1,4 +1,4 @@
-import { READ_CHAPTER_URL } from "@/constants";
+import { READ_CHAPTER_URL, TAG_BASE_URL } from "@/constants";
 import { Chapter, Manga, Tag } from "../../types";
 import { slugify } from "./utils";
 import flags from "@/data/flag.json";
@@ -103,4 +103,8 @@ export const getStatisticsLink = (links: Record<string, string>) => {
         }))
         .filter((value) => !!value.link);
     return { readOrBuy, track };
+};
+
+export const createTagLink = (tag: Tag) => {
+    return `${TAG_BASE_URL}/${tag.id}/${slugify(getTagName(tag))}`;
 };

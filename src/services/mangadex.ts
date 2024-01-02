@@ -66,9 +66,40 @@ interface GetMangaOption {
     originalLanguage: string[];
     excludedOriginalLanguage: string[];
 }
-interface GetMangaOpts {
-    includes: IncludeOption[];
-}
+
+type GetChaptersOptions = {
+    limit: number;
+    offset: number;
+    ids: string[];
+    title: string;
+    groups: string[];
+    manga: string;
+    volume: string[];
+    chapter: string | string[];
+    translatedLanguage: string[];
+    originalLanguage: string[];
+    excludedOriginalLanguage: string[];
+    includeEmptyPages: 0 | 1;
+    includeFuturePublishAt: 0 | 1;
+    includeExternalUrl: 0 | 1;
+    createdAtSince: string;
+    updatedAtSince: string;
+    publishAtSince: string;
+    includes: ("manga" | "user" | "scanlation_group")[];
+    order:
+        | "createdAt.desc"
+        | "createdAt.asc"
+        | "updatedAt.desc"
+        | "updatedAt.asc"
+        | "publishAt.desc"
+        | "publishAt.asc"
+        | "chapter.asc"
+        | "chapter.desc"
+        | "volume.desc"
+        | "volume.asc"
+        | "readableAt.desc"
+        | "readableAt.asc";
+};
 export const getMangaList = async (options: Partial<GetMangaOption>) => {
     const order = options?.order || "";
     const [field, value] = order?.split(".");
@@ -603,39 +634,6 @@ export const getMangaAggregate = async (
     }
 };
 
-type GetChaptersOptions = {
-    limit: number;
-    offset: number;
-    ids: string[];
-    title: string;
-    groups: string[];
-    manga: string;
-    volume: string[];
-    chapter: string | string[];
-    translatedLanguage: string[];
-    originalLanguage: string[];
-    excludedOriginalLanguage: string[];
-    includeEmptyPages: 0 | 1;
-    includeFuturePublishAt: 0 | 1;
-    includeExternalUrl: 0 | 1;
-    createdAtSince: string;
-    updatedAtSince: string;
-    publishAtSince: string;
-    includes: ("manga" | "user" | "scanlation_group")[];
-    order:
-        | "createdAt.desc"
-        | "createdAt.asc"
-        | "updatedAt.desc"
-        | "updatedAt.asc"
-        | "publishAt.desc"
-        | "publishAt.asc"
-        | "chapter.asc"
-        | "chapter.desc"
-        | "volume.desc"
-        | "volume.asc"
-        | "readableAt.desc"
-        | "readableAt.asc";
-};
 export const getChapters = async (opts?: Partial<GetChaptersOptions>) => {
     const order = opts?.order || "";
     const [field, value] = order?.split(".");

@@ -10,7 +10,11 @@ import Backdrop from "../Backdrop/Backdrop";
 import { useTranslations } from "next-intl";
 import { randomManga } from "@/actions/random-manga-action";
 import { BookOpen, Bookmark, Home, Users, X } from "lucide-react";
-import { ADVANCED_SEARCH_URL, READING_HISTORY_URL } from "@/constants";
+import {
+    ADVANCED_SEARCH_URL,
+    FOLLOW_URL,
+    READING_HISTORY_URL,
+} from "@/constants";
 
 type Props = {};
 
@@ -52,13 +56,12 @@ function DrawerMenu({}: Props) {
                     <DrawerItem
                         title={t("follows")}
                         exact
-                        href="/follows"
                         icon={<Bookmark />}
                     />
                     <DrawerItem
                         title={t("library")}
                         subItem
-                        href="/titles/recent"
+                        href={FOLLOW_URL}
                     />
                     <DrawerItem
                         title={t("history")}
@@ -99,7 +102,6 @@ function DrawerMenu({}: Props) {
                         href={"https://forums.mangadex.org/"}
                     />
                     <DrawerItem title={t("groups")} subItem href="/groups" />
-                    <DrawerItem title={t("users")} subItem href="/users" />
                 </div>
             </div>
             <Backdrop

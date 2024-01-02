@@ -1,4 +1,10 @@
-import { cn, getLangFlagUrl, getStatisticsLink } from "@/lib/utils";
+import {
+    cn,
+    createTagLink,
+    getLangFlagUrl,
+    getStatisticsLink,
+    getTagName,
+} from "@/lib/utils";
 import Link from "next/link";
 import React from "react";
 import { Manga } from "../../../types";
@@ -65,9 +71,9 @@ const DetailInfo = ({ manga, className }: Props) => {
                             <Link
                                 key={value.id}
                                 className="bg-accent hover:bg-primary text-xs rounded py-1 px-2 mt-2 inline-block transition-colors"
-                                href={"/"}
+                                href={createTagLink(value)}
                             >
-                                {value.attributes.name.en}
+                                {getTagName(value)}
                             </Link>
                         ))}
                     </div>
@@ -81,9 +87,9 @@ const DetailInfo = ({ manga, className }: Props) => {
                             <Link
                                 key={value.id}
                                 className="bg-accent hover:bg-primary text-xs rounded py-1 px-2 mt-2 inline-block transition-colors"
-                                href={"/"}
+                                href={createTagLink(value)}
                             >
-                                {value.attributes.name.en}
+                                {getTagName(value)}
                             </Link>
                         ))}
                     </div>
@@ -111,9 +117,9 @@ const DetailInfo = ({ manga, className }: Props) => {
                             <Link
                                 key={value.id}
                                 className="bg-accent hover:bg-primary text-xs rounded py-1 px-2 mt-2 inline-block transition-colors"
-                                href={"/"}
+                                href={createTagLink(value)}
                             >
-                                {value.attributes.name.en}
+                                {getTagName(value)}
                             </Link>
                         ))}
                     </div>
@@ -186,7 +192,7 @@ const DetailInfo = ({ manga, className }: Props) => {
                                         height={24}
                                         src={flag}
                                         alt={key}
-                                        className="w-auto h-auto"
+                                        className="w-6 h-6"
                                     />
                                 )}
 

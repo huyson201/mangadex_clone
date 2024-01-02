@@ -1,8 +1,8 @@
+import React from "react";
 import { Button } from "@/components/ui/button";
 import Wrapper from "@/layouts/Wrapper/Wrapper";
 import { BookOpen, Bookmark, MoreHorizontal } from "lucide-react";
 import Image from "next/image";
-import React from "react";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -18,11 +18,16 @@ import {
     getCoverArtFromManga,
     getDataByLocale,
     getMangaTitle,
+    getTagName,
 } from "@/lib/manga";
 import StatisticInfo from "@/components/StatisticInfo/StatisticInfo";
 import { cn } from "@/lib/utils";
 import { statusDotVariants } from "@/components/MangaStatus/MangaStatus";
-import engtl from "@/assets/engtl.svg";
+import AddLib from "./AddLib";
+import { auth } from "@/auth";
+import connectDb from "@/lib/mongodb";
+import { Follow } from "@/models/Follow";
+
 type Props = {
     params: {
         id: string;
@@ -31,7 +36,7 @@ type Props = {
 };
 
 const page = async ({ params }: Props) => {
-    const [manga, statisticsResult] = await Promise.all([
+    const [manga, statisticsResult, session] = await Promise.all([
         getMangaById(params.id, [
             "artist",
             "author",
@@ -41,9 +46,19 @@ const page = async ({ params }: Props) => {
             "manga",
         ]),
         getStatistics("manga", params.id),
+        auth(),
     ]);
     if (!manga) notFound();
 
+    await connectDb();
+    const follow = session
+        ? (
+              await Follow.findOne({
+                  userId: session.user._id,
+                  mangaId: manga.result.data.id,
+              })
+          )?.toJSON()
+        : undefined;
     const statistics = statisticsResult.result.statistics[manga.result.data.id];
     const coverArt = getCoverArtFromManga(manga.result.data);
 
@@ -73,7 +88,7 @@ const page = async ({ params }: Props) => {
                 key={tag.id}
                 className="uppercase  text-[11px] text-foreground font-bold px-1.5 rounded-md bg-customs-accent"
             >
-                {tag.attributes.name.en}
+                {getTagName(tag)}
             </span>
         );
     });
@@ -131,12 +146,13 @@ const page = async ({ params }: Props) => {
                     </div>
                     <div className="hidden sm:block mt-5">
                         <div className="flex items-center gap-2 ">
-                            <Button
-                                className="rounded px-8"
-                                variant={"primary"}
-                            >
-                                Add To Library
-                            </Button>
+                            <AddLib
+                                isLoggedIn={!!session}
+                                follow={
+                                    follow && JSON.parse(JSON.stringify(follow))
+                                }
+                                manga={manga.result.data}
+                            />
                             <Button
                                 variant={"secondary"}
                                 className="px-2 rounded"
@@ -197,9 +213,11 @@ const page = async ({ params }: Props) => {
                 </div>
 
                 <div className="mt-4 flex items-center gap-2 ">
-                    <Button variant={"primary"} className="px-2 rounded-sm">
-                        <Bookmark />
-                    </Button>
+                    <AddLib
+                        follow={follow && JSON.parse(JSON.stringify(follow))}
+                        isLoggedIn={!!session}
+                        manga={manga.result.data}
+                    />
                     <Button
                         variant={"secondary"}
                         className="outline-none  border-none px-2 rounded-sm"
