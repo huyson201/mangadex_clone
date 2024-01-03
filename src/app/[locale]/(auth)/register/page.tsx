@@ -6,7 +6,7 @@ type Props = {};
 const page = (props: Props) => {
     return (
         <div>
-            <h1 className="mt-5 text-white text-xl text-center font-semibold">
+            <h1 className="mt-5 text-white md:text-xl text-center font-semibold">
                 Register
             </h1>
             <RegisterForm />

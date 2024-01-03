@@ -11,6 +11,7 @@ import {
     getStatisticsList,
 } from "@/services/mangadex";
 import Pagination from "@/components/Pagination/Pagination";
+import BackNavigation from "@/components/BackNavigation/BackNavigation";
 
 type Props = {
     searchParams: {
@@ -40,17 +41,7 @@ const page = async ({ searchParams: { page = 1 } }: Props) => {
             : maxPage;
     return (
         <Wrapper>
-            <div className="flex items-center gap-6">
-                <Button
-                    variant={"outline"}
-                    className="rounded-full w-10 h-10 p-0"
-                >
-                    <ArrowLeft />
-                </Button>
-                <span className="capitalize text-2xl font-medium">
-                    Recently Added
-                </span>
-            </div>
+            <BackNavigation title="Recently Added" />
             <div className="mt-4">
                 <Tabs defaultValue="grid" className="w-full flex flex-col">
                     <TabsList className="p-0 rounded-none  h-auto ml-auto">

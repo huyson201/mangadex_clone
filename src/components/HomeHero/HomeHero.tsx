@@ -9,7 +9,7 @@ import { Button } from "../ui/button";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
-import { Manga } from "../../../types";
+import { Manga } from "../../types";
 
 type Props = {
     mangaList: Manga[];
@@ -53,7 +53,7 @@ const HomeHero = ({ mangaList }: Props) => {
                 </span>
                 <div className="space-x-3 flex items-center justify-between md:block w-full px-[var(--side-margin)] md:px-0">
                     <Button
-                        variant={"outline"}
+                        variant={"ghost"}
                         className="rounded-full text-xl md:w-10 md:h-10 "
                         size={"xs"}
                         onClick={() => swiperRef.current?.slidePrev()}
@@ -65,7 +65,7 @@ const HomeHero = ({ mangaList }: Props) => {
                         {swiperRef.current?.slides.length}
                     </span>
                     <Button
-                        variant={"outline"}
+                        variant={"ghost"}
                         className="rounded-full text-xl md:w-10 md:h-10 "
                         size={"xs"}
                         onClick={() => swiperRef.current?.slideNext()}

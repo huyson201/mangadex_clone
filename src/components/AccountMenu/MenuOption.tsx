@@ -8,7 +8,7 @@ export const menuOptionVariants = cva(
     {
         variants: {
             variant: {
-                default: "text-foreground hover:bg-drawer-accent-2",
+                default: "text-foreground hover:bg-accent-2/30",
             },
             size: {
                 full: "w-full",
@@ -28,6 +28,7 @@ interface Props
 function MenuOption({ className, variant, size, ...props }: Props) {
     return (
         <Button
+            variant={"ghost"}
             className={cn(menuOptionVariants({ variant, size }), className)}
             {...props}
         />

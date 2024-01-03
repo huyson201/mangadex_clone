@@ -121,8 +121,8 @@ const Combobox = function <T>({
                             role="combobox"
                             aria-expanded={open}
                             className={cn(
-                                " w-full py-1.5 gap-1 h-auto justify-between border  active:border-primary",
-                                open && "bg-accent-hover-2",
+                                " w-full py-1.5 gap-1 h-auto justify-between border border-transparent  active:border-primary",
+                                open && "bg-accent-hover",
                                 className
                             )}
                         >
@@ -167,7 +167,7 @@ type ComboboxLabelProps<T> =
           children?: React.ReactNode;
       }
     | {
-          children?: (data?: T) => React.JSX.Element;
+          children?: (data?: T) => React.JSX.Element | null;
           data?: T;
       };
 

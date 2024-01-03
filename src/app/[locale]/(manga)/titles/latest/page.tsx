@@ -8,7 +8,7 @@ import LatestMangaListitem from "@/components/ListMangaItems/LatestMangaListItem
 import Pagination from "@/components/Pagination/Pagination";
 import BackNavigation from "@/components/BackNavigation/BackNavigation";
 import { getLatestUpdateList } from "@/services/mangadex";
-import { Chapter, Manga } from "../../../../../../types";
+import { Chapter, Manga } from "@/types";
 
 type Props = {
     searchParams: {

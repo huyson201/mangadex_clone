@@ -13,13 +13,6 @@
 
     --chapter-progress-height: 2.5rem;
 
-    --status-yellow: 32 100% 42.7% ;
-    --status-blue: 0 201 245 ;
-    --status-green: 84 208 0;
-    --status-red: 255 64 64;
-    --status-purple:125 64 255;
-    --status-grey: 196 196 196;
-    
     --head-search-index: 6;
 
     --drawer-profile-min-width: 256px;
@@ -29,46 +22,110 @@
     --drawer-index: 12;
 
     
+    --radius: 0.5rem;
+
+
+    
+    --status-yellow: 32 100% 42.7% ;
+    --status-blue: 191 100% 48% ;
+    --status-green: 84 208 0;
+    --status-red: 255 64 64;
+    --status-purple:125 64 255;
+    --status-grey: 196 196 196;
+
+    --primary: 12 100% 62.5%;
+    --primary-foreground: 255 255 255;
    
 
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --input: var(--accent);
+    --input-foreground: var(--foreground);
+ 
 
-    --md-background: 231 14.9% 18.4%;
-
-
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
- 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
- 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
- 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
- 
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
  
     --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
  
-    --destructive: 0 84.2% 60.2%;
+    --destructive:  0 100% 62.5%;
+
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
     --ring: 222.2 84% 4.9%;
  
-    --radius: 0.5rem;
 
-    --custom-accent: 230 14.8% 23.9%;
-    --custom-accent-hover: 219 14% 33.1%;
-  }
+    --swiper-pagination-color: hsl(var(--primary)); 
+    --swiper-pagination-bullet-inactive-color: #808080e6;
+    
+    --backdrop: 0, 0, 0, 0.4;
+    --muted:var(--accent);
+
+    --drawer-separator:hsl(0 0% 100%);
+
+    /* --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
  
-  .dark {
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%; */
+ 
+
+ 
+    /* --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%; */
+ 
+   
+
+
+
+  }
+
+  .dark{
+    --background: 230 14.3% 8.2%;
+    --foreground: 180 34.7% 90.4%;
+
+    --accent: 223 9.6% 14.3%;
+    --accent-hover: 222 9.6% 20.4%;
+
+    --accent-2: 222 9.6% 26.5%;
+    --accent-2-hover: 72 78 90;
+
+    --accent-3: 224 10.1% 29.2%;
+    --accent-10: 220 10.6% 16.7%;
+
+    --midTone: 191 8.6% 52.4%;
+
+    --muted-contrast: 222 9.6% 26.6%;
+    --muted-foreground: 0 0% 100%;
+
+    --border: var(--midTone);
+
+  }
+
+  .light{
+    --background: 0 0% 100%;
+    --foreground: 0 0% 14.1%;
+
+    --accent: 210 7.1% 94.5%;
+    --accent-hover: 216 7.2% 86.5%;
+
+    --accent-2: 200 10.7% 89%;
+    --accent-2-hover: 205 209 201;
+
+    --accent-3: 200 8.6% 86.3%;
+    --accent-10: 200 7% 91.6%;
+ 
+    --midTone: 193 6.4% 43.1%;
+
+    --muted-contrast: 0 0% 0%;
+    --muted-foreground: 0 0% 100%;
+
+    --border: var(--foreground);
+
+
+    --drawer-separator: hsl(220 13% 91%);
+
+  }
+
+  .dracula {
 
     --background: 231 15% 18%;
     --foreground: 0 0% 100%;
@@ -78,63 +135,54 @@
     --status-green: 80 250 123;
     --status-red: 255 85 85;
     
-    --button: 230 15% 24%;
-    --button-foreground: 0 0% 100% ;
-    --button-hover: 218 12.5% 25.1%;
- 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
- 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
- 
     --primary: 274 36% 61%;
-    --primary-foreground: 222.2 47.4% 11.2%;
- 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
- 
-    --muted:230 14.8% 23.9%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --muted-contrast: 231 16.8% 37.3%;
+
+   
  
     --accent: 230 14.8% 23.9%;
-    --accent-hover: 219 14% 33.1%;
-    --accent-hover-2: 230 15.9% 30.8%;
-    --accent-foreground: 210 40% 98%;
+    --accent-hover: 230 15.9% 30.8%;
 
     --accent-2: 218 12.5% 25.1%;
     --accent-2-hover: 73 81 96;
+
     --accent-3: 219 13.5% 29.0%;
     --accent-10: 220 11.3% 20.8%;
  
     --midTone:217 21.7% 58.4% ;
-    --destructive: 0 100% 62.5% / 0.2;
-    --destructive-foreground:  0 100% 62.5%;
+
+    --muted-foreground: 0 0% 100%;
+    --muted-contrast: 231 16.8% 37.3%;
+
  
-    --border: 217.2 32.6% 17.5%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+ 
+ 
+ 
+    /* --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%; */
+    
+    /* --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%; */
 
-    --input: 230 14.8% 23.9%;
-    --input-foreground: 0 0% 100%;
+  --border: 217.2 32.6% 17.5%;
+  --ring: 212.7 26.8% 83.9%;
+   
+ 
+   
 
-    --drawer: 230 14.8% 23.9% ;
-    --drawer-accent:220 11.3% 20.8% ;
-    --drawer-accent-2: 218 12% 25%;
-    --drawer-separator:0 0% 100%;
 
-    --skeleton-bg: 231 16.8% 37.3%;
 
-    --ring: 212.7 26.8% 83.9%;
-    --backdrop: 0, 0, 0, 0.4;
-
-    --swiper-pagination-color: hsl(274 ,36% ,61%); 
-    --swiper-pagination-bullet-inactive-color: #808080e6;
   }
 }
- 
+
+.dracula .logo, .dark .logo{
+  @apply filter invert;
+}
+
 @layer base {
   * {
-    @apply border-border font-poppins;
+    @apply box-border font-poppins border-border;
   }
   body {
     @apply bg-background text-foreground;

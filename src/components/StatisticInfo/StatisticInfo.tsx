@@ -1,7 +1,7 @@
 import React from "react";
 import { ClassValue } from "clsx";
 import { Bookmark, Eye, MessageSquare, Star } from "lucide-react";
-import { Statistic } from "../../../types";
+import { Statistic } from "../../types";
 import { cn, formatNumber } from "@/lib/utils";
 
 type Props = {
@@ -19,8 +19,8 @@ const StatisticInfo = ({ className, statistics }: Props) => {
         >
             <span className="flex items-center gap-1 text-primary ">
                 <Star size={16} />
-                {statistics?.rating?.average?.toFixed(2) ||
-                    statistics?.rating?.bayesian?.toFixed(2)}
+                {statistics?.rating?.bayesian?.toFixed(2) ||
+                    statistics?.rating?.average?.toFixed(2)}
             </span>
             <span className="flex items-center gap-1 text-foreground  ">
                 <Bookmark size={16} />

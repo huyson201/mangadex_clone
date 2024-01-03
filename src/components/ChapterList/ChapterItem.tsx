@@ -1,7 +1,7 @@
 import { Clock, Eye, MessageSquare, User, Users } from "lucide-react";
 import Link from "next/link";
 import React from "react";
-import { Chapter } from "../../../types";
+import { Chapter } from "@/types";
 import {
     getChapterTitle,
     getDetailChapterLink,
@@ -26,7 +26,7 @@ function ChapterItem({ chapter }: Props) {
 
     return (
         <div className="bg-accent rounded">
-            <div className="w-full px-2 py-1.5 bg-accent hover:bg-accent-hover-2 transition-colors  ">
+            <div className="w-full px-2 py-1.5 bg-accent hover:bg-accent-hover transition-colors  ">
                 <div className="sm:gap-x-6 flex  justify-between sm:justify-start">
                     <Link
                         href={getDetailChapterLink(chapter)}
@@ -56,8 +56,8 @@ function ChapterItem({ chapter }: Props) {
                     </div>
                     <div className=" text-right sm:text-left sm:hidden block ">
                         <Button
-                            className="w-auto gap-1.5 h-auto px-1.5 sm:py-1 py-0.5 hover:bg-customs-accent-hover"
-                            variant={"outline"}
+                            className="w-auto gap-1.5 h-auto px-1.5 sm:py-1 py-0.5 hover:bg-accent-2-hover"
+                            variant={"ghost"}
                             size={"xs"}
                         >
                             <MessageSquare size={16} />
@@ -72,13 +72,13 @@ function ChapterItem({ chapter }: Props) {
                                 <Link
                                     key={value.id}
                                     href={"/"}
-                                    className="break-all line-clamp-1 px-1 rounded hover:bg-customs-accent-hover"
+                                    className="break-all line-clamp-1 px-1 rounded hover:bg-accent-hover"
                                 >
                                     {value.attributes?.name}
                                 </Link>
                             ))
                         ) : (
-                            <span className="break-all line-clamp-1 px-1 rounded hover:bg-customs-accent-hover">
+                            <span className="break-all line-clamp-1 px-1 rounded hover:bg-accent-hover">
                                 No Group
                             </span>
                         )}
@@ -87,15 +87,15 @@ function ChapterItem({ chapter }: Props) {
                         <User size={16} />
                         <Link
                             href={"/"}
-                            className="break-all line-clamp-1  px-1 rounded hover:bg-customs-accent-hover"
+                            className="break-all line-clamp-1  px-1 rounded hover:bg-accent-hover"
                         >
                             {user?.attributes.username || "No User"}
                         </Link>
                     </div>
                     <div className=" hidden sm:block text-right sm:text-left ">
                         <Button
-                            className="w-auto gap-1.5 h-auto px-1.5 py-1 hover:bg-customs-accent-hover"
-                            variant={"outline"}
+                            className="w-auto gap-1.5 h-auto px-1.5 py-1 hover:bg-accent-2-hover"
+                            variant={"ghost"}
                             size={"xs"}
                         >
                             <MessageSquare size={16} />
@@ -111,7 +111,7 @@ function ChapterItem({ chapter }: Props) {
                         <User size={16} />
                         <Link
                             href={"/"}
-                            className="break-all line-clamp-1  px-1 rounded hover:bg-customs-accent-hover"
+                            className="break-all line-clamp-1  px-1 rounded hover:bg-accent-2-hover"
                         >
                             {user?.attributes.username || "No User"}
                         </Link>

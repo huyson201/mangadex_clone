@@ -1,6 +1,6 @@
 import mongoose, { Document } from "mongoose";
 import { IUser } from "./user";
-import { ReadingStatus, readingStatusData } from "../../types";
+import { ReadingStatus, readingStatusData } from "../types";
 
 export interface IFollow extends Document {
     userId: IUser["_id"];

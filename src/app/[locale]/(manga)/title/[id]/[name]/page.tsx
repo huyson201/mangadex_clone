@@ -11,10 +11,16 @@ import {
 } from "@/components/ui/dropdown-menu";
 import DetailDesc from "@/components/DetailDesc/DetailDesc";
 import ChapterList from "@/components/ChapterList/ChapterList";
-import { getImageUrl, getMangaById, getStatistics } from "@/services/mangadex";
-import { notFound } from "next/navigation";
-import { Relationship } from "../../../../../../../types";
 import {
+    getChapters,
+    getImageUrl,
+    getMangaById,
+    getStatistics,
+} from "@/services/mangadex";
+import { notFound } from "next/navigation";
+import { Relationship } from "@/types";
+import {
+    createTagLink,
     getCoverArtFromManga,
     getDataByLocale,
     getMangaTitle,
@@ -27,6 +33,8 @@ import AddLib from "./AddLib";
 import { auth } from "@/auth";
 import connectDb from "@/lib/mongodb";
 import { Follow } from "@/models/Follow";
+import Tag from "@/components/Tag/Tag";
+import Link from "next/link";
 
 type Props = {
     params: {
@@ -49,6 +57,12 @@ const page = async ({ params }: Props) => {
         auth(),
     ]);
     if (!manga) notFound();
+
+    // const fistChapters = await getChapters({
+    //     manga: manga.result.data.id,
+    //     chapter: `1`,
+    //     includes: ["user", "scanlation_group"],
+    // });
 
     await connectDb();
     const follow = session
@@ -84,12 +98,11 @@ const page = async ({ params }: Props) => {
 
     const tagList = manga.result.data.attributes.tags.map((tag) => {
         return (
-            <span
-                key={tag.id}
-                className="uppercase  text-[11px] text-foreground font-bold px-1.5 rounded-md bg-customs-accent"
-            >
-                {getTagName(tag)}
-            </span>
+            <Tag key={tag.id} variant={"default"} asChild>
+                <Link href={createTagLink(tag)} className=" px-1.5">
+                    {getTagName(tag)}
+                </Link>
+            </Tag>
         );
     });
     return (
@@ -106,12 +119,12 @@ const page = async ({ params }: Props) => {
                             )})`,
                         }}
                     ></div>
-                    <div className="backdrop-blur-sm absolute top-0 left-0 right-0 bottom-0 bg-gradient-to-b from-md-background/80 to-md-background from-0% to-100% sm:bg-gradient-to-tr sm:from-black/60 sm:from-[44%] sm:to-transparent"></div>
+                    <div className="sm:backdrop-blur-sm absolute top-0 left-0 right-0 bottom-0 bg-gradient-to-b from-background/8e0 to-background from-0% to-100% sm:bg-gradient-to-tr sm:from-black/60 sm:from-[44%] sm:to-transparent"></div>
                 </div>
                 <div
                     className="blur-xl hidden sm:block absolute min-h-[670px] w-full top-0 left-0  -z-[2]"
                     style={{
-                        background: `radial-gradient(circle at top, hsla(var(--md-background) / 0.8), hsla(var(--md-background)) 75%), no-repeat top 30% center / 100% url(${getImageUrl(
+                        background: `radial-gradient(circle at top, hsla(var(--background) / 0.8), hsla(var(--background)) 75%), no-repeat top 30% center / 100% url(${getImageUrl(
                             "256",
                             params.id,
                             coverArt?.attributes.fileName
@@ -132,14 +145,14 @@ const page = async ({ params }: Props) => {
                         alt="cover_art"
                     />
                 </div>
-                <div className="flex sm:h-full sm:min-h-[360px] flex-col w-[calc(100%_-_100px_-_1.5rem)] sm:w-[calc(100%_-_200px_-_1.5rem)]">
+                <div className="text-white flex sm:h-full sm:min-h-[360px] flex-col w-[calc(100%_-_100px_-_1.5rem)] sm:w-[calc(100%_-_200px_-_1.5rem)]">
                     <h1 className="text-2xl sm:text-[2.5rem]/10  md:text-5xl font-bold line-clamp-2">
                         {getMangaTitle(manga.result.data)}
                     </h1>
-                    <div className="text-foreground text-base sm:text-xl line-clamp-2 mt-1">
+                    <div className="text-white text-base sm:text-xl line-clamp-2 mt-1">
                         {altTitle}
                     </div>
-                    <div className="text-foreground sm:mt-auto text-xs sm:text-base font-normal">
+                    <div className="text-white sm:mt-auto text-xs sm:text-base font-normal">
                         {uniqueAuthorsAndArtist
                             .map((value) => value.attributes.name)
                             .join(", ")}
@@ -161,9 +174,9 @@ const page = async ({ params }: Props) => {
                             </Button>
                         </div>
                         <div className="tags flex gap-1.5 mt-3 overflow-hidden max-h-[18px] flex-wrap">
-                            <span className="uppercase  text-[11px] text-foreground font-bold px-1.5 rounded-md bg-status-yellow">
+                            <Tag variant={"warning"} className="px-1.5 ">
                                 Suggestive
-                            </span>
+                            </Tag>
                             {tagList}
                         </div>
                         <div className="flex items-center gap-2 text-status-blue mt-2">
@@ -192,9 +205,9 @@ const page = async ({ params }: Props) => {
             </div>
             <div className="sm:hidden">
                 <div className=" tags flex gap-1.5 mt-3 flex-wrap max-h-[39px] overflow-hidden">
-                    <span className="uppercase  text-[11px] text-foreground font-semibold px-1.5 rounded-md bg-status-yellow">
+                    <Tag variant={"warning"} className="px-1.5 ">
                         Suggestive
-                    </span>
+                    </Tag>
                     {tagList}
                 </div>
 
@@ -224,22 +237,7 @@ const page = async ({ params }: Props) => {
                     >
                         <MoreHorizontal />
                     </Button>
-                    {/* <div>
-                            <DropdownMenu>
-                                <DropdownMenuTrigger>
-                                    <Button
-                                        variant={"secondary"}
-                                        className="outline-none  border-none px-2 rounded-sm"
-                                    >
-                                        <MoreHorizontal />
-                                    </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent className="bg-accent-2 min-w-[140px] rounded-lg">
-                                    <DropdownMenuItem>Share</DropdownMenuItem>
-                                    <DropdownMenuItem>Upload</DropdownMenuItem>
-                                </DropdownMenuContent>
-                            </DropdownMenu>
-                        </div> */}
+
                     <Button
                         className="grow capitalize gap-4 rounded-sm"
                         variant={"secondary"}

@@ -8,6 +8,8 @@ import { useHeadSearch } from "@/contexts/HeadSearchContext";
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 import { Search, X } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { HOME_URL, MANGA_DETAIL_BASE_URL } from "@/constants";
 type Props = {
     onFocus?: () => void;
     onBlur?: () => void;
@@ -24,6 +26,7 @@ const HeadSearchForm = ({ onFocus, onBlur, onChange, onClickClear }: Props) => {
         headSearchState.setIsActive?.(true);
     };
 
+    const pathname = usePathname();
     useEffect(() => {
         const handleKeyPress = (event: KeyboardEvent) => {
             if (
@@ -58,8 +61,13 @@ const HeadSearchForm = ({ onFocus, onBlur, onChange, onClickClear }: Props) => {
                 onFocus={focusHandle}
                 onChange={onChange}
                 ref={inputRef}
-                className="peer/input rounded-lg px-4 py-1 w-full peer"
-                backgroundFilter={!headSearchState.isActive ? "blur" : null}
+                className={cn(
+                    "peer/input  rounded-lg px-4 py-1 w-full peer",
+                    !headSearchState.isActive &&
+                        (pathname === HOME_URL ||
+                            pathname.startsWith(`${MANGA_DETAIL_BASE_URL}/`)) &&
+                        " group-[:not(.scrolling)]/navbar:opacity-[0.65] group-[:not(.scrolling)]/navbar:filter group-[:not(.scrolling)]/navbar:brightness-[1.1]"
+                )}
                 type="text"
                 placeholder={t("placeholder")}
             />
@@ -75,7 +83,7 @@ const HeadSearchForm = ({ onFocus, onBlur, onChange, onClickClear }: Props) => {
             </div>
             <div
                 className={cn(
-                    "hidden  peer-[:not(:placeholder-shown)]/input:hidden items-center gap-x-1.5 absolute top-2/4 -translate-y-2/4 right-10",
+                    "pointer-events-none hidden  peer-[:not(:placeholder-shown)]/input:hidden items-center gap-x-1.5 absolute top-2/4 -translate-y-2/4 right-10",
                     { "md:flex": !headSearchState.isActive }
                 )}
             >
@@ -97,7 +105,7 @@ const HeadSearchForm = ({ onFocus, onBlur, onChange, onClickClear }: Props) => {
             </Button>
             <Button
                 type="button"
-                variant={"outline"}
+                variant={"ghost"}
                 className={cn(
                     "text-xl ",
                     headSearchState.isActive ? "md:hidden flex" : "hidden"

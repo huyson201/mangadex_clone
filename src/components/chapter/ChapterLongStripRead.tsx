@@ -6,7 +6,7 @@ import React, {
     useRef,
     useState,
 } from "react";
-import { AtHomeResponse } from "../../../types";
+import { AtHomeResponse } from "@/types";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { InView } from "react-intersection-observer";

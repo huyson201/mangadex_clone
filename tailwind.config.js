@@ -27,13 +27,10 @@ module.exports = {
         poppins: ["var(--font-poppins)", ...fontFamily.sans],
       },
       colors: {
-        border: "hsl(var(--border))",
-
         ring: "hsl(var(--ring))",
+        border: "hsl(var(--border))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
-        "md-background": "hsl(var(--md-background))",
-        "button-hover": "rgb( 79 79 79 / 1 )",
         backdrop: "rgba(var(--backdrop))",
         status: {
           yellow: "hsl(var(--status-yellow))",
@@ -48,21 +45,18 @@ module.exports = {
           foreground: "hsl(var(--input-foreground))"
         },
         button: {
-          DEFAULT: "hsl(var(--button))",
-          foreground: "hsl(var(--button-foreground))",
-          hover: "hsl(var(--button-hover))"
+          accent: "hsl(var(--accent-2))"
         },
         primary: {
           DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+          foreground: "rgba(var(--primary-foreground))"
         },
-        secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
-        },
+        // secondary: {
+        //   DEFAULT: "hsl(var(--secondary))",
+        //   foreground: "hsl(var(--secondary-foreground))",
+        // },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
         },
         midTone: "hsl(var(--midTone))",
         muted: {
@@ -70,38 +64,20 @@ module.exports = {
           foreground: "hsl(var(--muted-foreground))",
           contrast: 'hsl(var(--muted-contrast))'
         },
-        skeleton: "hsl(var(--skeleton-bg))",
-        // accent: {
-        //   DEFAULT: "hsl(var(--accent))",
-        //   foreground: "hsl(var(--accent-foreground))",
-        // },
+
         popover: {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",
         },
-        card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
-        },
+
         drawer: {
-          DEFAULT: "hsl(var(--drawer))",
-          accent: "hsl(var(--drawer-accent))",
-          "accent-2": "hsl(var(--drawer-accent-2))"
+          DEFAULT: "hsl(var(--accent))",
+          accent: "hsl(var(--accent-10))",
         },
-        customs: {
-          accent: {
-            DEFAULT: "hsl(var(--accent))",
-            hover: "hsl(var(--accent-hover))"
-          }
-        },
+
         accent: {
           DEFAULT: "hsl(var(--accent))",
-          hover: {
-            DEFAULT: "hsl(var(--accent-hover))",
-            2: {
-              DEFAULT: "hsl(var(--accent-hover-2))",
-            },
-          },
+          hover: "hsl(var(--accent-hover))",
           2: {
             DEFAULT: "hsl(var(--accent-2))",
             hover: "rgb(var(--accent-2-hover))"

@@ -29,10 +29,10 @@ export default async function RootLayout({
     if (!LOCALES.includes(locale as any)) notFound();
     const [messages, session] = await Promise.all([getMessages(), auth()]);
     return (
-        <html lang={locale}>
+        <html lang={locale} suppressHydrationWarning>
             <body
                 className={cn(
-                    "min-h-screen bg-background font-sans antialiased dark",
+                    "min-h-screen bg-background font-sans antialiased",
                     inter.variable,
                     poppins.variable
                 )}

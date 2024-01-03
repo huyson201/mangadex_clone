@@ -10,7 +10,7 @@ import {
     PaginationResponse,
     StatisticsResponse,
     Tag,
-} from "../../types";
+} from "../types";
 import { getCurrentSeasonTimeString, getTimeAgo } from "@/lib/utils";
 
 export const base_url = "https://api.mangadex.org/";

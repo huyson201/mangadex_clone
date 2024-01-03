@@ -2,8 +2,9 @@ import { Bookmark, Eye, MessageSquare, Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { Manga, Statistic } from "../../../types";
+import { Manga, Statistic } from "../../types";
 import {
+    createTagLink,
     getCoverArtFromManga,
     getDataByLocale,
     getDetailMangaLink,
@@ -28,6 +29,9 @@ function RecentMangaStretchItem({ manga, statistic }: Props) {
     const title = getMangaTitle(manga);
     const contentTag = getTagsWithGroupContent(manga.attributes.tags);
     const flag = getLangFlagUrl(manga.attributes.originalLanguage);
+    const isDoujinshi = manga.relationships.some(
+        (relation) => relation.related === "doujinshi"
+    );
     return (
         <div className="flex gap-2 bg-accent rounded p-2">
             <Link href={getDetailMangaLink(manga)} className="block w-1/4   ">
@@ -96,16 +100,28 @@ function RecentMangaStretchItem({ manga, statistic }: Props) {
                         </Tag>
                     )}
                     {contentTag.map((tag) => (
-                        <Tag className="px-1" key={tag.id} variant={"danger"}>
-                            <Link href={"#"}>{getTagName(tag)}</Link>
+                        <Tag asChild key={tag.id} variant={"danger"}>
+                            <Link className="px-1" href={createTagLink(tag)}>
+                                {getTagName(tag)}
+                            </Link>
                         </Tag>
                     ))}
+                    {isDoujinshi && (
+                        <Tag variant={"purple"} className="px-1">
+                            Doujinshi
+                        </Tag>
+                    )}
 
                     {manga.attributes.tags.map((tag) => {
                         if (tag.attributes.group === "content") return null;
                         return (
-                            <Tag className="px-1" key={tag.id} variant={"none"}>
-                                <Link href={"#"}>{getTagName(tag)}</Link>
+                            <Tag asChild key={tag.id} variant={"none"}>
+                                <Link
+                                    className="px-1"
+                                    href={createTagLink(tag)}
+                                >
+                                    {getTagName(tag)}
+                                </Link>
                             </Tag>
                         );
                     })}

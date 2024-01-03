@@ -16,7 +16,7 @@ const RegisterForm = (props: Props) => {
                     Username <span className="text-red-600">*</span>
                 </label>
                 <input
-                    className="w-full rounded bg-[#3d414a] outline-none mt-2 focus:border-2 transition-all h-9 px-2 text-xs focus:border-[#ff6740]"
+                    className="w-full rounded bg-[#3d414a] text-white outline-none mt-2 focus:border-2 transition-all h-9 px-2 text-xs focus:border-[#ff6740]"
                     id="username"
                     name="username"
                     type="text"
@@ -33,7 +33,7 @@ const RegisterForm = (props: Props) => {
                     Password <span className="text-red-600">*</span>
                 </label>
                 <input
-                    className="w-full rounded bg-[#3d414a] outline-none mt-2 focus:border-2 transition-all h-9 px-2 text-xs focus:border-[#ff6740]"
+                    className="w-full rounded bg-[#3d414a] text-white outline-none mt-2 focus:border-2 transition-all h-9 px-2 text-xs focus:border-[#ff6740]"
                     id="password"
                     name="password"
                     type="password"
@@ -50,7 +50,7 @@ const RegisterForm = (props: Props) => {
                     Confirm password <span className="text-red-600">*</span>
                 </label>
                 <input
-                    className="w-full rounded bg-[#3d414a] outline-none mt-2 focus:border-2 transition-all h-9 px-2 text-xs focus:border-[#ff6740]"
+                    className="w-full rounded bg-[#3d414a] text-white outline-none mt-2 focus:border-2 transition-all h-9 px-2 text-xs focus:border-[#ff6740]"
                     id="confirm"
                     name="confirmPassword"
                     type="password"
@@ -67,7 +67,7 @@ const RegisterForm = (props: Props) => {
                     Email <span className="text-red-600">*</span>
                 </label>
                 <input
-                    className="w-full rounded bg-[#3d414a] outline-none mt-2 focus:border-2 transition-all h-9 px-2 text-xs focus:border-[#ff6740]"
+                    className="w-full rounded bg-[#3d414a] text-white outline-none mt-2 focus:border-2 transition-all h-9 px-2 text-xs focus:border-[#ff6740]"
                     id="email"
                     name="email"
                     type="text"
@@ -89,7 +89,7 @@ const RegisterForm = (props: Props) => {
                 </Link>
             </div>
 
-            <FormSubmitButton className="mt-8 block w-full rounded py-1.5 text-sm font-semibold bg-[#ff6740]">
+            <FormSubmitButton className="mt-8 block text-white w-full rounded py-1.5 text-sm font-semibold bg-[#ff6740]">
                 {(pending) => {
                     return pending ? "..." : "Register";
                 }}

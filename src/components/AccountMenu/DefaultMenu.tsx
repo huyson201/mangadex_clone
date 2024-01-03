@@ -24,19 +24,19 @@ function DefaultMenu({}: Props) {
         <div>
             <div>
                 <Button
-                    variant={"outline"}
-                    className="text-xl hover:bg-drawer-accent rounded-full"
+                    variant={"ghost"}
+                    className="text-xl hover:bg-accent rounded-full"
                     size={"icon"}
                     onClick={() => stackMenu?.close()}
                 >
                     <X />
                 </Button>
             </div>
-            <div>
+            <div className="my-4">
                 <Link
                     href={"#"}
                     className={cn(
-                        "flex-col text-foreground gap-y-3 py-6 flex items-center justify-center hover:bg-drawer-accent"
+                        "rounded flex-col text-foreground gap-y-3 py-4 flex items-center justify-center hover:bg-accent"
                     )}
                 >
                     {status === "authenticated" && data.user.verified && (
@@ -71,7 +71,7 @@ function DefaultMenu({}: Props) {
                             onClick={() =>
                                 stackMenu?.push(Language_SELECTION_MENU_ID)
                             }
-                            className="hover:bg-drawer-accent gap-2"
+                            className="hover:bg-accent gap-2"
                         >
                             <User />
                             My Profile
@@ -80,7 +80,7 @@ function DefaultMenu({}: Props) {
                             onClick={() =>
                                 stackMenu?.push(Language_SELECTION_MENU_ID)
                             }
-                            className="hover:bg-drawer-accent gap-2"
+                            className="hover:bg-accent gap-2"
                         >
                             <Bookmark />
                             My Follows
@@ -97,14 +97,14 @@ function DefaultMenu({}: Props) {
             >
                 <div className="flex gap-2">
                     <MenuOption
-                        className="gap-2 w-2/4  hover:bg-drawer-accent"
+                        className="gap-2 w-2/4  hover:bg-accent"
                         onClick={() => stackMenu?.push(THEME_SELECTION_MENU_ID)}
                     >
                         <Settings />
                         {t("settings")}
                     </MenuOption>
                     <MenuOption
-                        className="gap-2 w-2/4 hover:bg-drawer-accent"
+                        className="gap-2 w-2/4 hover:bg-accent"
                         onClick={() => stackMenu?.push(THEME_SELECTION_MENU_ID)}
                     >
                         <Droplet />
@@ -113,16 +113,16 @@ function DefaultMenu({}: Props) {
                 </div>
                 <MenuOption
                     onClick={() => stackMenu?.push(Language_SELECTION_MENU_ID)}
-                    className="hover:bg-drawer-accent"
+                    className="hover:bg-accent"
                 >
                     {t("languages")}
                 </MenuOption>
-                <MenuOption className="hover:bg-drawer-accent">
+                <MenuOption className="hover:bg-accent">
                     {t("filter")}
                 </MenuOption>
                 {status === "authenticated" && data.user.verified && (
                     <form action={signOutAction}>
-                        <MenuOption className="gap-2  hover:bg-drawer-accent">
+                        <MenuOption className="gap-2  hover:bg-accent">
                             <LogOut />
                             Sign Out
                         </MenuOption>
@@ -139,15 +139,15 @@ function DefaultMenu({}: Props) {
                     >
                         {t("signIn")}
                     </Button>
-                    <Link
-                        href={SING_UP_URL}
+                    <Button
+                        variant={"ghost"}
                         className={cn(
-                            buttonVariants({ variant: "default" }),
-                            "mt-2 hover:bg-drawer-accent w-full text-base font-medium rounded"
+                            "w-full mt-2 text-base font-medium rounded"
                         )}
+                        asChild
                     >
-                        {t("register")}
-                    </Link>
+                        <Link href={SING_UP_URL}>{t("register")}</Link>
+                    </Button>
                 </div>
             )}
         </div>

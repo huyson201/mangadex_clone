@@ -4,7 +4,7 @@ import { Button } from "../ui/button";
 import { ChevronsDown, ChevronsUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 import DetailInfo from "./DetailInfo";
-import { Manga } from "../../../types";
+import { Manga } from "@/types";
 
 interface DetailDescProps {
     manga: Manga;
@@ -12,24 +12,24 @@ interface DetailDescProps {
 const DetailDesc = ({ manga }: DetailDescProps) => {
     const [isCollapsed, setIsCollapsed] = useState(true);
     const descRef = useRef<HTMLDivElement>(null);
-    useEffect(() => {
-        if (!descRef.current) return;
-        if (!isCollapsed) {
-            descRef.current.style.height =
-                descRef.current.scrollHeight + 4 + "px";
-            return;
-        }
-        descRef.current.style.height = "";
-    }, [isCollapsed]);
+    // useEffect(() => {
+    //     if (!descRef.current) return;
+    //     if (!isCollapsed) {
+    //         descRef.current.style.height =
+    //             descRef.current.scrollHeight + 4 + "px";
+    //         return;
+    //     }
+    //     descRef.current.style.height = "";
+    // }, [isCollapsed]);
 
     return (
         <div className="relative">
             <div
                 ref={descRef}
                 className={cn(
-                    `mt-4 sm:mt-6 pb-4 overflow-y-hidden h-[80px]  lg:h-auto
+                    `mt-4 sm:mt-6 max-h-[200vh] overflow-y-hidden   lg:h-auto
                  lg:after:hidden [&.collapsed]:after:content-[''] after:w-full after:absolute after:content-none after:h-6 after:bg-gradient-to-t after:from-background after:to-transparent after:left-0 after:bottom-0
-                 relative lg:[&.collapsed]:border-none [&.collapsed]:border-b border-primary transition-[height] duration-500 `,
+                 relative [&.collapsed]:max-h-[60px] pb-4  lg:[&.collapsed]:border-none [&.collapsed]:border-b  border-primary transition-all duration-500 `,
                     { collapsed: isCollapsed }
                 )}
             >

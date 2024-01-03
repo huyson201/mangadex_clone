@@ -3,14 +3,14 @@ import React, { useEffect, useRef, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "../ui/button";
 import DetailInfo from "../DetailDesc/DetailInfo";
-import { Manga } from "../../../types";
-import { cn } from "@/lib/utils";
+import { Manga } from "@/types";
 import SelectChapterLang from "./SelectChapterLang";
 import useSWR from "swr";
 import { getMangaFeed } from "@/services/mangadex";
 import ChapterItem from "./ChapterItem";
 import RingLoader from "../Loader/RingLoader";
 import Pagination from "../Pagination/Pagination";
+import NotfoundData from "../NotFoundData/NotfoundData";
 type Props = {
     manga: Manga;
 };
@@ -44,17 +44,12 @@ const ChapterList = ({ manga }: Props) => {
                 offset,
             })
     );
+
     const totalPage = data
         ? data.total - limit < 10000
             ? Math.ceil(data.total / limit)
             : maxPage
         : 0;
-
-    // useEffect(() => {
-    //     if (!isLoading && data) {
-    //         scrollRef.current?.scrollIntoView();
-    //     }
-    // }, [data, isLoading]);
 
     return (
         <div className="mt-10 lg:mt-4">
@@ -79,67 +74,76 @@ const ChapterList = ({ manga }: Props) => {
                     </div>
                     <div className="lg:col-span-8 col-span-12">
                         <TabsContent value="chapters">
-                            <div
-                                className="flex gap-2 justify-between"
-                                ref={scrollRef}
-                            >
-                                <Button
-                                    variant={"secondary"}
-                                    className="py-1 px-4 h-auto "
-                                    onClick={() =>
-                                        setSortBy((prev) =>
-                                            prev === "chapter.desc"
-                                                ? "chapter.asc"
-                                                : "chapter.desc"
-                                        )
-                                    }
-                                >
-                                    {sortBy === "chapter.desc"
-                                        ? "Descending"
-                                        : "Ascending"}
-                                </Button>
-                                <SelectChapterLang
-                                    onChange={(value) =>
-                                        setChapterFilterLang(
-                                            value || defaultTranslatedLanguage
-                                        )
-                                    }
-                                    availableTranslatedLanguages={
-                                        manga.attributes
-                                            .availableTranslatedLanguages
-                                    }
-                                    defaultTranslatedLanguage={
-                                        defaultTranslatedLanguage
-                                    }
-                                />
-                            </div>
-                            <div className="mt-4 space-y-2">
-                                {isLoading && (
-                                    <div className="flex py-6 items-center justify-center my-4">
-                                        <RingLoader />
-                                    </div>
-                                )}
-                                {data &&
-                                    data.data.map((chapter) => (
-                                        <ChapterItem
-                                            key={chapter.id}
-                                            chapter={chapter}
+                            {(!data && !isLoading) || data?.total === 0 ? (
+                                <NotfoundData title="No Chapters" />
+                            ) : (
+                                <>
+                                    <div
+                                        className="flex gap-2 justify-between"
+                                        ref={scrollRef}
+                                    >
+                                        <Button
+                                            variant={"secondary"}
+                                            className="py-1 px-4 h-auto "
+                                            onClick={() =>
+                                                setSortBy((prev) =>
+                                                    prev === "chapter.desc"
+                                                        ? "chapter.asc"
+                                                        : "chapter.desc"
+                                                )
+                                            }
+                                        >
+                                            {sortBy === "chapter.desc"
+                                                ? "Descending"
+                                                : "Ascending"}
+                                        </Button>
+                                        <SelectChapterLang
+                                            onChange={(value) =>
+                                                setChapterFilterLang(
+                                                    value ||
+                                                        defaultTranslatedLanguage
+                                                )
+                                            }
+                                            availableTranslatedLanguages={
+                                                manga.attributes
+                                                    .availableTranslatedLanguages
+                                            }
+                                            defaultTranslatedLanguage={
+                                                defaultTranslatedLanguage
+                                            }
                                         />
-                                    ))}
-                            </div>
-                            <div>
-                                <Pagination
-                                    className="mt-6"
-                                    onChange={(page) => {
-                                        setChapterPage(page);
-                                        scrollRef.current?.scrollIntoView({
-                                            block: "center",
-                                        });
-                                    }}
-                                    defaultCurrent={1}
-                                    totalPage={totalPage}
-                                />
-                            </div>
+                                    </div>
+                                    <div className="mt-4 space-y-2">
+                                        {isLoading && (
+                                            <div className="flex py-6 items-center justify-center my-4">
+                                                <RingLoader />
+                                            </div>
+                                        )}
+                                        {data &&
+                                            data.data.map((chapter) => (
+                                                <ChapterItem
+                                                    key={chapter.id}
+                                                    chapter={chapter}
+                                                />
+                                            ))}
+                                    </div>
+                                    <div>
+                                        <Pagination
+                                            className="mt-6"
+                                            onChange={(page) => {
+                                                setChapterPage(page);
+                                                scrollRef.current?.scrollIntoView(
+                                                    {
+                                                        block: "center",
+                                                    }
+                                                );
+                                            }}
+                                            defaultCurrent={1}
+                                            totalPage={totalPage}
+                                        />
+                                    </div>
+                                </>
+                            )}
                         </TabsContent>
                         <TabsContent value="comment" className="mt-4">
                             Comment

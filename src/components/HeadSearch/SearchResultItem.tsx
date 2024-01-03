@@ -2,7 +2,7 @@ import { Bookmark, Eye, MessageSquare, Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { Manga, Statistic } from "../../../types";
+import { Manga, Statistic } from "../../types";
 import {
     getCoverArtFromManga,
     getDetailMangaLink,
@@ -22,7 +22,7 @@ function SearchResultItem({ manga, statistic }: Props) {
     const title = getMangaTitle(manga);
     return (
         <Link href={getDetailMangaLink(manga)}>
-            <div className="flex gap-x-2 bg-accent p-1.5 rounded hover:bg-accent-hover-2 transition-colors">
+            <div className="flex gap-x-2 bg-accent p-1.5 rounded hover:bg-accent-hover transition-colors">
                 <Image
                     className="w-14 h-20 object-cover rounded"
                     src={getImageUrl(

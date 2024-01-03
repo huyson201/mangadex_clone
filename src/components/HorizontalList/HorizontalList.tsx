@@ -5,7 +5,7 @@ import { Pagination, Mousewheel } from "swiper/modules";
 import "swiper/css/pagination";
 import HorizontalListItem from "./HorizontalListItem";
 import { cn } from "@/lib/utils";
-import { Manga } from "../../../types";
+import { Manga } from "../../types";
 
 type Props = {
     slideClassName?: string;

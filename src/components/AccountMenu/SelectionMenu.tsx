@@ -15,7 +15,7 @@ function SelectionMenu({ children, title }: Props) {
         <div>
             <div className="flex items-center gap-2">
                 <Button
-                    variant={"outline"}
+                    variant={"ghost"}
                     className="text-xl hover:bg-drawer-accent rounded-full"
                     size={"icon"}
                     onClick={() => stackMenu?.back()}

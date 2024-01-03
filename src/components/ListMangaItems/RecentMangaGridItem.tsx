@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import React from "react";
-import { Manga } from "../../../types";
+import { Manga } from "../../types";
 import {
     getCoverArtFromManga,
     getDetailMangaLink,
@@ -36,7 +36,7 @@ function RecentMangaGridItem({ manga }: Props) {
                     width={512}
                     height={728}
                 />
-                <div className="absolute bottom-0 w-full bg-gradient-to-t from-black/80 px-2 text-sm to-transparent py-3">
+                <div className="absolute text-white bottom-0 w-full bg-gradient-to-t from-black/80 px-2 text-sm to-transparent py-3">
                     {flag && (
                         <Image
                             className="inline-block mr-1 w-6 h-6"

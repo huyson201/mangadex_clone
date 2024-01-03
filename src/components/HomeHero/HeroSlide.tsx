@@ -3,9 +3,14 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useMemo } from "react";
 import useSWR from "swr";
-import { Manga } from "../../../types";
+import { Manga, Relationship } from "../../types";
 import { getImageUrl } from "@/services/mangadex";
-import { getDataByLocale, getLangFlagUrl, slugify } from "@/lib/utils";
+import {
+    getDataByLocale,
+    getDetailMangaLink,
+    getLangFlagUrl,
+    slugify,
+} from "@/lib/utils";
 import Tag from "../Tag/Tag";
 import TagCollapse from "../Tag/TagCollapse";
 type Props = {
@@ -19,22 +24,26 @@ function HeroSlide({ manga }: Props) {
         );
     }, [manga]);
 
-    const authors = useMemo(() => {
-        return manga.relationships.filter(
-            (relation) => relation.type === "author"
-        );
-    }, [manga]);
+    const uniqueAuthorsAndArtist = manga.relationships
+        .filter(
+            (relation) =>
+                relation.type === "author" || relation.type === "artist"
+        )
+        .reduce((data: Relationship[], authorOrArtist) => {
+            //handle remove duplicate data
+            const exist = data.find(
+                (obj) => obj.attributes.name === authorOrArtist.attributes.name
+            );
+            if (exist) return data;
+            data.push(authorOrArtist);
+            return data;
+        }, []);
 
-    const artist = useMemo(() => {
-        return manga.relationships.filter(
-            (relation) => relation.type === "artist"
-        );
-    }, [manga]);
     const languageFlag = getLangFlagUrl(manga.attributes.originalLanguage);
 
     return (
         <Link
-            href={`/title/${manga.id}/${slugify(manga.attributes.title.en)}`}
+            href={getDetailMangaLink(manga)}
             className="block relative w-full h-[324px] md:h-[400px] lg:h-[440px]"
         >
             <Image
@@ -48,7 +57,7 @@ function HeroSlide({ manga }: Props) {
                 height={660}
                 alt="art"
             />
-            <div className="absolute top-0 left-0 right-0 bottom-0 bg-gradient-to-b from-md-background/60 to-md-background"></div>
+            <div className="absolute top-0 left-0 right-0 bottom-0 bg-gradient-to-b from-background/60 to-background"></div>
             <div className="absolute w-full h-[70%]   sm:h-[65%] md:h-[77%] bottom-0 mb-7 lg:mb-0">
                 <Wrapper className="md:pb-6 pt-6 md:pt-8 flex gap-4">
                     <div className="relative block w-[112px] md:h-[278px] md:w-[200px]">
@@ -107,7 +116,7 @@ function HeroSlide({ manga }: Props) {
 
                         <div className="mt-auto ">
                             <span className="font-medium italic line-clamp-1">
-                                {[...authors, ...artist]
+                                {uniqueAuthorsAndArtist
                                     .map((value) => value.attributes.name)
                                     .join(", ")}
                             </span>

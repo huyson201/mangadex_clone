@@ -7,7 +7,7 @@ import {
 } from "@/lib/utils";
 import Link from "next/link";
 import React from "react";
-import { Manga } from "../../../types";
+import { Manga } from "../../types";
 import Image from "next/image";
 import mangaLinkIcons from "@/data/mangaLinkIcon.json";
 type Props = {
@@ -41,7 +41,7 @@ const DetailInfo = ({ manga, className }: Props) => {
                     {authors.map((author) => (
                         <Link
                             key={author.id}
-                            className="mr-2 bg-accent hover:bg-primary text-xs rounded py-1 px-2 mt-2 inline-block transition-colors"
+                            className="mr-2 bg-accent hover:bg-primary hover:text-primary-foreground text-xs rounded py-1 px-2 mt-2 inline-block transition-colors"
                             href={"/"}
                         >
                             {author.attributes.name}
@@ -55,7 +55,7 @@ const DetailInfo = ({ manga, className }: Props) => {
                     {artists.map((author) => (
                         <Link
                             key={author.id}
-                            className="mr-2 bg-accent hover:bg-primary text-xs rounded py-1 px-2 mt-2 inline-block transition-colors"
+                            className="mr-2 bg-accent hover:bg-primary hover:text-primary-foreground text-xs rounded py-1 px-2 mt-2 inline-block transition-colors"
                             href={"/"}
                         >
                             {author.attributes.name}
@@ -70,7 +70,7 @@ const DetailInfo = ({ manga, className }: Props) => {
                         {genres.map((value) => (
                             <Link
                                 key={value.id}
-                                className="bg-accent hover:bg-primary text-xs rounded py-1 px-2 mt-2 inline-block transition-colors"
+                                className="bg-accent hover:bg-primary hover:text-primary-foreground text-xs rounded py-1 px-2 mt-2 inline-block transition-colors"
                                 href={createTagLink(value)}
                             >
                                 {getTagName(value)}
@@ -86,7 +86,7 @@ const DetailInfo = ({ manga, className }: Props) => {
                         {themes.map((value) => (
                             <Link
                                 key={value.id}
-                                className="bg-accent hover:bg-primary text-xs rounded py-1 px-2 mt-2 inline-block transition-colors"
+                                className="bg-accent hover:bg-primary hover:text-primary-foreground text-xs rounded py-1 px-2 mt-2 inline-block transition-colors"
                                 href={createTagLink(value)}
                             >
                                 {getTagName(value)}
@@ -100,7 +100,7 @@ const DetailInfo = ({ manga, className }: Props) => {
                     <div className=" font-bold">Demographic</div>
                     <div className="flex items-center flex-wrap gap-2">
                         <Link
-                            className="bg-accent hover:bg-primary text-xs rounded py-1 px-2 mt-2 inline-block transition-colors"
+                            className="bg-accent hover:bg-primary hover:text-primary-foreground text-xs rounded py-1 px-2 mt-2 inline-block transition-colors"
                             href={"/"}
                         >
                             {manga.attributes.publicationDemographic}
@@ -116,7 +116,7 @@ const DetailInfo = ({ manga, className }: Props) => {
                         {formats.map((value) => (
                             <Link
                                 key={value.id}
-                                className="bg-accent hover:bg-primary text-xs rounded py-1 px-2 mt-2 inline-block transition-colors"
+                                className="bg-accent hover:bg-primary hover:text-primary-foreground text-xs rounded py-1 px-2 mt-2 inline-block transition-colors"
                                 href={createTagLink(value)}
                             >
                                 {getTagName(value)}
@@ -132,7 +132,7 @@ const DetailInfo = ({ manga, className }: Props) => {
                         {links.readOrBuy.map((value) => (
                             <Link
                                 key={value.key}
-                                className="bg-accent hover:bg-primary text-xs rounded py-1 px-2 mt-2 inline-flex gap-1 transition-colors"
+                                className="bg-accent hover:bg-primary hover:text-primary-foreground text-xs rounded py-1 px-2 mt-2 inline-flex gap-1 transition-colors"
                                 href={value.link}
                             >
                                 <Image
@@ -160,7 +160,7 @@ const DetailInfo = ({ manga, className }: Props) => {
                         {links.track.map((value) => (
                             <Link
                                 key={value.key}
-                                className="bg-accent hover:bg-primary text-xs rounded py-1 px-2 mt-2 inline-flex gap-1 transition-colors"
+                                className="bg-accent hover:bg-primary hover:text-primary-foreground text-xs rounded py-1 px-2 mt-2 inline-flex gap-1 transition-colors"
                                 href={value.link}
                             >
                                 <Image
@@ -175,33 +175,35 @@ const DetailInfo = ({ manga, className }: Props) => {
                     </div>
                 </div>
             )}
-            <div className="w-full">
-                <div className=" font-bold">Alternative Titles</div>
-                <div className="text-sm divide-y-2 divide-accent">
-                    {manga.attributes.altTitles.map((title, index) => {
-                        const key = Object.keys(title)[0];
-                        const flag = getLangFlagUrl(key);
-                        return (
-                            <div
-                                className="py-1.5 flex items-center gap-2"
-                                key={key + index}
-                            >
-                                {flag && (
-                                    <Image
-                                        width={24}
-                                        height={24}
-                                        src={flag}
-                                        alt={key}
-                                        className="w-6 h-6"
-                                    />
-                                )}
+            {manga.attributes.altTitles.length > 0 && (
+                <div className="w-full">
+                    <div className=" font-bold">Alternative Titles</div>
+                    <div className="text-sm divide-y-2 divide-accent">
+                        {manga.attributes.altTitles.map((title, index) => {
+                            const key = Object.keys(title)[0];
+                            const flag = getLangFlagUrl(key);
+                            return (
+                                <div
+                                    className="py-1.5 flex items-center gap-2"
+                                    key={key + index}
+                                >
+                                    {flag && (
+                                        <Image
+                                            width={24}
+                                            height={24}
+                                            src={flag}
+                                            alt={key}
+                                            className="w-6 h-6"
+                                        />
+                                    )}
 
-                                {title[key]}
-                            </div>
-                        );
-                    })}
+                                    {title[key]}
+                                </div>
+                            );
+                        })}
+                    </div>
                 </div>
-            </div>
+            )}
         </div>
     );
 };

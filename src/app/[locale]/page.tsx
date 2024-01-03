@@ -13,6 +13,7 @@ import {
     getRecentlyAddedMangaList,
     getSeasonalMangaList,
 } from "@/services/mangadex";
+import { LATEST_LIST_URL, RECENTLY_LIST_URL } from "@/constants";
 
 export default async function Home() {
     const [t, popularMangaResult, recentlyAddedList, seasonalResult] =
@@ -31,10 +32,10 @@ export default async function Home() {
                     <h2 className="text-xl sm:text-2xl font-semibold flex items-center justify-between">
                         <span>{t("titles.latestList")}</span>
                         <Link
-                            href={"/titles/latest"}
+                            href={LATEST_LIST_URL}
                             className={cn(
                                 buttonVariants({
-                                    variant: "outline",
+                                    variant: "ghost",
                                     size: "icon",
                                 }),
                                 "rounded-full text-xl"
@@ -65,10 +66,10 @@ export default async function Home() {
                     <h2 className="text-xl sm:text-2xl font-semibold flex items-center justify-between">
                         <span>{t("titles.recentlyList")}</span>
                         <Link
-                            href={"/titles/recent"}
+                            href={RECENTLY_LIST_URL}
                             className={cn(
                                 buttonVariants({
-                                    variant: "outline",
+                                    variant: "ghost",
                                     size: "icon",
                                 }),
                                 "rounded-full text-xl"

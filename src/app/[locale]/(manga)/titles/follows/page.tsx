@@ -10,12 +10,7 @@ import {
     getMangaList,
     getStatisticsList,
 } from "@/services/mangadex";
-import {
-    Chapter,
-    Manga,
-    ReadingStatus,
-    readingStatusData,
-} from "../../../../../../types";
+import { Chapter, Manga, ReadingStatus, readingStatusData } from "@/types";
 import Link from "next/link";
 import connectDb from "@/lib/mongodb";
 import { auth } from "@/auth";

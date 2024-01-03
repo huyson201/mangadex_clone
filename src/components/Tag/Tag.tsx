@@ -8,10 +8,10 @@ export const tagVariants = cva(
             variant: {
                 none: "",
                 default: "bg-accent",
-                warning: "bg-status-yellow",
-                success: "bg-status-green",
-                danger: "bg-status-red",
-                purple: "bg-status-purple",
+                warning: "bg-status-yellow text-white",
+                success: "bg-status-green text-white",
+                danger: "bg-status-red text-white",
+                purple: "bg-status-purple text-white",
             },
         },
         defaultVariants: {
@@ -19,16 +19,48 @@ export const tagVariants = cva(
         },
     }
 );
-interface Props
-    extends React.HTMLAttributes<HTMLSpanElement>,
-        VariantProps<typeof tagVariants> {
+
+type AsChildProps = {
+    asChild: true;
+    children: React.ReactNode;
+    className?: never;
+};
+interface Props extends React.HTMLAttributes<HTMLSpanElement> {
     className?: string;
+    asChild?: never;
+    children?: React.ReactNode;
 }
 
-const Tag = ({ className, variant, ...props }: Props) => {
+const Tag = ({
+    className,
+    variant,
+    asChild,
+    ...props
+}: (Props | AsChildProps) & VariantProps<typeof tagVariants>) => {
+    const Comp = asChild ? Slot : "span";
     return (
-        <span {...props} className={cn(tagVariants({ variant }), className)} />
+        <Comp {...props} className={cn(tagVariants({ variant }), className)} />
     );
 };
 
 export default Tag;
+
+const Slot = ({ children, ...props }: { children?: React.ReactNode }) => {
+    if (React.Children.count(children) > 1) {
+        throw new Error("Required only one child component.");
+    }
+    if (React.isValidElement(children)) {
+        return React.Children.map(children, (child) => {
+            return React.cloneElement(child, {
+                ...props,
+                ...child.props,
+                className: cn(
+                    (props as any)?.className,
+                    child.props?.className
+                ),
+            });
+        });
+    }
+
+    return null;
+};

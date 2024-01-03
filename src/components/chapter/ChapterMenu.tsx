@@ -23,7 +23,7 @@ import Link from "next/link";
 import { Popover } from "@radix-ui/react-popover";
 import { PopoverContent, PopoverTrigger } from "../ui/popover";
 import { cn, getDataByLocale } from "@/lib/utils";
-import { Chapter } from "../../../types";
+import { Chapter } from "@/types";
 import useSWR from "swr";
 import { getMangaAggregate } from "@/services/mangadex";
 import { READ_CHAPTER_URL } from "@/constants";
@@ -239,7 +239,7 @@ const ChapterMenu = ({ chapter }: Props) => {
                         <Link
                             key={chapterWithKey.id}
                             className={cn(
-                                "hover:bg-accent-hover-2 transition-all w-full block rounded px-1.5 py-1",
+                                "hover:bg-accent-hover transition-all w-full block rounded px-1.5 py-1",
                                 chapter.id === chapterWithKey.id && "bg-primary"
                             )}
                             href={`${READ_CHAPTER_URL}/${chapterWithKey.id}`}
@@ -271,7 +271,7 @@ const ChapterMenu = ({ chapter }: Props) => {
                 <div className="px-2">
                     <Button
                         onClick={() => chapterMenu.close()}
-                        variant={"outline"}
+                        variant={"ghost"}
                         className="rounded-full"
                         size={"icon"}
                     >
@@ -324,7 +324,7 @@ const ChapterMenu = ({ chapter }: Props) => {
                                             aria-expanded={openList}
                                             className={cn(
                                                 " h-full w-full py-1.5 gap-1  justify-between border  active:border-primary",
-                                                openList && "bg-accent-hover-2"
+                                                openList && "bg-accent-hover"
                                             )}
                                         >
                                             <div className="text-left">

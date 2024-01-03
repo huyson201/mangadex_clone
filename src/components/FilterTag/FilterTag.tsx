@@ -13,7 +13,7 @@ import useSWR from "swr";
 import { getTags } from "@/services/mangadex";
 import { getTagName } from "@/lib/manga";
 import { cn } from "@/lib/utils";
-import { Tag } from "../../../types";
+import { Tag } from "../../types";
 type Props = {
     onSelect?: (data: { includes: string[]; excludes: string[] }) => void;
     defaultValue?: { id: string; state: "include" | "exclude" }[];
@@ -188,7 +188,7 @@ const FilterTag = forwardRef<{ reset: () => void }, Props>(
                 open={open}
                 onOpenChange={() => setOpen((prev) => !prev)}
                 title={title}
-                contentClass="overflow-auto custom-scrollbar md:max-h-[260px] custom-scrollbar md:w-[500px] w-[var(--radix-popover-trigger-width)]"
+                contentClass="overflow-auto custom-scrollbar max-h-[320px] md:max-h-[260px] custom-scrollbar md:w-[500px] w-[var(--radix-popover-trigger-width)]"
             >
                 <div className="p-1.5">
                     <div className="relative">
@@ -245,7 +245,7 @@ const FilterTagItem = ({
         <span
             onClick={onClick}
             className={cn(
-                " border cursor-pointer capitalize text-xs   px-2 py-1  rounded-md",
+                " border border-transparent cursor-pointer capitalize text-xs   px-2 py-1  rounded-md",
                 variant === "success" &&
                     "bg-status-green/[0.05]  border-status-green text-status-green",
                 variant === "danger" &&

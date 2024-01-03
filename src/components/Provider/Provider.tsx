@@ -12,7 +12,7 @@ import React from "react";
 import { SessionProvider } from "next-auth/react";
 import { Session } from "next-auth/types";
 import { ChapterMenuProvider } from "@/contexts/ChapterMenuContext";
-
+import { ThemeProvider } from "next-themes";
 type Props = {
     children?: any;
     locale: string;
@@ -31,7 +31,15 @@ const Provider = ({ session, locale, messages, children }: Props) => {
                 >
                     <ChapterMenuProvider>
                         <HeadSearchProvider>
-                            <DrawerMenuProvider>{children}</DrawerMenuProvider>
+                            <DrawerMenuProvider>
+                                <ThemeProvider
+                                    attribute="class"
+                                    themes={["light", "dark", "dracula"]}
+                                    enableSystem
+                                >
+                                    {children}
+                                </ThemeProvider>
+                            </DrawerMenuProvider>
                         </HeadSearchProvider>
                     </ChapterMenuProvider>
                 </NextIntlClientProvider>

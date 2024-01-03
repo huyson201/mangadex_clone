@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import ChapterItem from "../ChapterList/ChapterItem";
-import { Chapter, Manga } from "../../../types";
+import { Chapter, Manga } from "../../types";
 import { getDetailMangaLink, getLangFlagUrl, getMangaTitle } from "@/lib/utils";
 
 type Props = {

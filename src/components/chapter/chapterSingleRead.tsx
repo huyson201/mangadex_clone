@@ -1,6 +1,6 @@
 "use client";
 import React, { forwardRef, useImperativeHandle, useState } from "react";
-import { AtHomeResponse } from "../../../types";
+import { AtHomeResponse } from "@/types";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { useChapterMenu } from "@/contexts/ChapterMenuContext";

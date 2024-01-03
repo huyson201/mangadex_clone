@@ -1,5 +1,5 @@
 import { READ_CHAPTER_URL, TAG_BASE_URL } from "@/constants";
-import { Chapter, Manga, Tag } from "../../types";
+import { Chapter, Manga, Tag } from "../types";
 import { slugify } from "./utils";
 import flags from "@/data/flag.json";
 

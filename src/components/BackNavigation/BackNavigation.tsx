@@ -14,7 +14,7 @@ const BackNavigation = ({ title }: Props) => {
         <div className="flex items-center gap-6">
             <Button
                 onClick={() => router.back()}
-                variant={"outline"}
+                variant={"ghost"}
                 className="rounded-full w-10 h-10 p-0"
             >
                 <ArrowLeft />

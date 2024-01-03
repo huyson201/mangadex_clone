@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { Manga } from "../../../types";
+import { Manga } from "../../types";
 import { getImageUrl } from "@/services/mangadex";
 import {
     cn,

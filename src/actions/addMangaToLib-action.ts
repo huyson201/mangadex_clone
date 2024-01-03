@@ -3,7 +3,7 @@
 import { auth } from "@/auth";
 import connectDb from "@/lib/mongodb";
 import { Follow } from "@/models/Follow";
-import { ReadingStatus } from "../../types";
+import { ReadingStatus } from "../types";
 import { revalidatePath } from "next/cache";
 
 export const addMangaToLib = async (

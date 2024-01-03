@@ -7,7 +7,7 @@ import { READING_HISTORY_KEY } from "@/constants";
 import { useSearchParams } from "next/navigation";
 import useSWR from "swr";
 import { getChapters, getMangaList } from "@/services/mangadex";
-import { Chapter, Manga } from "../../../../../../types";
+import { Chapter, Manga } from "@/types";
 import LatestMangaListitem from "@/components/ListMangaItems/LatestMangaListItem";
 import HistoryStretchItem from "./HistoryStretchItem";
 import RingLoader from "@/components/Loader/RingLoader";

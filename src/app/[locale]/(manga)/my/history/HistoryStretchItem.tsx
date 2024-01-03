@@ -1,5 +1,5 @@
 import React from "react";
-import { Chapter, Manga } from "../../../../../../types";
+import { Chapter, Manga } from "@/types";
 import { getDetailMangaLink, getLangFlagUrl, getMangaTitle } from "@/lib/manga";
 import Link from "next/link";
 import Image from "next/image";

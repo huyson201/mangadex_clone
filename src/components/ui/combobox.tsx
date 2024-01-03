@@ -33,8 +33,8 @@ const ComboBox = ({
                             role="combobox"
                             aria-expanded={open}
                             className={cn(
-                                " w-full py-1.5 gap-1 h-auto justify-between border  active:border-primary",
-                                open && "bg-accent-hover-2"
+                                " w-full py-1.5 gap-1 h-auto justify-between border border-transparent  active:border-primary",
+                                open && "bg-accent-hover"
                             )}
                         >
                             <div className="whitespace-break-spaces break-all line-clamp-1">

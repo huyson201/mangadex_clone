@@ -75,7 +75,7 @@ const Pagination = ({
                               onClick: () =>
                                   handleOnchange(currentPageState - 1),
                           } as any))}
-                    className="h-10 w-10 rounded-full transition cursor-pointer active:bg-button-hover hover:bg-button-hover/30 [&.active]:bg-primary   flex items-center justify-center text-foreground font-medium"
+                    className="h-10 w-10 rounded-full transition cursor-pointer active:bg-button-accent hover:bg-button-accent/30 [&.active]:bg-primary [&.active]:text-primary-foreground   flex items-center justify-center text-foreground font-medium"
                 >
                     <ArrowLeft />
                 </Comp>
@@ -110,7 +110,7 @@ const Pagination = ({
                               } as any))}
                         key={`${value}-${idx}`}
                         className={cn(
-                            "px-4 transition cursor-pointer active:bg-button-hover hover:bg-button-hover/30 rounded [&.active]:bg-primary  h-10 flex items-center justify-center text-foreground font-medium",
+                            "px-4 transition cursor-pointer active:bg-button-accent hover:bg-button-accent/30 rounded [&.active]:bg-primary [&.active]:text-primary-foreground  h-10 flex items-center justify-center text-foreground font-medium",
                             {
                                 active: asLink
                                     ? currentPage === value
@@ -137,7 +137,7 @@ const Pagination = ({
                               onClick: () =>
                                   handleOnchange(currentPageState - 1),
                           } as any))}
-                    className="w-10 rounded-full transition cursor-pointer active:bg-button-hover hover:bg-button-hover/30  [&.active]:bg-primary  h-10 flex items-center justify-center text-foreground font-medium"
+                    className="w-10 rounded-full transition cursor-pointer active:bg-button-accent hover:bg-button-accent/30  [&.active]:bg-primary [&.active]:text-primary-foreground  h-10 flex items-center justify-center text-foreground font-medium"
                 >
                     <ArrowRight />
                 </Comp>

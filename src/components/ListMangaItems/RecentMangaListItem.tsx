@@ -2,8 +2,9 @@ import { Bookmark, Eye, MessageSquare, Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { Manga, Statistic } from "../../../types";
+import { Manga, Statistic } from "../../types";
 import {
+    createTagLink,
     getCoverArtFromManga,
     getDataByLocale,
     getDetailMangaLink,
@@ -28,6 +29,9 @@ function RecentMangaListItem({ manga, statistic }: Props) {
     const title = getMangaTitle(manga);
     const tagsWithGroupContent = getTagsWithGroupContent(manga.attributes.tags);
     const flag = getLangFlagUrl(manga.attributes.originalLanguage);
+    const isDoujinshi = manga.relationships.some(
+        (relation) => relation.related === "doujinshi"
+    );
 
     return (
         <div className="p-2 rounded bg-accent grid gap-x-2 grid-rows-[auto_1fr_auto] sm:grid-rows-[auto_auto_1fr] sm:grid-cols-[84px_1fr_auto] grid-cols-[64px_1fr_auto]">
@@ -95,8 +99,8 @@ function RecentMangaListItem({ manga, statistic }: Props) {
                 </div>
             </div>
             <div className="col-span-2">
-                <TagCollapse className="mt-2" variant={"normal"}>
-                    <div className="flex  items-center gap-2 flex-wrap mt-2">
+                <TagCollapse className="mt-0" variant={"normal"}>
+                    <div className="flex  items-center gap-2 flex-wrap mt-1.5">
                         <MangaStatus
                             variant={manga.attributes.status}
                             title={manga.attributes.status}
@@ -108,36 +112,40 @@ function RecentMangaListItem({ manga, statistic }: Props) {
                             </Tag>
                         )}
                         {tagsWithGroupContent.map((tag) => (
-                            <Link
-                                href={"#"}
-                                key={tag.id}
-                                className={cn(
-                                    tagVariants({ variant: "danger" }),
-                                    "px-1"
-                                )}
-                            >
-                                {getTagName(tag)}
-                            </Link>
+                            <Tag asChild key={tag.id} variant={"danger"}>
+                                <Link
+                                    href={createTagLink(tag)}
+                                    key={tag.id}
+                                    className="px-1"
+                                >
+                                    {getTagName(tag)}
+                                </Link>
+                            </Tag>
                         ))}
+
+                        {isDoujinshi && (
+                            <Tag variant={"purple"} className="px-1">
+                                Doujinshi
+                            </Tag>
+                        )}
 
                         {manga.attributes.tags.map((tag) => {
                             if (tag.attributes.group === "content") return null;
                             return (
-                                <Link
-                                    href={"#"}
-                                    key={tag.id}
-                                    className={cn(
-                                        tagVariants({ variant: "none" })
-                                    )}
-                                >
-                                    {getTagName(tag)}
-                                </Link>
+                                <Tag key={tag.id} variant={"none"}>
+                                    <Link
+                                        href={createTagLink(tag)}
+                                        className="px-1"
+                                    >
+                                        {getTagName(tag)}
+                                    </Link>
+                                </Tag>
                             );
                         })}
                     </div>
                 </TagCollapse>
             </div>
-            <div className="col-span-3 sm:col-span-2 text-sm mt-2 line-clamp-4">
+            <div className="col-span-3 sm:col-span-2 text-sm mt-1.5 line-clamp-4">
                 {getDataByLocale(manga.attributes.description)}
             </div>
         </div>

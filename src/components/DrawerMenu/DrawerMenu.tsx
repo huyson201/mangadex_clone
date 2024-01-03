@@ -36,7 +36,7 @@ function DrawerMenu({}: Props) {
 
                     <Button
                         type="button"
-                        variant={"outline"}
+                        variant={"ghost"}
                         className={cn("text-3xl rounded-full ")}
                         size={"icon"}
                         onClick={() => setIsActive?.(false)}
@@ -88,7 +88,7 @@ function DrawerMenu({}: Props) {
                         href="/titles/latest"
                     />
                     <form action={randomManga}>
-                        <button className="px-4 active:bg-drawer-accent-2 hover:bg-drawer-accent transition-colors duration-300  capitalize text-sm  py-1 rounded gap-2 w-full flex items-center text-foreground">
+                        <button className="px-4 active:bg-accent-2 hover:bg-drawer-accent transition-colors duration-300  capitalize text-sm  py-1 rounded gap-2 w-full flex items-center text-foreground">
                             Random
                         </button>
                     </form>
@@ -141,7 +141,7 @@ const DrawerItem = ({ title, href, icon, subItem, exact }: DrawerItemProps) => {
                 className={cn(
                     "px-2 py-1 rounded gap-2 w-full flex items-center",
                     href &&
-                        "group-active:bg-drawer-accent-2 group-hover:bg-drawer-accent transition-colors duration-300 group-[&.active]:bg-primary"
+                        "group-active:bg-accent-2 group-hover:bg-drawer-accent transition-colors duration-300 group-[&.active]:bg-primary group-[&.active]:text-primary-foreground"
                 )}
             >
                 {icon && icon}

@@ -25,6 +25,7 @@
     "themeSelections": {
       "title": "Select Theme",
       "light": "Light",
+      "dracula": "dracula",
       "dark": "Dark",
       "system": "System"
     },

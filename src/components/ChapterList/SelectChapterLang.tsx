@@ -35,9 +35,11 @@ const SelectChapterLang = ({
         >
             <Combobox.Label>
                 {(data: string | undefined) => {
+                    if (!data) return null;
                     const comboboxLabelValue = translatedLanguages.find(
                         (el) => el.code === data
                     );
+
                     return (
                         <div
                             className={cn(

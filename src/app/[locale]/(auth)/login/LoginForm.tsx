@@ -18,7 +18,7 @@ const LoginForm = (props: Props) => {
                     Username or email
                 </label>
                 <input
-                    className="w-full rounded bg-[#3d414a] outline-none mt-2 focus:border-2 transition-all h-9 px-2 text-xs focus:border-[#ff6740]"
+                    className="w-full rounded bg-[#3d414a] text-white outline-none mt-2 focus:border-2 transition-all h-9 px-2 text-xs focus:border-[#ff6740]"
                     id="username"
                     name="username"
                     type="text"
@@ -35,7 +35,7 @@ const LoginForm = (props: Props) => {
                     Password
                 </label>
                 <input
-                    className="w-full rounded bg-[#3d414a] outline-none mt-2 focus:border-2 transition-all h-9 px-2 text-xs focus:border-[#ff6740]"
+                    className="w-full rounded bg-[#3d414a] text-white outline-none mt-2 focus:border-2 transition-all h-9 px-2 text-xs focus:border-[#ff6740]"
                     id="password"
                     name="password"
                     type="password"
@@ -56,13 +56,13 @@ const LoginForm = (props: Props) => {
                 </Link>
             </div>
 
-            <FormSubmitButton className="mt-8 mb-16 block w-full rounded py-1.5 text-sm font-semibold bg-[#ff6740]">
+            <FormSubmitButton className="mt-8 text-white mb-16 block w-full rounded py-1.5 text-sm font-semibold bg-[#ff6740]">
                 {(pending) => {
                     return pending ? "..." : "Sign In";
                 }}
             </FormSubmitButton>
 
-            <div className="absolute text-sm bottom-0 left-0 w-full text-center py-4 mt-8 bg-[#2e2f37]">
+            <div className="text-[#72767b] border-t border-t-white/10 absolute text-sm bottom-0 left-0 w-full text-center py-4 mt-8 bg-[#2e2f37]">
                 New user?{" "}
                 <Link
                     href="/register"

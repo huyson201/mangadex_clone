@@ -4,7 +4,7 @@ import Wrapper from "@/layouts/Wrapper/Wrapper";
 import { ChevronLeft, Users } from "lucide-react";
 import Link from "next/link";
 import React, { CSSProperties, useEffect, useRef, useState } from "react";
-import { AtHomeResponse, Chapter } from "../../../types";
+import { AtHomeResponse, Chapter } from "@/types";
 import Image from "next/image";
 import { cn, getDataByLocale, getMangaTitle } from "@/lib/utils";
 import ChapterSingleRead from "./chapterSingleRead";

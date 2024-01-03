@@ -3,7 +3,7 @@ import Link from "next/link";
 import React from "react";
 import { FaRegCommentAlt } from "react-icons/fa";
 import { Button } from "../ui/button";
-import { Chapter, Manga, Statistic } from "../../../types";
+import { Chapter, Manga, Statistic } from "../../types";
 import {
     getChapter,
     getImageUrl,
@@ -73,6 +73,7 @@ async function LatestUpdateItem({ statistic, manga }: Props) {
                     <div className="flex gap-1">
                         {chapterLang && (
                             <Image
+                                className="w-5"
                                 src={chapterLang}
                                 width={20}
                                 height={20}
@@ -86,8 +87,8 @@ async function LatestUpdateItem({ statistic, manga }: Props) {
                         </span>
                     </div>
                     <Button
-                        className="w-auto gap-1.5 h-auto px-1.5 py-1 hover:bg-customs-accent-hover"
-                        variant={"outline"}
+                        className="w-auto gap-1.5 h-auto px-1.5 py-1 hover:bg-accent-2-hover"
+                        variant={"ghost"}
                         size={"xs"}
                     >
                         <FaRegCommentAlt />
@@ -102,7 +103,7 @@ async function LatestUpdateItem({ statistic, manga }: Props) {
                         <Users size={18} />
                         <Link
                             href={"/"}
-                            className="text-sm inline-block px-1 rounded hover:bg-customs-accent-hover"
+                            className="text-sm inline-block px-1 rounded hover:bg-accent-2-hover"
                         >
                             {!group ? "No Group" : group.attributes.name}
                         </Link>

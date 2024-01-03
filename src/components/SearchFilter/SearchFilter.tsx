@@ -152,7 +152,7 @@ const SearchFilter = ({}: Props) => {
                         onClick={() => searchFilters?.closeFilters()}
                         className="rounded-full"
                         size={"icon"}
-                        variant={"outline"}
+                        variant={"ghost"}
                     >
                         <X />
                     </Button>

@@ -16,11 +16,7 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
-import {
-    Manga,
-    ReadingStatus,
-    readingStatusData,
-} from "../../../../../../../types";
+import { Manga, ReadingStatus, readingStatusData } from "@/types";
 import { addMangaToLib } from "@/actions/addMangaToLib-action";
 import { getImageUrl } from "@/services/mangadex";
 import { usePathname } from "next/navigation";
@@ -97,7 +93,7 @@ const AddLib = ({ manga, follow, isLoggedIn }: Props) => {
                                 <DialogClose asChild>
                                     <Button
                                         type="button"
-                                        variant="outline"
+                                        variant="ghost"
                                         className="rounded-full w-8 h-8 p-0"
                                     >
                                         <X size={20} />
@@ -142,7 +138,7 @@ const AddLib = ({ manga, follow, isLoggedIn }: Props) => {
                                                         className={cn(
                                                             " h-full w-full sm:w-2/3 rounded-sm py-1.5 gap-1  justify-between border  active:border-primary",
                                                             openList &&
-                                                                "bg-accent-hover-2"
+                                                                "bg-accent-hover"
                                                         )}
                                                     >
                                                         <div className="text-left">
