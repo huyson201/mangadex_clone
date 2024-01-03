@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import Wrapper from "@/layouts/Wrapper/Wrapper";
 import { ArrowLeft, LayoutGrid, List, StretchHorizontal } from "lucide-react";
 import React from "react";
@@ -11,7 +10,6 @@ import {
     getStatisticsList,
 } from "@/services/mangadex";
 import Pagination from "@/components/Pagination/Pagination";
-import BackNavigation from "@/components/BackNavigation/BackNavigation";
 
 type Props = {
     searchParams: {
@@ -40,8 +38,7 @@ const page = async ({ searchParams: { page = 1 } }: Props) => {
             ? Math.ceil(recentListResponse.total / limit)
             : maxPage;
     return (
-        <Wrapper>
-            <BackNavigation title="Recently Added" />
+        <>
             <div className="mt-4">
                 <Tabs defaultValue="grid" className="w-full flex flex-col">
                     <TabsList className="p-0 rounded-none  h-auto ml-auto">
@@ -92,7 +89,7 @@ const page = async ({ searchParams: { page = 1 } }: Props) => {
                 </Tabs>
             </div>
             <Pagination asLink className="mt-4" totalPage={totalPage} />
-        </Wrapper>
+        </>
     );
 };
 

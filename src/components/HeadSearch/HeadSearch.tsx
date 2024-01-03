@@ -76,9 +76,11 @@ function HeadSearch({}: Props) {
                         "custom-scrollbar max-h-[90vh] overflow-auto scrollbar-track-transparent scrollbar-thumb-rounded-full scrollbar-thumb-accent-2 scrollbar-thin px-6 md:px-4 py-4"
                     )}
                 >
-                    {!isLoading && !data && debounceSearchKey === "" && (
-                        <div>{t("resultDefault")}</div>
-                    )}
+                    {(!isLoading || !getStatisticsLoading) &&
+                        !data &&
+                        debounceSearchKey === "" && (
+                            <div>{t("resultDefault")}</div>
+                        )}
                     {!isLoading && data?.total === 0 && (
                         <div>{t("noResult")}</div>
                     )}

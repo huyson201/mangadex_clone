@@ -60,9 +60,9 @@ function HeroSlide({ manga }: Props) {
             <div className="absolute top-0 left-0 right-0 bottom-0 bg-gradient-to-b from-background/60 to-background"></div>
             <div className="absolute w-full h-[70%]   sm:h-[65%] md:h-[77%] bottom-0 mb-7 lg:mb-0">
                 <Wrapper className="md:pb-6 pt-6 md:pt-8 flex gap-4">
-                    <div className="relative block w-[112px] md:h-[278px] md:w-[200px]">
+                    <div className="relative block min-h-[160px] w-[112px] md:w-[200px] md:h-[278px] ">
                         <Image
-                            className="w-full md:h-full object-cover rounded-lg"
+                            className="w-full h-full object-cover rounded-lg"
                             src={getImageUrl(
                                 "512",
                                 manga.id,

@@ -48,8 +48,7 @@ async function page({ searchParams: { page = 1 } }: Props) {
     );
 
     return (
-        <Wrapper className="mt-4">
-            <BackNavigation title="Latest Updates" />
+        <>
             <div className="mt-4">
                 <Tabs defaultValue="stretch" className="w-full flex flex-col">
                     <TabsList className="p-0 rounded-none  h-auto ml-auto">
@@ -87,7 +86,7 @@ async function page({ searchParams: { page = 1 } }: Props) {
                 </Tabs>
             </div>
             <Pagination asLink className="mt-4" totalPage={maxPage} />
-        </Wrapper>
+        </>
     );
 }
 
