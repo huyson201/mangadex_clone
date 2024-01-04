@@ -1,6 +1,6 @@
 import createIntlMiddleware from "next-intl/middleware";
-import { DEFAULT_LANG, LOCALES, LOCALE_PREFIX } from "./i18n.config";
 import { auth as middleware } from "./auth";
+import { DEFAULT_LANG, LOCALES, LOCALE_PREFIX } from "./i18n.config";
 
 export default middleware((request) => {
     // Step 1: define default locale

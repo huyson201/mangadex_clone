@@ -1,5 +1,6 @@
 "use client";
-import React, { useRef, useState, useTransition } from "react";
+import { addMangaToLib } from "@/actions/addMangaToLib-action";
+import { Button } from "@/components/ui/button";
 import {
     Dialog,
     DialogClose,
@@ -7,21 +8,20 @@ import {
     DialogHeader,
     DialogTrigger,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Bookmark, ChevronDown, X } from "lucide-react";
-import Image from "next/image";
-import { cn, getCoverArtFromManga, getMangaTitle } from "@/lib/utils";
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
-import { Manga, ReadingStatus, readingStatusData } from "@/types";
-import { addMangaToLib } from "@/actions/addMangaToLib-action";
-import { getImageUrl } from "@/services/mangadex";
-import { usePathname } from "next/navigation";
+import { cn, getCoverArtFromManga, getMangaTitle } from "@/lib/utils";
 import { IFollow } from "@/models/Follow";
+import { getImageUrl } from "@/services/mangadex";
+import { Manga, ReadingStatus, readingStatusData } from "@/types";
+import { Bookmark, ChevronDown, X } from "lucide-react";
 import { signIn } from "next-auth/react";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
+import { useRef, useState, useTransition } from "react";
 
 type Props = {
     manga: Manga;
@@ -43,18 +43,18 @@ const AddLib = ({ manga, follow, isLoggedIn }: Props) => {
         return (
             <div>
                 <Button
-                    onClick={() => signIn()}
-                    className="hidden sm:flex capitalize gap-x-2 rounded px-8"
+                    onClick={() => startTransition(signIn)}
+                    className="hidden min-w-[164px] sm:flex capitalize gap-x-2 rounded px-8"
                     variant={"primary"}
                 >
-                    Add To Library
+                    {pending ? "..." : "Add To Library"}
                 </Button>
                 <Button
-                    onClick={() => signIn()}
+                    onClick={() => startTransition(signIn)}
                     variant={"primary"}
                     className="sm:hidden px-2 rounded-sm"
                 >
-                    <Bookmark />
+                    {pending ? "..." : <Bookmark />}
                 </Button>
             </div>
         );
@@ -136,7 +136,7 @@ const AddLib = ({ manga, follow, isLoggedIn }: Props) => {
                                                         role="combobox"
                                                         aria-expanded={openList}
                                                         className={cn(
-                                                            " h-full w-full sm:w-2/3 rounded-sm py-1.5 gap-1  justify-between border  active:border-primary",
+                                                            " h-full border-none w-full sm:w-2/3 rounded-sm py-1.5 gap-1  justify-between border  active:border-primary",
                                                             openList &&
                                                                 "bg-accent-hover"
                                                         )}

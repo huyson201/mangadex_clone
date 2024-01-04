@@ -1,20 +1,27 @@
 "use client";
-import React, { forwardRef, useImperativeHandle, useState } from "react";
+import { READ_CHAPTER_URL } from "@/constants";
+import { useChapterMenu } from "@/contexts/ChapterMenuContext";
+import { cn } from "@/lib/utils";
 import { AtHomeResponse } from "@/types";
 import Image from "next/image";
-import { cn } from "@/lib/utils";
-import { useChapterMenu } from "@/contexts/ChapterMenuContext";
+import { useRouter } from "next/navigation";
+import { forwardRef, useImperativeHandle, useState } from "react";
 
 type Props = {
     data: AtHomeResponse;
     onChange?: (index: number) => void;
     defaultIndex?: number;
+    nextChapter?: string;
+    prevChapter?: string;
 };
 
 const ChapterSingleRead = forwardRef<
     { slideToIndex: (index: number) => void },
     Props
->(function ChapterSingleReadFC({ data, defaultIndex, onChange }, ref) {
+>(function ChapterSingleReadFC(
+    { data, defaultIndex, onChange, prevChapter, nextChapter },
+    ref
+) {
     const { readingDirection, headerType, imageFit } = useChapterMenu();
     const [imageIndex, setImageIndex] = useState(defaultIndex || 0);
     const images = data.chapter.data;
@@ -22,6 +29,7 @@ const ChapterSingleRead = forwardRef<
     const quality = "data";
     const hash = data.chapter.hash;
     const base_url = data.baseUrl;
+    const router = useRouter();
 
     useImperativeHandle(
         ref,
@@ -37,14 +45,25 @@ const ChapterSingleRead = forwardRef<
     );
 
     const handlePrev = () => {
-        if (imageIndex === 0) return;
+        if (imageIndex === 0) {
+            if (prevChapter) {
+                router.push(`${READ_CHAPTER_URL}/${prevChapter}`);
+            }
+            return;
+        }
+
         const newIndex = imageIndex - 1;
         setImageIndex(newIndex);
         onChange?.(newIndex);
     };
 
     const handleNext = () => {
-        if (imageIndex === arrImgLength - 1) return;
+        if (imageIndex === arrImgLength - 1) {
+            if (nextChapter) {
+                router.push(`${READ_CHAPTER_URL}/${nextChapter}`);
+            }
+            return;
+        }
         const newIndex = imageIndex + 1;
         setImageIndex(newIndex);
         onChange?.(newIndex);
@@ -83,6 +102,7 @@ const ChapterSingleRead = forwardRef<
                             alt="img"
                             width={312}
                             height={700}
+                            priority
                             className={cn(
                                 "w-auto object-contain ",
                                 imageFit === "height" && "h-full",

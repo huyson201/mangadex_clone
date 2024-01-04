@@ -1,16 +1,16 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "../ui/button";
-import DetailInfo from "../DetailDesc/DetailInfo";
-import { Manga } from "@/types";
-import SelectChapterLang from "./SelectChapterLang";
-import useSWR from "swr";
 import { getMangaFeed } from "@/services/mangadex";
-import ChapterItem from "./ChapterItem";
+import { Manga } from "@/types";
+import { useRef, useState } from "react";
+import useSWR from "swr";
+import DetailInfo from "../DetailDesc/DetailInfo";
 import RingLoader from "../Loader/RingLoader";
-import Pagination from "../Pagination/Pagination";
 import NotfoundData from "../NotFoundData/NotfoundData";
+import Pagination from "../Pagination/Pagination";
+import { Button } from "../ui/button";
+import ChapterItem from "./ChapterItem";
+import SelectChapterLang from "./SelectChapterLang";
 type Props = {
     manga: Manga;
 };
@@ -74,45 +74,49 @@ const ChapterList = ({ manga }: Props) => {
                     </div>
                     <div className="lg:col-span-8 col-span-12">
                         <TabsContent value="chapters">
+                            {manga.attributes.availableTranslatedLanguages
+                                .length !== 0 && (
+                                <div
+                                    className="flex gap-2 justify-between"
+                                    ref={scrollRef}
+                                >
+                                    <Button
+                                        variant={"secondary"}
+                                        className="py-1 px-4 h-auto "
+                                        onClick={() =>
+                                            setSortBy((prev) =>
+                                                prev === "chapter.desc"
+                                                    ? "chapter.asc"
+                                                    : "chapter.desc"
+                                            )
+                                        }
+                                    >
+                                        {sortBy === "chapter.desc"
+                                            ? "Descending"
+                                            : "Ascending"}
+                                    </Button>
+                                    <SelectChapterLang
+                                        onChange={(value) =>
+                                            setChapterFilterLang(
+                                                value ||
+                                                    defaultTranslatedLanguage
+                                            )
+                                        }
+                                        availableTranslatedLanguages={
+                                            manga.attributes
+                                                .availableTranslatedLanguages
+                                        }
+                                        defaultTranslatedLanguage={
+                                            defaultTranslatedLanguage
+                                        }
+                                    />
+                                </div>
+                            )}
+
                             {(!data && !isLoading) || data?.total === 0 ? (
                                 <NotfoundData title="No Chapters" />
                             ) : (
                                 <>
-                                    <div
-                                        className="flex gap-2 justify-between"
-                                        ref={scrollRef}
-                                    >
-                                        <Button
-                                            variant={"secondary"}
-                                            className="py-1 px-4 h-auto "
-                                            onClick={() =>
-                                                setSortBy((prev) =>
-                                                    prev === "chapter.desc"
-                                                        ? "chapter.asc"
-                                                        : "chapter.desc"
-                                                )
-                                            }
-                                        >
-                                            {sortBy === "chapter.desc"
-                                                ? "Descending"
-                                                : "Ascending"}
-                                        </Button>
-                                        <SelectChapterLang
-                                            onChange={(value) =>
-                                                setChapterFilterLang(
-                                                    value ||
-                                                        defaultTranslatedLanguage
-                                                )
-                                            }
-                                            availableTranslatedLanguages={
-                                                manga.attributes
-                                                    .availableTranslatedLanguages
-                                            }
-                                            defaultTranslatedLanguage={
-                                                defaultTranslatedLanguage
-                                            }
-                                        />
-                                    </div>
                                     <div className="mt-4 space-y-2">
                                         {isLoading && (
                                             <div className="flex py-6 items-center justify-center my-4">

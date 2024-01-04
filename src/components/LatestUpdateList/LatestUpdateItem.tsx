@@ -1,25 +1,18 @@
-import Image from "next/image";
-import Link from "next/link";
-import React from "react";
-import { FaRegCommentAlt } from "react-icons/fa";
-import { Button } from "../ui/button";
-import { Chapter, Manga, Statistic } from "../../types";
-import {
-    getChapter,
-    getImageUrl,
-    getMangaById,
-    getStatistics,
-} from "@/services/mangadex";
 import {
     getChapterTitle,
     getDetailChapterLink,
     getDetailMangaLink,
     getLangFlagUrl,
     getMangaTitle,
-    slugify,
     timeAgoFormat,
 } from "@/lib/utils";
+import { getChapter, getImageUrl } from "@/services/mangadex";
 import { Users } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { FaRegCommentAlt } from "react-icons/fa";
+import { Manga, Statistic } from "../../types";
+import { Button } from "../ui/button";
 type Props = {
     statistic: Statistic;
     manga: Manga;
@@ -56,7 +49,7 @@ async function LatestUpdateItem({ statistic, manga }: Props) {
                         alt="manga-name"
                         width={256}
                         height={341}
-                        className="rounded shadow-md h-full object-cover"
+                        className="rounded shadow-md h-[80px] object-cover"
                     />
                 </Link>
             </div>

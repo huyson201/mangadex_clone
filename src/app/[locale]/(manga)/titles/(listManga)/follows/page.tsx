@@ -1,26 +1,18 @@
-import { ArrowLeft, LayoutGrid, List, StretchHorizontal } from "lucide-react";
-import React, { Suspense } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import Wrapper from "@/layouts/Wrapper/Wrapper";
-import { Button } from "@/components/ui/button";
-import Pagination from "@/components/Pagination/Pagination";
-import BackNavigation from "@/components/BackNavigation/BackNavigation";
-import {
-    getLatestUpdateList,
-    getMangaList,
-    getStatisticsList,
-} from "@/services/mangadex";
-import { Chapter, Manga, ReadingStatus, readingStatusData } from "@/types";
-import Link from "next/link";
-import connectDb from "@/lib/mongodb";
 import { auth } from "@/auth";
-import { Follow, IFollow } from "@/models/Follow";
+import RecentMangaGridItem from "@/components/ListMangaItems/RecentMangaGridItem";
 import RecentMangaListItem from "@/components/ListMangaItems/RecentMangaListItem";
 import RecentMangaStretchItem from "@/components/ListMangaItems/RecentMangaStretchItem";
-import RecentMangaGridItem from "@/components/ListMangaItems/RecentMangaGridItem";
-import NotfoundData from "@/components/NotFoundData/NotfoundData";
 import RingLoader from "@/components/Loader/RingLoader";
-import RequiredAuthNotification from "@/components/RequiredAuthNotification/RequiredAuthNotification";
+import NotfoundData from "@/components/NotFoundData/NotfoundData";
+import Pagination from "@/components/Pagination/Pagination";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import connectDb from "@/lib/mongodb";
+import { Follow, IFollow } from "@/models/Follow";
+import { getMangaList, getStatisticsList } from "@/services/mangadex";
+import { ReadingStatus, readingStatusData } from "@/types";
+import { LayoutGrid, List, StretchHorizontal } from "lucide-react";
+import Link from "next/link";
+import { Suspense } from "react";
 
 type Props = {
     searchParams: {
@@ -31,78 +23,65 @@ type Props = {
 
 async function page({ searchParams: { tab = "reading", page = 1 } }: Props) {
     const [session, _] = await Promise.all([auth(), connectDb()]);
-    if (!session) {
-        return (
-            <Wrapper className="mt-4">
-                <BackNavigation title="Library" />
-                <div className="mt-4">
-                    <RequiredAuthNotification />
-                </div>
-            </Wrapper>
-        );
-    }
 
     const totalDoc = Follow.countDocuments({
-        userId: session.user._id,
+        userId: session!.user._id,
         status: tab,
     }).exec();
     const limit = 32;
     const offset = (page - 1) * limit;
-    const follows = Follow.find({ userId: session.user._id, status: tab })
+    const follows = Follow.find({ userId: session!.user._id, status: tab })
         .skip(offset)
         .limit(limit)
         .sort("updatedAt")
         .exec();
 
     return (
-        <Wrapper className="mt-4">
-            <BackNavigation title="Library" />
-            <div className="mt-4">
-                <Tabs defaultValue={tab} className="w-full ">
-                    <TabsList className="py-1.5 rounded-none  h-auto ">
-                        {readingStatusData.map((value) => {
-                            if (value === "none") return null;
-                            return (
-                                <TabsTrigger key={value} value={value} asChild>
-                                    <Link
-                                        className="capitalize"
-                                        href={{
-                                            query: {
-                                                tab: value,
-                                            },
-                                        }}
-                                    >
-                                        {value}
-                                    </Link>
-                                </TabsTrigger>
-                            );
-                        })}
-                    </TabsList>
-                    <div className="mt-4">
-                        {readingStatusData.map((value) => {
-                            if (value === "none") return null;
-                            return (
-                                <TabsContent key={value} value={value}>
-                                    <Suspense
-                                        fallback={
-                                            <div className="flex items-center justify-center">
-                                                {<RingLoader />}
-                                            </div>
-                                        }
-                                    >
-                                        <FollowContent
-                                            follows={follows}
-                                            total={totalDoc}
-                                            limit={limit}
-                                        />
-                                    </Suspense>
-                                </TabsContent>
-                            );
-                        })}
-                    </div>
-                </Tabs>
-            </div>
-        </Wrapper>
+        <div className="mt-4">
+            <Tabs defaultValue={tab} className="w-full ">
+                <TabsList className="py-1.5 rounded-none  h-auto ">
+                    {readingStatusData.map((value) => {
+                        if (value === "none") return null;
+                        return (
+                            <TabsTrigger key={value} value={value} asChild>
+                                <Link
+                                    className="capitalize"
+                                    href={{
+                                        query: {
+                                            tab: value,
+                                        },
+                                    }}
+                                >
+                                    {value}
+                                </Link>
+                            </TabsTrigger>
+                        );
+                    })}
+                </TabsList>
+                <div className="mt-4">
+                    {readingStatusData.map((value) => {
+                        if (value === "none") return null;
+                        return (
+                            <TabsContent key={value} value={value}>
+                                <Suspense
+                                    fallback={
+                                        <div className="flex items-center justify-center">
+                                            {<RingLoader />}
+                                        </div>
+                                    }
+                                >
+                                    <FollowContent
+                                        follows={follows}
+                                        total={totalDoc}
+                                        limit={limit}
+                                    />
+                                </Suspense>
+                            </TabsContent>
+                        );
+                    })}
+                </div>
+            </Tabs>
+        </div>
     );
 }
 

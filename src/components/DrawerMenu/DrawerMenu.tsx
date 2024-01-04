@@ -1,20 +1,19 @@
 "use client";
-import React from "react";
+import { randomManga } from "@/actions/random-manga-action";
 import Logo from "@/components/Logo/Logo";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { cn } from "@/lib/utils";
-import { useDrawerMenu } from "@/contexts/DrawerMenuContext";
-import { usePathname } from "next/navigation";
-import Backdrop from "../Backdrop/Backdrop";
-import { useTranslations } from "next-intl";
-import { randomManga } from "@/actions/random-manga-action";
-import { BookOpen, Bookmark, Home, Users, X } from "lucide-react";
 import {
     ADVANCED_SEARCH_URL,
     FOLLOW_URL,
     READING_HISTORY_URL,
 } from "@/constants";
+import { useDrawerMenu } from "@/contexts/DrawerMenuContext";
+import { cn } from "@/lib/utils";
+import { BookOpen, Bookmark, Home, Users, X } from "lucide-react";
+import { useTranslations } from "next-intl";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import Backdrop from "../Backdrop/Backdrop";
 
 type Props = {};
 
@@ -101,7 +100,6 @@ function DrawerMenu({}: Props) {
                         exact
                         href={"https://forums.mangadex.org/"}
                     />
-                    <DrawerItem title={t("groups")} subItem href="/groups" />
                 </div>
             </div>
             <Backdrop

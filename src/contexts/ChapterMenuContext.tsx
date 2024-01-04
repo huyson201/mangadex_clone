@@ -1,3 +1,5 @@
+import { CHAPTER_MENU_SETTINGS_KEY } from "@/constants";
+import { useLocalStorage } from "@/hooks";
 import React, { useState } from "react";
 
 export const pageType = ["single", "longStrip"] as const;
@@ -38,26 +40,28 @@ export const useChapterMenu = () => {
 
     return context;
 };
-
+interface ChapterMenuState {
+    pageTypeState: PageType;
+    readingDirectionState: ReadingDirection;
+    progressbarType: ProgressbarType;
+    headerType: HeaderType;
+    imageFit: ImageFit;
+}
 export const ChapterMenuProvider = ({
     children,
 }: {
     children: React.ReactNode;
 }) => {
     const [isOpen, setIsOpen] = useState(false);
-    const [states, setStates] = useState<{
-        pageTypeState: PageType;
-        readingDirectionState: ReadingDirection;
-        progressbarType: ProgressbarType;
-        headerType: HeaderType;
-        imageFit: ImageFit;
-    }>({
-        pageTypeState: "single",
-        readingDirectionState: "left-right",
-        progressbarType: "normal",
-        headerType: "shown",
-        imageFit: "height",
-    });
+    const { data: states, setData: setStates } =
+        useLocalStorage<ChapterMenuState>(CHAPTER_MENU_SETTINGS_KEY, {
+            pageTypeState: "single",
+            readingDirectionState: "left-right",
+            progressbarType: "normal",
+            headerType: "shown",
+            imageFit: "height",
+        });
+
     const close = () => {
         setIsOpen(false);
     };
@@ -134,3 +138,5 @@ export const ChapterMenuProvider = ({
         </ChapterMenuContext.Provider>
     );
 };
+
+// Example usage with optional init

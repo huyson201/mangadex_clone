@@ -1,18 +1,17 @@
 "use client";
-import React from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { List, StretchHorizontal } from "lucide-react";
-import { useLocalStorage } from "@/hooks";
-import { READING_HISTORY_KEY } from "@/constants";
-import { useSearchParams } from "next/navigation";
-import useSWR from "swr";
-import { getChapters, getMangaList } from "@/services/mangadex";
-import { Chapter, Manga } from "@/types";
 import LatestMangaListitem from "@/components/ListMangaItems/LatestMangaListItem";
-import HistoryStretchItem from "./HistoryStretchItem";
 import RingLoader from "@/components/Loader/RingLoader";
 import NotfoundData from "@/components/NotFoundData/NotfoundData";
 import Pagination from "@/components/Pagination/Pagination";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { READING_HISTORY_KEY } from "@/constants";
+import { useLocalStorage } from "@/hooks";
+import { getChapters, getMangaList } from "@/services/mangadex";
+import { Chapter, Manga } from "@/types";
+import { List, StretchHorizontal } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import useSWR from "swr";
+import HistoryStretchItem from "./HistoryStretchItem";
 
 type Props = {};
 export interface ReadingHistoryItem {

@@ -3,8 +3,8 @@
 import { auth } from "@/auth";
 import connectDb from "@/lib/mongodb";
 import { Follow } from "@/models/Follow";
-import { ReadingStatus } from "../types";
 import { revalidatePath } from "next/cache";
+import { ReadingStatus } from "../types";
 
 export const addMangaToLib = async (
     mangaId: string,
@@ -35,7 +35,7 @@ export const addMangaToLib = async (
             );
         }
 
-        revalidatePath(revalidateUrl, "page");
+        revalidatePath(`/(manga)/title/[id]/[name]`, "page");
     } catch (error) {
         console.log(error);
         throw error;

@@ -1,6 +1,17 @@
 "use client";
-import React, { useState } from "react";
-import { Button, buttonVariants } from "../ui/button";
+import { READ_CHAPTER_URL } from "@/constants";
+import {
+    HeaderType,
+    ImageFit,
+    PageType,
+    ProgressbarType,
+    ReadingDirection,
+    useChapterMenu,
+} from "@/contexts/ChapterMenuContext";
+import { cn, getDataByLocale } from "@/lib/utils";
+import { MangaAggregateResponse } from "@/services/mangadex";
+import { Chapter } from "@/types";
+import { Popover } from "@radix-ui/react-popover";
 import {
     ArrowLeftCircle,
     ArrowRightCircle,
@@ -20,21 +31,9 @@ import {
     X,
 } from "lucide-react";
 import Link from "next/link";
-import { Popover } from "@radix-ui/react-popover";
+import React, { useState } from "react";
+import { Button, buttonVariants } from "../ui/button";
 import { PopoverContent, PopoverTrigger } from "../ui/popover";
-import { cn, getDataByLocale } from "@/lib/utils";
-import { Chapter } from "@/types";
-import useSWR from "swr";
-import { getMangaAggregate } from "@/services/mangadex";
-import { READ_CHAPTER_URL } from "@/constants";
-import {
-    HeaderType,
-    ImageFit,
-    PageType,
-    ProgressbarType,
-    ReadingDirection,
-    useChapterMenu,
-} from "@/contexts/ChapterMenuContext";
 
 export const LongStripIcon = () => {
     return (
@@ -104,6 +103,7 @@ export const HiddenProgressbarIcon = () => {
 };
 type Props = {
     chapter: Chapter;
+    aggregate: MangaAggregateResponse;
 };
 
 const pageTypeIcon: Record<
@@ -178,17 +178,10 @@ const imgFitIcons: Record<ImageFit, { icon: React.JSX.Element; name: string }> =
             icon: <Ban />,
         },
     };
-const ChapterMenu = ({ chapter }: Props) => {
+const ChapterMenu = ({ chapter, aggregate }: Props) => {
     const chapterMenu = useChapterMenu();
     const [openList, setOpenList] = useState(false);
     const manga = chapter.relationships.find((value) => value.type === "manga");
-    const { data, isLoading } = useSWR(
-        manga ? `manga/${manga.id}/aggregate` : null,
-        () =>
-            getMangaAggregate(manga!.id, {
-                translatedLanguage: [chapter.attributes.translatedLanguage],
-            })
-    );
 
     const chapterGroup = chapter.relationships.find(
         (relation) => relation.type === "scanlation_group"
@@ -202,7 +195,7 @@ const ChapterMenu = ({ chapter }: Props) => {
         let chapterNext = "";
         let hasPrev = false;
         let hasNext = false;
-        const chapters = data ? Object.values(data.volumes) : [];
+        const chapters = aggregate ? Object.values(aggregate.volumes) : [];
 
         const chapterElements = chapters.map((volume) => {
             const volumeElement = (
@@ -289,7 +282,8 @@ const ChapterMenu = ({ chapter }: Props) => {
                         <div className="flex items-center  gap-2.5">
                             <StickyNote />
                             <span className="break-all line-clamp-1">
-                                {chapter.attributes.title}
+                                {chapter.attributes.title ||
+                                    `Chapter ${chapter.attributes.chapter}`}
                             </span>
                         </div>
                     </div>
@@ -323,7 +317,7 @@ const ChapterMenu = ({ chapter }: Props) => {
                                             role="combobox"
                                             aria-expanded={openList}
                                             className={cn(
-                                                " h-full w-full py-1.5 gap-1  justify-between border  active:border-primary",
+                                                " h-full border-none w-full py-1.5 gap-1  justify-between border  active:border-primary",
                                                 openList && "bg-accent-hover"
                                             )}
                                         >

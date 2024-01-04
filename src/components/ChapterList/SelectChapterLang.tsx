@@ -1,9 +1,9 @@
 "use client";
-import React, { useState } from "react";
-import Combobox from "../Combobox/Combobox";
 import flags from "@/data/flag.json";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { useState } from "react";
+import Combobox from "../Combobox/Combobox";
 
 type Props = {
     availableTranslatedLanguages: string[];
@@ -47,6 +47,7 @@ const SelectChapterLang = ({
                             )}
                         >
                             <Image
+                                className="w-6"
                                 width={24}
                                 height={24}
                                 src={comboboxLabelValue!.flag}
@@ -90,7 +91,7 @@ const SelectChapterLang = ({
                                         height={24}
                                         src={lang.flag}
                                         alt={lang.name}
-                                        className="w-auto h-auto"
+                                        className="w-6"
                                     />
                                     <div className="break-all line-clamp-1">
                                         {lang.name}

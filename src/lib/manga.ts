@@ -1,7 +1,8 @@
 import { READ_CHAPTER_URL, TAG_BASE_URL } from "@/constants";
+import flags from "@/data/flag.json";
+import { MangaAggregateResponse } from "@/services/mangadex";
 import { Chapter, Manga, Tag } from "../types";
 import { slugify } from "./utils";
-import flags from "@/data/flag.json";
 
 export const getMangaTitle = (manga: Manga, locale = "en") => {
     return (
@@ -13,8 +14,20 @@ export const getMangaTitle = (manga: Manga, locale = "en") => {
 export const getDetailMangaLink = (manga: Manga) => {
     return `/title/${manga.id}/${slugify(getMangaTitle(manga))}`;
 };
+
 export const getDetailChapterLink = (chapter: Chapter) => {
-    return `${READ_CHAPTER_URL}/${chapter.id}`;
+    const hasExternalUrl = !!chapter.attributes.externalUrl;
+    const hasPages = chapter.attributes.pages > 0;
+    let link = "#";
+    if (hasPages) {
+        link = `${READ_CHAPTER_URL}/${chapter.id}`;
+    }
+
+    if (!hasPages && hasExternalUrl) {
+        link = chapter.attributes.externalUrl || "#";
+    }
+
+    return link;
 };
 export const getCoverArtFromManga = (manga: Manga) => {
     return manga.relationships.find(
@@ -107,4 +120,41 @@ export const getStatisticsLink = (links: Record<string, string>) => {
 
 export const createTagLink = (tag: Tag) => {
     return `${TAG_BASE_URL}/${tag.id}/${slugify(getTagName(tag))}`;
+};
+
+export const getPrevAndNextChapter = (
+    currentChapterId: string,
+    aggregate?: MangaAggregateResponse
+) => {
+    let prevChapter: string | undefined;
+    let nextChapter: string | undefined;
+
+    if (aggregate) {
+        const volumes = Object.values(aggregate.volumes);
+        const chapters = volumes.reduce(
+            (
+                prev: {
+                    chapter: string;
+                    id: string;
+                    other: string[];
+                    count: number;
+                }[],
+                volume
+            ) => {
+                prev = [...prev, ...Object.values(volume.chapters)];
+                return prev;
+            },
+            []
+        );
+
+        const currentChapterIndex = chapters.findIndex(
+            (item) => item.id === currentChapterId
+        );
+        prevChapter = chapters[currentChapterIndex - 1]?.id;
+        nextChapter = chapters[currentChapterIndex + 1]?.id;
+    }
+    return {
+        prevChapter,
+        nextChapter,
+    };
 };

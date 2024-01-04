@@ -1,22 +1,23 @@
 "use client";
+import { ReadingHistoryItem } from "@/app/[locale]/(manga)/my/history/HistoryContent";
 import { Button } from "@/components/ui/button";
+import { READING_HISTORY_KEY } from "@/constants";
+import { useChapterMenu } from "@/contexts/ChapterMenuContext";
+import { useLocalStorage } from "@/hooks";
 import Wrapper from "@/layouts/Wrapper/Wrapper";
+import { cn, getDataByLocale, getPrevAndNextChapter } from "@/lib/utils";
+import { getMangaAggregate } from "@/services/mangadex";
+import { AtHomeResponse, Chapter } from "@/types";
 import { ChevronLeft, Users } from "lucide-react";
 import Link from "next/link";
-import React, { CSSProperties, useEffect, useRef, useState } from "react";
-import { AtHomeResponse, Chapter } from "@/types";
-import Image from "next/image";
-import { cn, getDataByLocale, getMangaTitle } from "@/lib/utils";
-import ChapterSingleRead from "./chapterSingleRead";
+import { CSSProperties, useEffect, useMemo, useRef, useState } from "react";
+import useSWR from "swr";
 import ChapterLongStripRead from "./ChapterLongStripRead";
 import ChapterMenu from "./ChapterMenu";
-import { PageType, useChapterMenu } from "@/contexts/ChapterMenuContext";
 import ChapterProgress from "./ChapterProgress";
-import { useLocalStorage } from "@/hooks";
-import { READING_HISTORY_KEY } from "@/constants";
-import { ReadingHistoryItem } from "@/app/[locale]/(manga)/my/history/HistoryContent";
+import ChapterSingleRead from "./chapterSingleRead";
 
-export interface MyCustomCSS extends CSSProperties {
+interface MyCustomCSS extends CSSProperties {
     "--current-progress": number | string;
 }
 type Props = {
@@ -43,6 +44,18 @@ const ChapterContent = ({ data, chapter }: Props) => {
     );
     const { data: history, setData } =
         useLocalStorage<ReadingHistoryItem[]>(READING_HISTORY_KEY);
+
+    const { data: aggregate, isLoading } = useSWR(
+        manga ? `manga/${manga.id}/aggregate` : null,
+        () =>
+            getMangaAggregate(manga!.id, {
+                translatedLanguage: [chapter.attributes.translatedLanguage],
+            })
+    );
+
+    const { nextChapter, prevChapter } = useMemo(() => {
+        return getPrevAndNextChapter(chapter.id, aggregate);
+    }, [aggregate, chapter]);
 
     useEffect(() => {
         if (!manga) return;
@@ -77,7 +90,8 @@ const ChapterContent = ({ data, chapter }: Props) => {
         >
             <Wrapper className="border-b border-b-accent pb-3">
                 <div className="text-lg font-medium text-center sm:text-left">
-                    Ch. 1
+                    {chapter.attributes.title ||
+                        `Ch. ${chapter.attributes.chapter}`}
                 </div>
                 <h1 className="text-center sm:text-left">
                     <Link href={"#"} className="text-primary">
@@ -86,10 +100,12 @@ const ChapterContent = ({ data, chapter }: Props) => {
                 </h1>
                 <div className="grid grid-cols-3 gap-x-2 mt-1.5">
                     <div className="bg-accent justify-center rounded-sm items-center flex py-1">
-                        Vol.1 Ch.1
+                        {chapter.attributes.volume &&
+                            `Vol. ${chapter.attributes.volume}`}
+                        ,{` Ch. ${chapter.attributes.chapter}`}
                     </div>
                     <div className="bg-accent justify-center rounded-sm items-center flex py-1">
-                        {progressIndex + 1} / {imagesLength}
+                        Pg. {progressIndex + 1} / {imagesLength}
                     </div>
                     <Button
                         onClick={() => chapterMenu.open()}
@@ -118,6 +134,8 @@ const ChapterContent = ({ data, chapter }: Props) => {
             >
                 {chapterMenu.pageType === "single" && (
                     <ChapterSingleRead
+                        nextChapter={nextChapter}
+                        prevChapter={prevChapter}
                         ref={chapterSinglePageRef}
                         data={data}
                         onChange={(index) => setProgressIndex(index)}
@@ -126,6 +144,8 @@ const ChapterContent = ({ data, chapter }: Props) => {
                 )}
                 {chapterMenu.pageType === "longStrip" && (
                     <ChapterLongStripRead
+                        nextChapter={nextChapter}
+                        prevChapter={prevChapter}
                         defaultValue={progressIndex}
                         ref={chapterLongStripReadRef}
                         data={data}
@@ -142,7 +162,9 @@ const ChapterContent = ({ data, chapter }: Props) => {
                     chapterSinglePageRef.current?.slideToIndex(step);
                 }}
             />
-            <ChapterMenu chapter={chapter} />
+            {aggregate && (
+                <ChapterMenu chapter={chapter} aggregate={aggregate} />
+            )}
         </div>
     );
 };

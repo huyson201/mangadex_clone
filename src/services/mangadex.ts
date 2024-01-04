@@ -1,3 +1,4 @@
+import { getCurrentSeasonTimeString, getTimeAgo } from "@/lib/utils";
 import queryString from "query-string";
 import {
     AtHomeResponse,
@@ -11,12 +12,11 @@ import {
     StatisticsResponse,
     Tag,
 } from "../types";
-import { getCurrentSeasonTimeString, getTimeAgo } from "@/lib/utils";
 
 export const base_url = "https://api.mangadex.org/";
 const chapterIncludesOption = ["manga", "scanlation_group", "user"] as const;
 type ChapterIncludesOpts = (typeof chapterIncludesOption)[number];
-type MangaAggregateResponse = {
+export type MangaAggregateResponse = {
     result: string;
     volumes: {
         [key: string | number]: {

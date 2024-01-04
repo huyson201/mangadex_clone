@@ -1,16 +1,37 @@
 import { cn } from "@/lib/utils";
-import React from "react";
 
 type Props = {
     className?: string;
+    color?: "default" | "primary";
 };
 
-const RingLoader = ({ className }: Props) => {
+const colors = {
+    default: "",
+    primary: "border-t-primary",
+};
+
+const RingLoader = ({ className, color = "default" }: Props) => {
+    const colorBorder = colors[color];
     return (
         <div className={cn("inline-block relative w-12 h-12", className)}>
-            <div className=" box-border  w-full h-full m-2 border-transparent absolute border-4 border-t-foreground animate-loader-spin animate-delay-[-350ms] rounded-full"></div>
-            <div className="box-border  w-full h-full m-2 border-transparent absolute border-4 border-t-foreground animate-loader-spin animate-delay-[-250ms] rounded-full"></div>
-            <div className="box-border   w-full h-full m-2 border-transparent absolute border-4 border-t-foreground animate-loader-spin animate-delay-[-150ms] rounded-full"></div>
+            <div
+                className={cn(
+                    "box-border  w-full h-full m-2 border-transparent absolute border-4  animate-loader-spin animate-delay-[-350ms] rounded-full",
+                    colorBorder
+                )}
+            ></div>
+            <div
+                className={cn(
+                    "box-border  w-full h-full m-2 border-transparent absolute border-4  animate-loader-spin animate-delay-[-250ms] rounded-full",
+                    colorBorder
+                )}
+            ></div>
+            <div
+                className={cn(
+                    "box-border  w-full h-full m-2 border-transparent absolute border-4  animate-loader-spin animate-delay-[-150ms] rounded-full",
+                    colorBorder
+                )}
+            ></div>
         </div>
     );
 };
