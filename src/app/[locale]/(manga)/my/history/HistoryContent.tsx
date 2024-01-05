@@ -26,7 +26,7 @@ const HistoryContent = (props: Props) => {
     const searchParams = useSearchParams();
     const page = +(searchParams.get("page") || 1);
     const limit = 32;
-    let offset = page * limit;
+    let offset = (page - 1) * limit;
     const totalPage = Math.ceil((data?.length || 0) / limit);
     const historyDataByPage =
         data
@@ -34,7 +34,7 @@ const HistoryContent = (props: Props) => {
                 (a, b) =>
                     new Date(b.date).getTime() - new Date(a.date).getTime()
             )
-            .slice(-offset, limit) || [];
+            .slice(offset, limit) || [];
 
     const groupHistoryData = historyDataByPage.reduce(
         (result: { mangaId: string; chapters: string[] }[], item) => {
@@ -55,14 +55,21 @@ const HistoryContent = (props: Props) => {
     const { data: resData, isLoading } = useSWR(
         historyDataByPage.length > 0 ? `/history/${page}` : null,
         async () => {
+            const mangaIds = groupHistoryData.map((item) => item.mangaId);
+            const chapterIds = historyDataByPage.map((item) => item.chapterId);
+
             const [mangaListRes, chaptersRes] = await Promise.all([
                 getMangaList({
-                    ids: groupHistoryData.map((item) => item.mangaId),
+                    ids: mangaIds,
                     includes: ["cover_art", "artist"],
+                    limit: mangaIds.length,
+                    offset: 0,
                 }),
                 getChapters({
-                    ids: historyDataByPage.map((item) => item.chapterId),
+                    ids: chapterIds,
                     includes: ["scanlation_group", "user"],
+                    limit: chapterIds.length,
+                    offset: 0,
                 }),
             ]);
 
@@ -89,7 +96,7 @@ const HistoryContent = (props: Props) => {
         }
     );
 
-    if (!isLoading && !data) {
+    if ((!isLoading && !resData) || !data) {
         return <NotfoundData />;
     }
 
@@ -112,14 +119,18 @@ const HistoryContent = (props: Props) => {
                                     <RingLoader />
                                 </div>
                             )}
-                            {resData &&
+                            {resData?.chapters &&
+                                resData.mangaList &&
                                 !isLoading &&
                                 groupHistoryData.map((value, index) => {
                                     const manga =
                                         resData?.mangaList[value.mangaId];
                                     const chapters = value.chapters.map(
-                                        (id) => resData?.chapters[id]
+                                        (id) => {
+                                            return resData.chapters?.[id];
+                                        }
                                     );
+
                                     return (
                                         <LatestMangaListitem
                                             key={`${value.mangaId}-${index}`}

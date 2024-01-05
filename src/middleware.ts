@@ -1,8 +1,25 @@
 import createIntlMiddleware from "next-intl/middleware";
 import { auth as middleware } from "./auth";
+import { SIGN_IN_URL } from "./constants";
 import { DEFAULT_LANG, LOCALES, LOCALE_PREFIX } from "./i18n.config";
-
+const privateRoutes = ["/profile"];
 export default middleware((request) => {
+    const privatePathnameRegex = RegExp(
+        `^(/(${LOCALES.join("|")}))?(${privateRoutes
+            .flatMap((p) => (p === "/" ? ["", "/"] : p))
+            .join("|")})/?$`,
+        "i"
+    );
+
+    const isAuth = !!request.auth;
+    const isPrivateRoute = privatePathnameRegex.test(request.nextUrl.pathname);
+
+    if (isPrivateRoute && !isAuth) {
+        const url = request.nextUrl.clone();
+        url.searchParams.set("callbackUrl", request.nextUrl.pathname);
+        url.pathname = `${SIGN_IN_URL}`;
+        return Response.redirect(url);
+    }
     // Step 1: define default locale
     const defaultLocale = DEFAULT_LANG;
     // Step 2: Create and call the next-intl middleware (example)

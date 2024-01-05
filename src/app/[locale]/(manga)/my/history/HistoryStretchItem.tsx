@@ -1,10 +1,9 @@
-import React from "react";
-import { Chapter, Manga } from "@/types";
-import { getDetailMangaLink, getLangFlagUrl, getMangaTitle } from "@/lib/manga";
-import Link from "next/link";
-import Image from "next/image";
-import { getImageUrl } from "@/services/mangadex";
 import ChapterItem from "@/components/ChapterList/ChapterItem";
+import { getDetailMangaLink, getLangFlagUrl, getMangaTitle } from "@/lib/manga";
+import { getImageUrl } from "@/services/mangadex";
+import { Chapter, Manga } from "@/types";
+import Image from "next/image";
+import Link from "next/link";
 
 type Props = {
     manga: Manga;
