@@ -1,11 +1,7 @@
-import { User } from "@/models/user";
-import React from "react";
-import connectDb from "@/lib/mongodb";
+import { auth, update } from "@/auth";
+import { User, prisma } from "@/lib";
 import { verifyMailToken } from "@/lib/utils";
 import VerifyNotification from "./VerifyNotification";
-import { JsonWebTokenError } from "jsonwebtoken";
-import { auth, update } from "@/auth";
-
 type Props = {
     searchParams: {
         user_id?: string;
@@ -17,7 +13,6 @@ const page = async ({ searchParams }: Props) => {
     const { token } = searchParams;
     const session = await auth();
 
-    console.log(session);
     // handle verify email if token exist
     if (token) {
         const decoded = (await verifyMailToken(token)) as {
@@ -26,8 +21,9 @@ const page = async ({ searchParams }: Props) => {
             username: string;
         };
 
-        await connectDb();
-        const user = await User.findById(decoded._id);
+        const user = await prisma.user.findUnique({
+            where: { id: decoded._id },
+        });
 
         // check saved token and current token
         if (!user || user.verifyCode !== token) {
@@ -37,8 +33,15 @@ const page = async ({ searchParams }: Props) => {
         if (user.verified) return <VerifyNotification type="verified" />;
 
         user.verified = true;
-        await user.save();
-        await update({ user: user.toJSON() });
+        await prisma.user.update({
+            where: { id: user.id },
+            data: user,
+        });
+        await update({
+            user: { ...user, password: undefined } as Partial<
+                Omit<User, "password">
+            >,
+        });
 
         return <VerifyNotification type="verified" />;
     }
@@ -47,8 +50,6 @@ const page = async ({ searchParams }: Props) => {
 
     //check email has verified before
     if (session.user.verified) {
-        console.log("verified");
-
         return (
             <VerifyNotification email={session.user.email} type="verified" />
         );

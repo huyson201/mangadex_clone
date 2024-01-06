@@ -1,12 +1,10 @@
 "use server";
-import { transporter, mailOptions } from "./../config/nodemailer";
-import connectDb from "@/lib/mongodb";
-import { User } from "@/models/user";
-import { z } from "zod";
+import avatar from "@/assets/avatar.png";
+import { signIn } from "@/auth";
+import { prisma } from "@/lib";
 import { hashSync } from "bcryptjs";
 import { redirect } from "next/navigation";
-import { NextResponse } from "next/server";
-import { signIn, signOut } from "@/auth";
+import { z } from "zod";
 import { sendVerifyEmail } from "./send-email";
 const schema = z
     .object({
@@ -33,6 +31,7 @@ export type RegisterFormState = z.infer<typeof schema>;
 export type Errors = { [K in keyof RegisterFormState]?: string } & {
     systemError: any;
 };
+
 export const register = async (prevState: any, formData: FormData) => {
     const email = formData.get("email") as string;
     const username = formData.get("username") as string;
@@ -66,9 +65,10 @@ const handleRegister = async (data: {
     const { email, username, password } = data;
 
     try {
-        await connectDb();
-        const existedUser = await User.findOne({
-            $or: [{ email: email }, { username: username }],
+        const existedUser = await prisma.user.findFirst({
+            where: {
+                OR: [{ email: email }, { username: username }],
+            },
         });
 
         if (existedUser) {
@@ -83,12 +83,14 @@ const handleRegister = async (data: {
         }
 
         const hashPassword = hashSync(password as string, 12);
-        const newUser = new User({
-            email,
-            username,
-            password: hashPassword,
+        const newUser = await prisma.user.create({
+            data: {
+                email,
+                username,
+                password: hashPassword,
+                image: avatar.src,
+            },
         });
-        await newUser.save();
 
         await signIn("credentials", {
             username,
@@ -96,7 +98,7 @@ const handleRegister = async (data: {
             redirect: false,
         });
 
-        await sendVerifyEmail(newUser._id.toString());
+        await sendVerifyEmail(newUser.id);
 
         return {
             success: true,

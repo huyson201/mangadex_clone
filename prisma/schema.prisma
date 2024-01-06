@@ -1,0 +1,39 @@
+// This is your Prisma schema file,
+// learn more about it in the docs https//pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  email      String   @unique
+  username   String   @unique
+  password   String?
+  verified   Boolean  @default(false)
+  image      String   @default("")
+  verifyCode String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now())
+  follows    Follow[]
+
+  @@map("users")
+}
+
+model Follow {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  mangaId   String
+  userId    String   @db.ObjectId
+  User      User     @relation(fields: [userId], references: [id])
+  status    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  @@unique([mangaId, userId])
+  @@map("follows")
+}

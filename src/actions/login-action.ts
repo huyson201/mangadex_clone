@@ -1,13 +1,13 @@
 "use server";
 
-import { sendVerifyEmail } from "./send-email";
 import { signIn } from "@/auth";
-import { AuthError } from "next-auth";
-import { z } from "zod";
-import connectDb from "@/lib/mongodb";
-import { User } from "@/models/user";
-import { RedirectType, permanentRedirect, redirect } from "next/navigation";
 import { VERIFY_MAIL_URL } from "@/constants";
+import { prisma } from "@/lib";
+import { AuthError } from "next-auth";
+import { redirect } from "next/navigation";
+import { z } from "zod";
+import { sendVerifyEmail } from "./send-email";
+
 const schema = z.object({
     username: z
         .string()
@@ -18,45 +18,6 @@ const schema = z.object({
         .trim()
         .min(6, { message: "Must be 6 or more characters long" }),
 });
-export type LoginFormType = z.infer<typeof schema>;
-export type ReturnType = {
-    success: boolean;
-    errors?: any;
-};
-
-export const login = async (prevState: any, formData: FormData) => {
-    const username = formData.get("username") as string;
-    const password = formData.get("password") as string;
-
-    const validateResult = validateForm({ username, password });
-    if (!validateResult.success) return validateResult;
-
-    const loginResult = await handleLogin({ username, password });
-
-    if (!loginResult.success) {
-        return loginResult;
-    }
-
-    const url = new URL(loginResult.redirectTo);
-
-    await connectDb();
-    const user = await User.findOne({
-        $or: [
-            {
-                email: username,
-            },
-            {
-                username: username,
-            },
-        ],
-    });
-
-    if (user && !user.verified) {
-        sendVerifyEmail(user._id.toString());
-        redirect(process.env.SITE_URL + VERIFY_MAIL_URL);
-    }
-    redirect(url.searchParams.get("callbackUrl") || process.env.SITE_URL);
-};
 
 const handleLogin = async ({
     username,
@@ -112,4 +73,45 @@ const validateForm = (data: { username: string; password: string }) => {
     return {
         success: true,
     };
+};
+
+export const login = async (prevState: any, formData: FormData) => {
+    const username = formData.get("username") as string;
+    const password = formData.get("password") as string;
+
+    const validateResult = validateForm({ username, password });
+    if (!validateResult.success) return validateResult;
+
+    const loginResult = await handleLogin({ username, password });
+
+    if (!loginResult.success) {
+        return loginResult;
+    }
+
+    const url = new URL(loginResult.redirectTo);
+
+    const user = await prisma.user.findFirst({
+        where: {
+            OR: [{ email: username }, { username: username }],
+        },
+    });
+
+    if (user && !user.verified) {
+        sendVerifyEmail(user.id);
+        redirect(
+            `${process.env.VERCEL_URL || process.env.SITE_URL}` +
+                VERIFY_MAIL_URL
+        );
+    }
+    redirect(
+        url.searchParams.get("callbackUrl") ||
+            process.env.VERCEL_URL ||
+            process.env.SITE_URL
+    );
+};
+
+export type LoginFormType = z.infer<typeof schema>;
+export type ReturnType = {
+    success: boolean;
+    errors?: any;
 };

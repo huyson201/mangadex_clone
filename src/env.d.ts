@@ -6,5 +6,6 @@ declare module NodeJS {
         EMAIL_ADDRESS: string;
         EMAIL_VERIFICATION_SECRET: string;
         SITE_URL: string;
+        VERCEL_URL?: string;
     }
 }

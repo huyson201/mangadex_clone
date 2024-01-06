@@ -6,8 +6,7 @@ import RingLoader from "@/components/Loader/RingLoader";
 import NotfoundData from "@/components/NotFoundData/NotfoundData";
 import Pagination from "@/components/Pagination/Pagination";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import connectDb from "@/lib/mongodb";
-import { Follow, IFollow } from "@/models/Follow";
+import { Follow, prisma } from "@/lib";
 import { getMangaList, getStatisticsList } from "@/services/mangadex";
 import { ReadingStatus, readingStatusData } from "@/types";
 import { LayoutGrid, List, StretchHorizontal } from "lucide-react";
@@ -22,19 +21,23 @@ type Props = {
 };
 
 async function page({ searchParams: { tab = "reading", page = 1 } }: Props) {
-    const [session, _] = await Promise.all([auth(), connectDb()]);
+    const session = await auth();
 
-    const totalDoc = Follow.countDocuments({
-        userId: session!.user._id,
-        status: tab,
-    }).exec();
+    const totalDoc = prisma.follow.count({
+        where: {
+            userId: session!.user.id,
+            status: tab,
+        },
+    });
+
     const limit = 32;
     const offset = (page - 1) * limit;
-    const follows = Follow.find({ userId: session!.user._id, status: tab })
-        .skip(offset)
-        .limit(limit)
-        .sort("updatedAt")
-        .exec();
+    const follows = prisma.follow.findMany({
+        where: { userId: session!.user.id, status: tab },
+        orderBy: [{ updatedAt: "desc" }],
+        skip: offset,
+        take: limit,
+    });
 
     return (
         <div className="mt-4">
@@ -90,7 +93,7 @@ const FollowContent = async ({
     total,
     limit,
 }: {
-    follows: Promise<IFollow[]>;
+    follows: Promise<Follow[]>;
     total: Promise<number>;
     limit: number;
 }) => {

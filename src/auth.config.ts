@@ -1,10 +1,20 @@
-import CredentialsProvider from "next-auth/providers/credentials";
-import type { NextAuthConfig } from "next-auth";
-import connectDb from "@/lib/mongodb";
-import { User } from "./models/user";
+import { User, prisma } from "@/lib";
 import bcrypt from "bcryptjs";
+import type { NextAuthConfig } from "next-auth";
+import { JWT } from "next-auth/jwt";
+import CredentialsProvider from "next-auth/providers/credentials";
 import { signOut } from "./auth";
 import { SIGN_IN_URL } from "./constants";
+
+declare module "next-auth" {
+    export interface Session {
+        user: Omit<User, "password">;
+    }
+}
+declare module "next-auth/jwt" {
+    export interface JWT extends Omit<User, "password"> {}
+}
+
 export default {
     providers: [
         CredentialsProvider({
@@ -15,27 +25,26 @@ export default {
             async authorize(credentials, request) {
                 const { username, password } = credentials;
                 if (!username || !password) return null;
-                await connectDb();
-                const user = await User.findOne({
-                    $or: [
-                        {
-                            email: username,
+                try {
+                    const existedUser = await prisma.user.findFirst({
+                        where: {
+                            OR: [{ email: username }, { username: username }],
                         },
-                        {
-                            username: username,
-                        },
-                    ],
-                });
+                    });
 
-                if (!user) throw new Error("email or password invalid");
-                const matchPassword = await bcrypt.compare(
-                    password as string,
-                    user.password
-                );
-                if (!matchPassword)
-                    throw new Error("email or password invalid");
+                    if (!existedUser)
+                        throw new Error("email or password invalid");
+                    const matchPassword = await bcrypt.compare(
+                        password as string,
+                        existedUser.password || ""
+                    );
 
-                return { ...user.toJSON(), password: undefined };
+                    if (!matchPassword)
+                        throw new Error("email or password invalid");
+                    return { ...existedUser, password: undefined };
+                } catch (error) {
+                    throw error;
+                }
             },
         }),
     ],

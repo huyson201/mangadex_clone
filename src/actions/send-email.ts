@@ -1,29 +1,28 @@
 "use server";
-import connectDb from "@/lib/mongodb";
 
-import { auth } from "@/auth";
-import { User } from "@/models/user";
+import { mailOptions, transporter } from "@/config/nodemailer";
+import { prisma } from "@/lib";
 import {
     createMailVerificationTemplate,
     generateVerifyMailToken,
 } from "@/lib/utils";
-import { mailOptions, transporter } from "@/config/nodemailer";
-
 export const sendVerifyEmail = async (userId: string) => {
-    await connectDb();
-    const user = await User.findById(userId);
+    const user = await prisma.user.findUnique({ where: { id: userId } });
     if (!user) return;
 
     // generate a verify token
     const verifyMailToken = await generateVerifyMailToken({
         email: user.email,
-        _id: user._id.toString(),
+        _id: user.id.toString(),
         username: user.username,
     });
 
     // save verify token to db
     user.verifyCode = verifyMailToken;
-    await user.save();
+    await prisma.user.update({
+        where: { id: userId },
+        data: user,
+    });
 
     // send email to user
     await transporter.sendMail({
@@ -31,9 +30,9 @@ export const sendVerifyEmail = async (userId: string) => {
         to: user.email,
         subject: "MangaDex Verify Email",
         html: createMailVerificationTemplate(
-            `http://localhost:3000/verify-email?token=${verifyMailToken}`
+            `${
+                process.env.VERCEL_URL || process.env.SITE_URL
+            }/verify-email?token=${verifyMailToken}`
         ),
     });
-
-    console.log("send verify mail success!");
 };

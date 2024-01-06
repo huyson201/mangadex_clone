@@ -1,24 +1,12 @@
-import React from "react";
+import { auth } from "@/auth";
+import ChapterList from "@/components/ChapterList/ChapterList";
+import DetailDesc from "@/components/DetailDesc/DetailDesc";
+import { statusDotVariants } from "@/components/MangaStatus/MangaStatus";
+import StatisticInfo from "@/components/StatisticInfo/StatisticInfo";
+import Tag from "@/components/Tag/Tag";
 import { Button } from "@/components/ui/button";
 import Wrapper from "@/layouts/Wrapper/Wrapper";
-import { BookOpen, Bookmark, MoreHorizontal } from "lucide-react";
-import Image from "next/image";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import DetailDesc from "@/components/DetailDesc/DetailDesc";
-import ChapterList from "@/components/ChapterList/ChapterList";
-import {
-    getChapters,
-    getImageUrl,
-    getMangaById,
-    getStatistics,
-} from "@/services/mangadex";
-import { notFound } from "next/navigation";
-import { Relationship } from "@/types";
+import { prisma } from "@/lib";
 import {
     createTagLink,
     getCoverArtFromManga,
@@ -26,15 +14,14 @@ import {
     getMangaTitle,
     getTagName,
 } from "@/lib/manga";
-import StatisticInfo from "@/components/StatisticInfo/StatisticInfo";
 import { cn } from "@/lib/utils";
-import { statusDotVariants } from "@/components/MangaStatus/MangaStatus";
-import AddLib from "./AddLib";
-import { auth } from "@/auth";
-import connectDb from "@/lib/mongodb";
-import { Follow } from "@/models/Follow";
-import Tag from "@/components/Tag/Tag";
+import { getImageUrl, getMangaById, getStatistics } from "@/services/mangadex";
+import { Relationship } from "@/types";
+import { BookOpen, MoreHorizontal } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
+import { notFound } from "next/navigation";
+import AddLib from "./AddLib";
 
 type Props = {
     params: {
@@ -64,14 +51,15 @@ const page = async ({ params }: Props) => {
     //     includes: ["user", "scanlation_group"],
     // });
 
-    await connectDb();
     const follow = session
-        ? (
-              await Follow.findOne({
-                  userId: session.user._id,
-                  mangaId: manga.result.data.id,
-              })
-          )?.toJSON()
+        ? await prisma.follow.findUnique({
+              where: {
+                  mangaId_userId: {
+                      userId: session.user.id,
+                      mangaId: manga.result.data.id,
+                  },
+              },
+          })
         : undefined;
     const statistics = statisticsResult.result.statistics[manga.result.data.id];
     const coverArt = getCoverArtFromManga(manga.result.data);

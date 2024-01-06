@@ -1,38 +1,43 @@
 "use server";
 
 import { auth } from "@/auth";
-import connectDb from "@/lib/mongodb";
-import { Follow } from "@/models/Follow";
+import { prisma } from "@/lib";
 import { revalidatePath } from "next/cache";
 import { ReadingStatus } from "../types";
 
-export const addMangaToLib = async (
-    mangaId: string,
-    status: ReadingStatus,
-    revalidateUrl: string
-) => {
+export const addMangaToLib = async (mangaId: string, status: ReadingStatus) => {
     const session = await auth();
     if (!session) {
         throw new Error("Unauthorized");
     }
     try {
-        await connectDb();
-
         if (status === "none") {
-            await Follow.findOneAndDelete({
-                userId: session.user._id,
-                mangaId,
-            });
-        } else {
-            await Follow.findOneAndUpdate(
-                { userId: session.user._id, mangaId },
-                {
-                    $set: {
-                        status: status,
+            await prisma.follow.delete({
+                where: {
+                    mangaId_userId: {
+                        userId: session.user.id,
+                        mangaId,
                     },
                 },
-                { upsert: true, new: true }
-            );
+            });
+        } else {
+            await prisma.follow.upsert({
+                create: {
+                    userId: session.user.id,
+                    mangaId,
+                    status,
+                },
+                update: {
+                    status,
+                    updatedAt: new Date(),
+                },
+                where: {
+                    mangaId_userId: {
+                        userId: session.user.id,
+                        mangaId,
+                    },
+                },
+            });
         }
 
         revalidatePath(`/(manga)/title/[id]/[name]`, "page");

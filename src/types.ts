@@ -1,17 +1,3 @@
-import { JWT } from "next-auth/jwt";
-import NextAuth from "next-auth";
-import { IUser } from "./models/user";
-
-declare module "next-auth" {
-    export interface Session {
-        user: Omit<IUser, "password"> & { _id: string };
-    }
-}
-
-declare module "next-auth/jwt" {
-    export interface JWT extends Omit<IUser & { _id: string }, "password"> {}
-}
-
 export interface Tag {
     id: string;
     type: string;

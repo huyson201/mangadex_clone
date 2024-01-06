@@ -1,18 +1,17 @@
 "use client";
-import React from "react";
+import { signOutAction } from "@/actions/signout-action";
+import { FOLLOW_URL, PROFILE_URL, SING_UP_URL } from "@/constants";
+import { useStackMenu } from "@/contexts/StackMenuContext";
+import { cn } from "@/lib/utils";
+import { Bookmark, Droplet, LogOut, Settings, User, X } from "lucide-react";
+import { signIn, useSession } from "next-auth/react";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
-import MenuOption from "./MenuOption";
 import { Button } from "../ui/button";
-import { cn } from "@/lib/utils";
-import { signOutAction } from "@/actions/signout-action";
-import { SING_UP_URL } from "@/constants";
-import { useStackMenu } from "@/contexts/StackMenuContext";
-import { THEME_SELECTION_MENU_ID } from "./ThemeSelectionMenu";
 import { Language_SELECTION_MENU_ID } from "./LanguageSelectionMenu";
-import { useTranslations } from "next-intl";
-import { signIn, useSession } from "next-auth/react";
-import { Bookmark, Droplet, LogOut, Settings, User, X } from "lucide-react";
+import MenuOption from "./MenuOption";
+import { THEME_SELECTION_MENU_ID } from "./ThemeSelectionMenu";
 
 type Props = {};
 
@@ -68,23 +67,17 @@ function DefaultMenu({}: Props) {
             {status === "authenticated" && data.user.verified && (
                 <div className=" border-t border-b border-[var(--drawer-separator)] py-4 ">
                     <div>
-                        <MenuOption
-                            onClick={() =>
-                                stackMenu?.push(Language_SELECTION_MENU_ID)
-                            }
-                            className="hover:bg-accent gap-2"
-                        >
-                            <User />
-                            My Profile
+                        <MenuOption asChild className="hover:bg-accent gap-2">
+                            <Link href={PROFILE_URL}>
+                                <User />
+                                My Profile
+                            </Link>
                         </MenuOption>
-                        <MenuOption
-                            onClick={() =>
-                                stackMenu?.push(Language_SELECTION_MENU_ID)
-                            }
-                            className="hover:bg-accent gap-2"
-                        >
-                            <Bookmark />
-                            My Follows
+                        <MenuOption asChild className="hover:bg-accent gap-2">
+                            <Link href={FOLLOW_URL}>
+                                <Bookmark />
+                                My Follows
+                            </Link>
                         </MenuOption>
                     </div>
                 </div>

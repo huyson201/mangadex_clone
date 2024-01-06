@@ -42,7 +42,7 @@ const page = async (props: Props) => {
                         </div>
                         <div>
                             <div className="font-bold">UserID</div>
-                            <div>{session?.user._id}</div>
+                            <div>{session?.user.id}</div>
                         </div>
                         <div className="mt-4">
                             <div className="font-bold">Email</div>

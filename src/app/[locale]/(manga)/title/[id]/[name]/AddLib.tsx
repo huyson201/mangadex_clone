@@ -13,8 +13,8 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
+import { Follow } from "@/lib";
 import { cn, getCoverArtFromManga, getMangaTitle } from "@/lib/utils";
-import { IFollow } from "@/models/Follow";
 import { getImageUrl } from "@/services/mangadex";
 import { Manga, ReadingStatus, readingStatusData } from "@/types";
 import { Bookmark, ChevronDown, X } from "lucide-react";
@@ -25,14 +25,14 @@ import { useRef, useState, useTransition } from "react";
 
 type Props = {
     manga: Manga;
-    follow?: IFollow;
+    follow?: Follow;
     isLoggedIn: boolean;
 };
 
 const AddLib = ({ manga, follow, isLoggedIn }: Props) => {
     const [openList, setOpenList] = useState(false);
     const [statusValue, setStatusValue] = useState<ReadingStatus>(
-        follow ? follow.status : "none"
+        follow ? (follow.status as ReadingStatus) : "none"
     );
     const coverArt = getCoverArtFromManga(manga);
     const [pending, startTransition] = useTransition();
@@ -216,8 +216,7 @@ const AddLib = ({ manga, follow, isLoggedIn }: Props) => {
                                     startTransition(async () => {
                                         await addMangaToLib(
                                             manga.id,
-                                            statusValue,
-                                            pathname
+                                            statusValue
                                         );
                                         closeRef.current?.click();
                                     })

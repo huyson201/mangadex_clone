@@ -10,5 +10,6 @@ export const MANGA_DETAIL_BASE_URL = "/title";
 export const READ_CHAPTER_URL = "/chapter";
 export const READING_HISTORY_URL = "/my/history";
 export const FOLLOW_URL = "/titles/follows";
+export const PROFILE_URL = "/profile";
 export const READING_HISTORY_KEY = "md.history";
 export const CHAPTER_MENU_SETTINGS_KEY = "md.chapter.settings";
