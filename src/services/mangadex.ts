@@ -435,7 +435,7 @@ export const getImageUrl = (
     filename: string
 ) => {
     const fileOpt = width === "full" ? filename : `${filename}.${width}.jpg`;
-    return `https://uploads.mangadex.org/covers/${mangaId}/${fileOpt}`;
+    return `/api/uploads/${mangaId}/${fileOpt}`;
 };
 
 export const getChapter = async (

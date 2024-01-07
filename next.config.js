@@ -11,7 +11,12 @@ const nextConfig = {
             {
                 hostname: "uploads.mangadex.org"
             },
-            { hostname: "t0.gstatic.com" }
+            {
+                hostname: "t0.gstatic.com"
+            },
+            {
+                hostname: new URL(process.env.SITE_URL || process.env.VERCEL_URL).hostname
+            }
         ]
     },
     async rewrites() {
@@ -20,11 +25,19 @@ const nextConfig = {
 
             // Rewrite for all paths excluding /api/auth
             {
-                source: '/api/:path((?!_next|foo$|bar$|auth).*)',
+                source: '/api/:path((?!_next|auth|uploads).*)',
                 destination: 'https://api.mangadex.org/:path*', // Use the same destination as source
             },
+            {
+                source: '/api/uploads/:path*',
+                destination: 'https://uploads.mangadex.org/covers/:path*'
+            }
 
         ]
+    },
+    env: {
+        SITE_URL: process.env.SITE_URL,
+        VERCEL_URL: process.env.VERCEL_URL
     }
 
 }

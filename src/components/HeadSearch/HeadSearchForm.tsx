@@ -1,15 +1,14 @@
 "use client";
-import React, { ChangeEvent, useEffect, useRef, useState } from "react";
-import { Input } from "../ui/input";
-import { CiSearch } from "react-icons/ci";
-import { Button } from "../ui/button";
-import { IoClose } from "react-icons/io5";
+import { HOME_URL, MANGA_DETAIL_BASE_URL } from "@/constants";
 import { useHeadSearch } from "@/contexts/HeadSearchContext";
 import { cn } from "@/lib/utils";
-import { useTranslations } from "next-intl";
 import { Search, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
-import { HOME_URL, MANGA_DETAIL_BASE_URL } from "@/constants";
+import { ChangeEvent, useEffect, useRef } from "react";
+import { IoClose } from "react-icons/io5";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 type Props = {
     onFocus?: () => void;
     onBlur?: () => void;
@@ -94,10 +93,10 @@ const HeadSearchForm = ({ onFocus, onBlur, onChange, onClickClear }: Props) => {
                 type="button"
                 onClick={handleClickClear}
                 className={cn(
-                    "  peer-placeholder-shown/input:hidden inline-block rounded-lg w-auto h-auto px-1 py-0.5 absolute hover:bg-primary  top-2/4 -translate-y-2/4   md:translate-x-0 md:right-2 ",
+                    "peer-placeholder-shown/input:hidden inline-block rounded-lg w-auto h-auto px-1 py-0.5 absolute hover:bg-primary  top-2/4 -translate-y-2/4   md:translate-x-0 md:right-2 ",
                     headSearchState.isActive
                         ? "right-11"
-                        : "right-2/4 translate-x-2/4"
+                        : "right-2/4 translate-x-2/4 md:flex hidden"
                 )}
                 variant={"primary"}
             >

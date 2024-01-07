@@ -1,16 +1,15 @@
-import { Bookmark, Eye, MessageSquare, Star } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import React from "react";
-import { Manga, Statistic } from "../../types";
 import {
     getCoverArtFromManga,
     getDetailMangaLink,
     getMangaTitle,
 } from "@/lib/manga";
-import { getImageUrl } from "@/services/mangadex";
-import MangaStatus from "../MangaStatus/MangaStatus";
 import { formatNumber } from "@/lib/utils";
+import { getImageUrl } from "@/services/mangadex";
+import { Bookmark, Eye, MessageSquare, Star } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { Manga, Statistic } from "../../types";
+import MangaStatus from "../MangaStatus/MangaStatus";
 
 type Props = {
     manga: Manga;
@@ -35,7 +34,7 @@ function SearchResultItem({ manga, statistic }: Props) {
                     height={342}
                 />
                 <div className="flex justify-between flex-col">
-                    <div className="line-clamp-2 font-bold text-lg">
+                    <div className="line-clamp-1 sm:line-clamp-2 font-bold text-lg">
                         {title}
                     </div>
                     <div className="flex flex-wrap gap-y-2 items-center gap-x-2">
