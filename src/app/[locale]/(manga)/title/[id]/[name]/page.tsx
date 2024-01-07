@@ -97,20 +97,23 @@ const page = async ({ params }: Props) => {
         <Wrapper className="mt-2">
             <div className=" md:px-4 flex gap-6">
                 <div className=" top-0 left-0 w-full -z-[1] [clip:rect(0,auto,auto,0)] [clip-path:inset(0_0)] h-[calc(var(--banner-height)_+_0.5rem)]  absolute">
-                    <div
-                        className="fixed  top-0 left-0 w-full h-[calc(var(--banner-height)_+_0.5rem)] "
-                        style={{
-                            background: `no-repeat  center 25% / cover  url(${getImageUrl(
+                    <div className="fixed  top-0 left-0 w-full h-[calc(var(--banner-height)_+_0.5rem)] ">
+                        <Image
+                            src={getImageUrl(
                                 "256",
                                 params.id,
                                 coverArt?.attributes.fileName
-                            )})`,
-                        }}
-                    ></div>
+                            )}
+                            width={256}
+                            height={600}
+                            className="w-full h-full object-cover object-[center_25%]"
+                            alt="banner"
+                        />
+                    </div>
                     <div className="sm:backdrop-blur-sm absolute top-0 left-0 right-0 bottom-0 bg-gradient-to-b from-background/80 to-background from-0% to-100% sm:bg-gradient-to-tr sm:from-background/60 sm:from-[44%] sm:to-transparent"></div>
                 </div>
                 <div
-                    className="blur-xl hidden sm:block absolute min-h-[670px] w-full top-0 left-0  -z-[2]"
+                    className=" blur-xl hidden sm:block absolute h-[670px] w-full top-0 left-0  -z-[2]"
                     style={{
                         background: `radial-gradient(circle at top, hsla(var(--background) / 0.8), hsla(var(--background)) 75%), no-repeat top 30% center / 100% url(${getImageUrl(
                             "256",
@@ -118,7 +121,25 @@ const page = async ({ params }: Props) => {
                             coverArt?.attributes.fileName
                         )})`,
                     }}
-                ></div>
+                >
+                    <Image
+                        src={getImageUrl(
+                            "256",
+                            params.id,
+                            coverArt?.attributes.fileName
+                        )}
+                        width={256}
+                        height={670}
+                        className="w-full h-full object-cover  object-[center_35%] "
+                        alt="banner"
+                    />
+                    <div
+                        className=" absolute h-full w-full top-0 left-0"
+                        style={{
+                            background: `radial-gradient(circle at top, hsla(var(--background) / 0.8), hsla(var(--background)) 75%)`,
+                        }}
+                    ></div>
+                </div>
 
                 <div className="w-[100px] sm:w-[200px]">
                     <Image

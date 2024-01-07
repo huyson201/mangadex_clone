@@ -1,8 +1,3 @@
-import { Bookmark, Eye, MessageSquare, Star } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import React from "react";
-import { Manga, Statistic } from "../../types";
 import {
     createTagLink,
     getCoverArtFromManga,
@@ -13,10 +8,14 @@ import {
     getTagName,
     getTagsWithGroupContent,
 } from "@/lib/manga";
-import { getImageUrl } from "@/services/mangadex";
 import { formatNumber } from "@/lib/utils";
-import Tag from "../Tag/Tag";
+import { getImageUrl } from "@/services/mangadex";
+import { Bookmark, Eye, MessageSquare, Star } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { Manga, Statistic } from "../../types";
 import MangaStatus from "../MangaStatus/MangaStatus";
+import Tag from "../Tag/Tag";
 import TagCollapse from "../Tag/TagCollapse";
 
 type Props = {
@@ -57,7 +56,7 @@ function RecentMangaStretchItem({ manga, statistic }: Props) {
                             src={flag}
                             width={24}
                             height={24}
-                            className="inline-block mr-1"
+                            className="inline-block mr-1 w-6"
                             alt={manga.attributes.originalLanguage}
                         />
                     )}

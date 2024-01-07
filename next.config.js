@@ -21,7 +21,6 @@ const nextConfig = {
     },
     async rewrites() {
         return [
-            // Exclude /api/auth
 
             // Rewrite for all paths excluding /api/auth
             {

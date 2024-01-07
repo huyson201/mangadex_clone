@@ -1,14 +1,13 @@
-import Image from "next/image";
-import Link from "next/link";
-import React from "react";
-import { Manga } from "../../types";
-import { getImageUrl } from "@/services/mangadex";
 import {
     cn,
     getDetailMangaLink,
     getLangFlagUrl,
     getMangaTitle,
 } from "@/lib/utils";
+import { getImageUrl } from "@/services/mangadex";
+import Image from "next/image";
+import Link from "next/link";
+import { Manga } from "../../types";
 
 type Props = {
     manga: Manga;
@@ -36,7 +35,7 @@ function HorizontalListItem({ manga, className }: Props) {
                 />
                 {flagLanguage && (
                     <Image
-                        className=" absolute bottom-2 right-2"
+                        className=" absolute bottom-2 w-6 right-2"
                         src={flagLanguage}
                         width={24}
                         height={24}

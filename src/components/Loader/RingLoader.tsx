@@ -6,7 +6,7 @@ type Props = {
 };
 
 const colors = {
-    default: "",
+    default: "border-t-foreground",
     primary: "border-t-primary",
 };
 

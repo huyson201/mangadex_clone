@@ -1,16 +1,14 @@
 import Wrapper from "@/layouts/Wrapper/Wrapper";
-import Image from "next/image";
-import Link from "next/link";
-import React, { useMemo } from "react";
-import useSWR from "swr";
-import { Manga, Relationship } from "../../types";
-import { getImageUrl } from "@/services/mangadex";
 import {
     getDataByLocale,
     getDetailMangaLink,
     getLangFlagUrl,
-    slugify,
 } from "@/lib/utils";
+import { getImageUrl } from "@/services/mangadex";
+import Image from "next/image";
+import Link from "next/link";
+import { useMemo } from "react";
+import { Manga, Relationship } from "../../types";
 import Tag from "../Tag/Tag";
 import TagCollapse from "../Tag/TagCollapse";
 type Props = {
@@ -74,7 +72,7 @@ function HeroSlide({ manga }: Props) {
                         />
                         {languageFlag && (
                             <Image
-                                className="absolute bottom-2 right-2"
+                                className="absolute bottom-2 right-2 w-6"
                                 src={languageFlag}
                                 width={24}
                                 height={24}
