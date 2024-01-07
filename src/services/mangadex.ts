@@ -13,7 +13,7 @@ import {
     Tag,
 } from "../types";
 
-export const base_url = "https://api.mangadex.org/";
+export const base_url = "http://localhost:3000/api/";
 const chapterIncludesOption = ["manga", "scanlation_group", "user"] as const;
 type ChapterIncludesOpts = (typeof chapterIncludesOption)[number];
 export type MangaAggregateResponse = {

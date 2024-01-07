@@ -14,9 +14,18 @@ const nextConfig = {
             { hostname: "t0.gstatic.com" }
         ]
     },
+    async rewrites() {
+        return [
+            // Exclude /api/auth
 
+            // Rewrite for all paths excluding /api/auth
+            {
+                source: '/api/:path((?!_next|foo$|bar$|auth).*)',
+                destination: 'https://api.mangadex.org/:path*', // Use the same destination as source
+            },
 
-
+        ]
+    }
 
 }
 

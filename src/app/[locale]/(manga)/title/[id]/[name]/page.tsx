@@ -96,7 +96,7 @@ const page = async ({ params }: Props) => {
     return (
         <Wrapper className="mt-2">
             <div className=" md:px-4 flex gap-6">
-                <div className="top-0 left-0 w-full -z-[1] [clip:rect(0,auto,auto,0)] [clip-path:inset(0_0)] h-[calc(var(--banner-height)_+_0.5rem)]  absolute">
+                <div className=" top-0 left-0 w-full -z-[1] [clip:rect(0,auto,auto,0)] [clip-path:inset(0_0)] h-[calc(var(--banner-height)_+_0.5rem)]  absolute">
                     <div
                         className="fixed  top-0 left-0 w-full h-[calc(var(--banner-height)_+_0.5rem)] "
                         style={{
@@ -107,7 +107,7 @@ const page = async ({ params }: Props) => {
                             )})`,
                         }}
                     ></div>
-                    <div className="sm:backdrop-blur-sm absolute top-0 left-0 right-0 bottom-0 bg-gradient-to-b from-background/8e0 to-background from-0% to-100% sm:bg-gradient-to-tr sm:from-black/60 sm:from-[44%] sm:to-transparent"></div>
+                    <div className="sm:backdrop-blur-sm absolute top-0 left-0 right-0 bottom-0 bg-gradient-to-b from-background/80 to-background from-0% to-100% sm:bg-gradient-to-tr sm:from-background/60 sm:from-[44%] sm:to-transparent"></div>
                 </div>
                 <div
                     className="blur-xl hidden sm:block absolute min-h-[670px] w-full top-0 left-0  -z-[2]"

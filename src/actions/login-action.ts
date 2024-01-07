@@ -99,14 +99,15 @@ export const login = async (prevState: any, formData: FormData) => {
     if (user && !user.verified) {
         sendVerifyEmail(user.id);
         redirect(
-            `${process.env.VERCEL_URL || process.env.SITE_URL}` +
+            `${process.env.SITE_URL || process.env.VERCEL_URL}` +
                 VERIFY_MAIL_URL
         );
     }
     redirect(
         url.searchParams.get("callbackUrl") ||
+            process.env.SITE_URL ||
             process.env.VERCEL_URL ||
-            process.env.SITE_URL
+            "/"
     );
 };
 
