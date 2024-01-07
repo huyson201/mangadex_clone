@@ -13,7 +13,9 @@ import {
     Tag,
 } from "../types";
 
-export const base_url = "http://localhost:3000/api/";
+export const base_url = `${
+    process.env.SITE_URL || process.env.VERCEL_URL
+}/api/`;
 const chapterIncludesOption = ["manga", "scanlation_group", "user"] as const;
 type ChapterIncludesOpts = (typeof chapterIncludesOption)[number];
 export type MangaAggregateResponse = {
