@@ -1,18 +1,17 @@
 import HomeHero from "@/components/HomeHero/HomeHero";
-import { buttonVariants } from "@/components/ui/button";
-import Wrapper from "@/layouts/Wrapper/Wrapper";
-import { cn } from "@/lib/utils";
-import Link from "next/link";
-import { FaArrowRight } from "react-icons/fa6";
-
 import HomeRecentlyList from "@/components/HomeRecentlyList/HomeRecentlyList";
 import HomeSeasonalList from "@/components/HomeSeasonalList/HomeSeasonalList";
 import LatestUpdateList from "@/components/LatestUpdateList/LatestUpdateList";
 import RingLoader from "@/components/Loader/RingLoader";
 import LatestUpdateListSkeleton from "@/components/skeletons/LatestUpdateListSkeleton";
+import { buttonVariants } from "@/components/ui/button";
 import { LATEST_LIST_URL, RECENTLY_LIST_URL } from "@/constants";
+import Wrapper from "@/layouts/Wrapper/Wrapper";
+import { cn } from "@/lib/utils";
 import { getTranslations } from "next-intl/server";
+import Link from "next/link";
 import { Suspense } from "react";
+import { FaArrowRight } from "react-icons/fa6";
 
 export default async function Home() {
     const [t] = await Promise.all([getTranslations("Home")]);

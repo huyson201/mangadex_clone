@@ -1,14 +1,10 @@
-import { ArrowLeft, List, StretchHorizontal } from "lucide-react";
-import React from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import Wrapper from "@/layouts/Wrapper/Wrapper";
-import { Button } from "@/components/ui/button";
-import LatestMangaStretchItem from "@/components/ListMangaItems/LatestMangaStretchItem";
 import LatestMangaListitem from "@/components/ListMangaItems/LatestMangaListItem";
+import LatestMangaStretchItem from "@/components/ListMangaItems/LatestMangaStretchItem";
 import Pagination from "@/components/Pagination/Pagination";
-import BackNavigation from "@/components/BackNavigation/BackNavigation";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getLatestUpdateList } from "@/services/mangadex";
 import { Chapter, Manga } from "@/types";
+import { List, StretchHorizontal } from "lucide-react";
 
 type Props = {
     searchParams: {
@@ -49,7 +45,7 @@ async function page({ searchParams: { page = 1 } }: Props) {
 
     return (
         <>
-            <div className="mt-4">
+            <div className="mt-10">
                 <Tabs defaultValue="stretch" className="w-full flex flex-col">
                     <TabsList className="p-0 rounded-none  h-auto ml-auto">
                         <TabsTrigger value="list" className="h-12">

@@ -12,7 +12,7 @@ const layout = (props: Props) => {
                 Reading history is currently only tracked on your device, and
                 will be lost if you clear site data.
             </div>
-            <div className="mt-4">{props.children}</div>
+            <div className="mt-10">{props.children}</div>
         </Wrapper>
     );
 };

@@ -1,10 +1,10 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
-import { Button } from "../ui/button";
-import { ChevronsDown, ChevronsUp } from "lucide-react";
-import { cn } from "@/lib/utils";
-import DetailInfo from "./DetailInfo";
+import { cn, getDataByLocale } from "@/lib/utils";
 import { Manga } from "@/types";
+import { ChevronsDown, ChevronsUp } from "lucide-react";
+import { useRef, useState } from "react";
+import { Button } from "../ui/button";
+import DetailInfo from "./DetailInfo";
 
 interface DetailDescProps {
     manga: Manga;
@@ -12,15 +12,6 @@ interface DetailDescProps {
 const DetailDesc = ({ manga }: DetailDescProps) => {
     const [isCollapsed, setIsCollapsed] = useState(true);
     const descRef = useRef<HTMLDivElement>(null);
-    // useEffect(() => {
-    //     if (!descRef.current) return;
-    //     if (!isCollapsed) {
-    //         descRef.current.style.height =
-    //             descRef.current.scrollHeight + 4 + "px";
-    //         return;
-    //     }
-    //     descRef.current.style.height = "";
-    // }, [isCollapsed]);
 
     return (
         <div className="relative">
@@ -37,7 +28,9 @@ const DetailDesc = ({ manga }: DetailDescProps) => {
                     <div
                         className="text-sm break-all"
                         dangerouslySetInnerHTML={{
-                            __html: manga.attributes.description.en,
+                            __html: getDataByLocale(
+                                manga.attributes.description
+                            ),
                         }}
                     ></div>
                     <hr className="block w-full h-0 border-t border-foreground mt-4 opacity-10" />

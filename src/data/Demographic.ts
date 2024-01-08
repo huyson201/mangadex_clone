@@ -17,6 +17,6 @@ export const demographics = [
     },
     {
         key: "None",
-        value: "None",
+        value: "none",
     },
 ];

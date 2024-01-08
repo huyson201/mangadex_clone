@@ -1,8 +1,8 @@
-import React from "react";
+import { cn, formatNumber } from "@/lib/utils";
 import { ClassValue } from "clsx";
 import { Bookmark, Eye, MessageSquare, Star } from "lucide-react";
+import Link from "next/link";
 import { Statistic } from "../../types";
-import { cn, formatNumber } from "@/lib/utils";
 
 type Props = {
     className?: ClassValue;
@@ -26,10 +26,17 @@ const StatisticInfo = ({ className, statistics }: Props) => {
                 <Bookmark size={16} />
                 {formatNumber(statistics?.follows || 0) || ""}
             </span>
-            <span className="flex items-center gap-1 text-foreground  ">
+            <Link
+                href={
+                    statistics?.comments?.threadId
+                        ? `https://forums.mangadex.org/threads/${statistics?.comments?.threadId}`
+                        : "#"
+                }
+                className="flex items-center gap-1 text-foreground  "
+            >
                 <MessageSquare size={16} />
                 {formatNumber(statistics?.comments?.repliesCount || 0) || 0}
-            </span>
+            </Link>
             <span className="flex items-center gap-1 text-foreground  opacity-40">
                 <Eye size={20} />
                 N/A

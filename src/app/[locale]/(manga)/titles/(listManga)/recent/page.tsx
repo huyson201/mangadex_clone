@@ -1,15 +1,13 @@
-import Wrapper from "@/layouts/Wrapper/Wrapper";
-import { ArrowLeft, LayoutGrid, List, StretchHorizontal } from "lucide-react";
-import React from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import RecentMangaGridItem from "@/components/ListMangaItems/RecentMangaGridItem";
-import RecentMangaStretchItem from "@/components/ListMangaItems/RecentMangaStretchItem";
 import RecentMangaListItem from "@/components/ListMangaItems/RecentMangaListItem";
+import RecentMangaStretchItem from "@/components/ListMangaItems/RecentMangaStretchItem";
+import Pagination from "@/components/Pagination/Pagination";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
     getRecentlyAddedMangaList,
     getStatisticsList,
 } from "@/services/mangadex";
-import Pagination from "@/components/Pagination/Pagination";
+import { LayoutGrid, List, StretchHorizontal } from "lucide-react";
 
 type Props = {
     searchParams: {
@@ -20,7 +18,7 @@ type Props = {
 const page = async ({ searchParams: { page = 1 } }: Props) => {
     const limit = 32;
     const maxPage = 312;
-    const offset = (page - 1) * limit;
+    const offset = ((page > maxPage ? maxPage : page) - 1) * limit;
     const recentListResponse = await getRecentlyAddedMangaList(limit, offset, [
         "cover_art",
     ]);
@@ -37,9 +35,24 @@ const page = async ({ searchParams: { page = 1 } }: Props) => {
         recentListResponse.total - limit < 10000
             ? Math.ceil(recentListResponse.total / limit)
             : maxPage;
+    const renderItem = (type: "list" | "stretch" | "grid") => {
+        const comps = {
+            list: RecentMangaListItem,
+            stretch: RecentMangaStretchItem,
+            grid: RecentMangaGridItem,
+        };
+        const Comp = comps[type];
+        return recentAddedList.map((manga) => (
+            <Comp
+                statistic={statistics[manga.id]}
+                manga={manga}
+                key={manga.id}
+            />
+        ));
+    };
     return (
         <>
-            <div className="mt-4">
+            <div className="mt-10">
                 <Tabs defaultValue="grid" className="w-full flex flex-col">
                     <TabsList className="p-0 rounded-none  h-auto ml-auto">
                         <TabsTrigger value="list" className="h-12">
@@ -55,34 +68,17 @@ const page = async ({ searchParams: { page = 1 } }: Props) => {
                     <div className="mt-4">
                         <TabsContent value="list">
                             <div className="space-y-2">
-                                {recentAddedList.map((manga) => (
-                                    <RecentMangaListItem
-                                        statistic={statistics[manga.id]}
-                                        manga={manga}
-                                        key={manga.id}
-                                    />
-                                ))}
+                                {renderItem("list")}
                             </div>
                         </TabsContent>
                         <TabsContent value="stretch">
                             <div className="grid gap-2 grid-cols-1 md:grid-cols-2">
-                                {recentAddedList.map((manga) => (
-                                    <RecentMangaStretchItem
-                                        statistic={statistics[manga.id]}
-                                        manga={manga}
-                                        key={manga.id}
-                                    />
-                                ))}
+                                {renderItem("stretch")}
                             </div>
                         </TabsContent>
                         <TabsContent value="grid">
                             <div className="grid gap-2 grid-cols-2 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3">
-                                {recentAddedList.map((manga) => (
-                                    <RecentMangaGridItem
-                                        manga={manga}
-                                        key={manga.id}
-                                    />
-                                ))}
+                                {renderItem("grid")}
                             </div>
                         </TabsContent>
                     </div>

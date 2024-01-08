@@ -34,7 +34,7 @@ export const useChapterMenu = () => {
     const context = React.useContext(ChapterMenuContext);
     if (!context) {
         throw new Error(
-            "useChapterMenu must be used withing ChapterMenuContext!"
+            "useChapterMenu must be used within ChapterMenuContext!"
         );
     }
 

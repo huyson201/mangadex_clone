@@ -116,8 +116,30 @@ const FollowContent = async ({
 
     const statistics = statisticsResponse?.statistics;
 
+    const isNotFound =
+        !mangaListRes || mangaListRes.data.length === 0 || !statistics;
+    const renderItem = (type: "list" | "stretch" | "grid") => {
+        if (isNotFound) {
+            return null;
+        }
+        const comps = {
+            list: RecentMangaListItem,
+            stretch: RecentMangaStretchItem,
+            grid: RecentMangaGridItem,
+        };
+        const Comp = comps[type];
+
+        return mangaListRes.data.map((manga) => (
+            <Comp
+                statistic={statistics[manga.id]}
+                manga={manga}
+                key={manga.id}
+            />
+        ));
+    };
+
     return (
-        <div className="mt-4">
+        <div className="mt-10">
             <Tabs defaultValue="grid" className="w-full flex flex-col">
                 <TabsList className="p-0 rounded-none  h-auto ml-auto">
                     <TabsTrigger value="list" className="h-12">
@@ -132,54 +154,23 @@ const FollowContent = async ({
                 </TabsList>
                 <div className="mt-4">
                     <TabsContent value="list">
-                        {mangaListRes &&
-                        mangaListRes.data.length > 0 &&
-                        statistics ? (
-                            <div className="space-y-2">
-                                {mangaListRes.data.map((manga) => (
-                                    <RecentMangaListItem
-                                        statistic={statistics[manga.id]}
-                                        manga={manga}
-                                        key={manga.id}
-                                    />
-                                ))}
-                            </div>
-                        ) : (
-                            <NotfoundData />
-                        )}
+                        {isNotFound && <NotfoundData />}
+
+                        <div className="space-y-2">{renderItem("list")}</div>
                     </TabsContent>
                     <TabsContent value="stretch">
-                        {mangaListRes &&
-                        mangaListRes.data.length > 0 &&
-                        statistics ? (
-                            <div className="grid gap-2 grid-cols-1 md:grid-cols-2">
-                                {mangaListRes.data.map((manga) => (
-                                    <RecentMangaStretchItem
-                                        statistic={statistics[manga.id]}
-                                        manga={manga}
-                                        key={manga.id}
-                                    />
-                                ))}
-                            </div>
-                        ) : (
-                            <NotfoundData />
-                        )}
+                        {isNotFound && <NotfoundData />}
+
+                        <div className="grid gap-2 grid-cols-1 md:grid-cols-2">
+                            {renderItem("stretch")}
+                        </div>
                     </TabsContent>
                     <TabsContent value="grid">
-                        {mangaListRes &&
-                        mangaListRes.data.length > 0 &&
-                        statistics ? (
-                            <div className="grid gap-2 grid-cols-2 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3">
-                                {mangaListRes.data.map((manga) => (
-                                    <RecentMangaGridItem
-                                        manga={manga}
-                                        key={manga.id}
-                                    />
-                                ))}
-                            </div>
-                        ) : (
-                            <NotfoundData />
-                        )}
+                        {isNotFound && <NotfoundData />}
+
+                        <div className="grid gap-2 grid-cols-2 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3">
+                            {renderItem("grid")}
+                        </div>
                     </TabsContent>
                 </div>
             </Tabs>

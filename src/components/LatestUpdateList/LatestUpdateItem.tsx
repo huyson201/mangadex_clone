@@ -83,11 +83,20 @@ async function LatestUpdateItem({ statistic, manga }: Props) {
                         className="w-auto gap-1.5 h-auto px-1.5 py-1 hover:bg-accent-2-hover"
                         variant={"ghost"}
                         size={"xs"}
+                        asChild
                     >
-                        <FaRegCommentAlt />
-                        {statistic.comments?.repliesCount && (
-                            <span>{statistic.comments.repliesCount}</span>
-                        )}
+                        <Link
+                            href={
+                                statistic.comments?.threadId
+                                    ? `https://forums.mangadex.org/threads/${statistic.comments?.threadId}`
+                                    : "#"
+                            }
+                        >
+                            <FaRegCommentAlt />
+                            {statistic.comments?.repliesCount && (
+                                <span>{statistic.comments.repliesCount}</span>
+                            )}
+                        </Link>
                     </Button>
                 </div>
 
@@ -101,7 +110,7 @@ async function LatestUpdateItem({ statistic, manga }: Props) {
                             {!group ? "No Group" : group.attributes.name}
                         </Link>
                     </div>
-                    <span className="text-sm font-medium">
+                    <span className="text-sm ">
                         {timeAgoFormat(chapter.attributes.updatedAt)}
                     </span>
                 </div>

@@ -5,7 +5,9 @@ import { Button } from "@/components/ui/button";
 import {
     ADVANCED_SEARCH_URL,
     FOLLOW_URL,
+    LATEST_LIST_URL,
     READING_HISTORY_URL,
+    RECENTLY_LIST_URL,
 } from "@/constants";
 import { useDrawerMenu } from "@/contexts/DrawerMenuContext";
 import { cn } from "@/lib/utils";
@@ -13,13 +15,101 @@ import { BookOpen, Bookmark, Home, Users, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect } from "react";
 import Backdrop from "../Backdrop/Backdrop";
 
 type Props = {};
 
+const menuData = [
+    {
+        name: "home",
+        group: [
+            {
+                key: "home",
+                exact: true,
+                href: "/",
+                icon: <Home />,
+                subItem: false,
+            },
+        ],
+    },
+    {
+        name: "follows",
+        group: [
+            {
+                key: "follows",
+                exact: true,
+                icon: <Bookmark />,
+                subItem: false,
+            },
+            {
+                key: "library",
+                href: FOLLOW_URL,
+                subItem: true,
+            },
+            {
+                key: "history",
+                href: READING_HISTORY_URL,
+                subItem: true,
+            },
+        ],
+    },
+    {
+        name: "titles",
+        group: [
+            {
+                key: "title",
+                icon: <BookOpen />,
+                subItem: false,
+            },
+            {
+                key: "advancedSearch",
+                href: ADVANCED_SEARCH_URL,
+                exact: true,
+                subItem: true,
+            },
+            {
+                key: "recently",
+                href: RECENTLY_LIST_URL,
+                subItem: true,
+            },
+            {
+                key: "latest",
+                href: LATEST_LIST_URL,
+                subItem: true,
+            },
+        ],
+    },
+    {
+        name: "community",
+        group: [
+            {
+                key: "community",
+                icon: <Users />,
+                exact: true,
+                subItem: false,
+            },
+            {
+                key: "forums",
+                href: "https://forums.mangadex.org/",
+                subItem: true,
+                exact: true,
+            },
+        ],
+    },
+];
+
 function DrawerMenu({}: Props) {
     const { isActive, setIsActive } = useDrawerMenu();
     const t = useTranslations("drawerMenu");
+    const pathname = usePathname();
+    useEffect(() => {
+        if (matchMedia && matchMedia("(max-width:1024px)").matches) {
+            setIsActive?.(false);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [pathname]);
+
     return (
         <>
             <div
@@ -43,64 +133,29 @@ function DrawerMenu({}: Props) {
                         <X />
                     </Button>
                 </div>
-                <div className="px-4 pt-2">
-                    <DrawerItem
-                        title={t("home")}
-                        exact
-                        href="/"
-                        icon={<Home />}
-                    />
-                </div>
-                <div className="px-4 pt-2">
-                    <DrawerItem
-                        title={t("follows")}
-                        exact
-                        icon={<Bookmark />}
-                    />
-                    <DrawerItem
-                        title={t("library")}
-                        subItem
-                        href={FOLLOW_URL}
-                    />
-                    <DrawerItem
-                        title={t("history")}
-                        subItem
-                        href={READING_HISTORY_URL}
-                    />
-                </div>
-                <div className="px-4 pt-2">
-                    <DrawerItem title={t("title")} icon={<BookOpen />} />
-                    <DrawerItem
-                        title={t("advancedSearch")}
-                        subItem
-                        exact
-                        href={ADVANCED_SEARCH_URL}
-                    />
-                    <DrawerItem
-                        title={t("recently")}
-                        subItem
-                        href="/titles/recent"
-                    />
-                    <DrawerItem
-                        title={t("latest")}
-                        subItem
-                        href="/titles/latest"
-                    />
-                    <form action={randomManga}>
-                        <button className="px-4 active:bg-accent-2 hover:bg-drawer-accent transition-colors duration-300  capitalize text-sm  py-1 rounded gap-2 w-full flex items-center text-foreground">
-                            Random
-                        </button>
-                    </form>
-                </div>
-                <div className="px-4 pt-2">
-                    <DrawerItem title={t("community")} icon={<Users />} />
-                    <DrawerItem
-                        title={t("forums")}
-                        subItem
-                        exact
-                        href={"https://forums.mangadex.org/"}
-                    />
-                </div>
+                {menuData.map((data, index) => {
+                    return (
+                        <div key={`${index}`} className="px-4 pt-2">
+                            {data.group.map((value, index) => (
+                                <DrawerItem
+                                    key={`${value.key}-${index}`}
+                                    title={t(value.key)}
+                                    exact={value.exact}
+                                    href={value.href}
+                                    icon={value.icon}
+                                    subItem={value.subItem}
+                                />
+                            ))}
+                            {data.name === "titles" && (
+                                <form action={randomManga}>
+                                    <button className="px-4 active:bg-accent-2 hover:bg-drawer-accent transition-colors duration-300  capitalize text-sm  py-1 rounded gap-2 w-full flex items-center text-foreground">
+                                        Random
+                                    </button>
+                                </form>
+                            )}
+                        </div>
+                    );
+                })}
             </div>
             <Backdrop
                 show={isActive}

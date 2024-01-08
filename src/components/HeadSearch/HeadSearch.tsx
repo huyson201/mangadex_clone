@@ -1,19 +1,19 @@
 "use client";
-import React, { ChangeEvent, useEffect, useState } from "react";
-import HeadSearchForm from "./HeadSearchForm";
-import { cn } from "@/lib/utils";
-import { useHeadSearch } from "@/contexts/HeadSearchContext";
-import Backdrop from "../Backdrop/Backdrop";
-import { useTranslations } from "next-intl";
-import SearchResultSkeleton from "../skeletons/SearchResultSkeleton";
-import SearchResultItem from "./SearchResultItem";
-import { useDebounce } from "@/hooks/useDebounce";
-import useSwr from "swr";
-import { advancedSearch, getStatisticsList } from "@/services/mangadex";
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 import { ADVANCED_SEARCH_URL } from "@/constants";
+import { useHeadSearch } from "@/contexts/HeadSearchContext";
+import { useDebounce } from "@/hooks/useDebounce";
+import { cn } from "@/lib/utils";
+import { advancedSearch, getStatisticsList } from "@/services/mangadex";
+import { ArrowRight } from "lucide-react";
+import { useTranslations } from "next-intl";
+import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
+import { ChangeEvent, useEffect, useState } from "react";
+import useSwr from "swr";
+import Backdrop from "../Backdrop/Backdrop";
+import SearchResultSkeleton from "../skeletons/SearchResultSkeleton";
+import HeadSearchForm from "./HeadSearchForm";
+import SearchResultItem from "./SearchResultItem";
 type Props = {};
 
 function HeadSearch({}: Props) {
@@ -36,7 +36,7 @@ function HeadSearch({}: Props) {
     };
 
     const { data, isLoading, error } = useSwr(
-        debounceSearchKey !== "" ? `/search?title=${debounceSearchKey}` : null,
+        searchKey !== "" ? `/search?title=${debounceSearchKey}` : null,
         () =>
             advancedSearch(debounceSearchKey, {
                 includes: ["cover_art"],
@@ -94,7 +94,7 @@ function HeadSearch({}: Props) {
                     {!isLoading &&
                         !getStatisticsLoading &&
                         data &&
-                        data.data.length > 1 && (
+                        data.data.length > 0 && (
                             <div>
                                 <div className="text-lg font-bold flex items-center justify-between">
                                     Manga

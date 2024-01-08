@@ -17,11 +17,12 @@ import {
 import { cn } from "@/lib/utils";
 import { getImageUrl, getMangaById, getStatistics } from "@/services/mangadex";
 import { Relationship } from "@/types";
-import { BookOpen, MoreHorizontal } from "lucide-react";
+import { MoreHorizontal } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import AddLib from "./AddLib";
+import ReadButton from "./ReadButton";
 
 type Props = {
     params: {
@@ -44,12 +45,6 @@ const page = async ({ params }: Props) => {
         auth(),
     ]);
     if (!manga) notFound();
-
-    // const fistChapters = await getChapters({
-    //     manga: manga.result.data.id,
-    //     chapter: `1`,
-    //     includes: ["user", "scanlation_group"],
-    // });
 
     const follow = session
         ? await prisma.follow.findUnique({
@@ -175,17 +170,16 @@ const page = async ({ params }: Props) => {
                                 }
                                 manga={manga.result.data}
                             />
-                            <Button
-                                variant={"secondary"}
-                                className="px-2 rounded"
-                            >
-                                <BookOpen />
-                            </Button>
+                            <ReadButton mangaId={manga.result.data.id} />
                         </div>
                         <div className="tags flex gap-1.5 mt-3 overflow-hidden max-h-[18px] flex-wrap">
-                            <Tag variant={"warning"} className="px-1.5 ">
-                                Suggestive
-                            </Tag>
+                            {manga.result.data.attributes.contentRating ===
+                                "suggestive" && (
+                                <Tag variant={"warning"} className="px-1.5 ">
+                                    Suggestive
+                                </Tag>
+                            )}
+
                             {tagList}
                         </div>
                         <div className="flex items-center gap-2 text-status-blue mt-2">
@@ -247,12 +241,7 @@ const page = async ({ params }: Props) => {
                         <MoreHorizontal />
                     </Button>
 
-                    <Button
-                        className="grow capitalize gap-4 rounded-sm"
-                        variant={"secondary"}
-                    >
-                        <BookOpen /> Read
-                    </Button>
+                    <ReadButton mangaId={manga.result.data.id} />
                 </div>
             </div>
             <DetailDesc manga={manga.result.data} />

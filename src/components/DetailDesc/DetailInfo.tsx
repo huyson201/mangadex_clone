@@ -1,3 +1,4 @@
+import mangaLinkIcons from "@/data/mangaLinkIcon.json";
 import {
     cn,
     createTagLink,
@@ -5,11 +6,9 @@ import {
     getStatisticsLink,
     getTagName,
 } from "@/lib/utils";
-import Link from "next/link";
-import React from "react";
-import { Manga } from "../../types";
 import Image from "next/image";
-import mangaLinkIcons from "@/data/mangaLinkIcon.json";
+import Link from "next/link";
+import { Manga } from "../../types";
 type Props = {
     className?: string;
     manga: Manga;

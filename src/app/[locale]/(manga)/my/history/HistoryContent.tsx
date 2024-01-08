@@ -100,6 +100,34 @@ const HistoryContent = (props: Props) => {
         return <NotfoundData />;
     }
 
+    const renderData = (type: "list" | "stretch") => {
+        const Comp = type === "list" ? LatestMangaListitem : HistoryStretchItem;
+        if (isLoading) {
+            return (
+                <div className="flex items-center justify-center py-6">
+                    <RingLoader />
+                </div>
+            );
+        }
+
+        if (resData && !isLoading) {
+            return groupHistoryData.map((value, index) => {
+                const manga = resData?.mangaList[value.mangaId];
+                const chapters = value.chapters.map((id) => {
+                    return resData.chapters?.[id];
+                });
+
+                return (
+                    <Comp
+                        key={`${value.mangaId}-${index}`}
+                        manga={manga}
+                        chapters={chapters}
+                    />
+                );
+            });
+        }
+    };
+
     return (
         <>
             <Tabs defaultValue="stretch" className="w-full flex flex-col">
@@ -113,57 +141,11 @@ const HistoryContent = (props: Props) => {
                 </TabsList>
                 <div className="mt-4">
                     <TabsContent value="list">
-                        <div className="space-y-4">
-                            {isLoading && (
-                                <div className="flex items-center justify-center py-6">
-                                    <RingLoader />
-                                </div>
-                            )}
-                            {resData?.chapters &&
-                                resData.mangaList &&
-                                !isLoading &&
-                                groupHistoryData.map((value, index) => {
-                                    const manga =
-                                        resData?.mangaList[value.mangaId];
-                                    const chapters = value.chapters.map(
-                                        (id) => {
-                                            return resData.chapters?.[id];
-                                        }
-                                    );
-
-                                    return (
-                                        <LatestMangaListitem
-                                            key={`${value.mangaId}-${index}`}
-                                            manga={manga}
-                                            chapters={chapters}
-                                        />
-                                    );
-                                })}
-                        </div>
+                        <div className="space-y-4">{renderData("list")}</div>
                     </TabsContent>
                     <TabsContent value="stretch">
                         <div className="grid grid-cols-1 gap-y-2">
-                            {isLoading && (
-                                <div className="flex items-center justify-center py-6">
-                                    <RingLoader />
-                                </div>
-                            )}
-                            {resData &&
-                                !isLoading &&
-                                groupHistoryData.map((value, index) => {
-                                    const manga =
-                                        resData?.mangaList[value.mangaId];
-                                    const chapters = value.chapters.map(
-                                        (id) => resData?.chapters[id]
-                                    );
-                                    return (
-                                        <HistoryStretchItem
-                                            key={`${value.mangaId}-${index}`}
-                                            manga={manga}
-                                            chapters={chapters}
-                                        />
-                                    );
-                                })}
+                            {renderData("stretch")}
                         </div>
                     </TabsContent>
                 </div>

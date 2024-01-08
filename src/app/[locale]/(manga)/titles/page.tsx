@@ -12,7 +12,6 @@ import { SearchFilterProvider } from "@/contexts/SearchFilterContext";
 import Wrapper from "@/layouts/Wrapper/Wrapper";
 import { advancedSearch, getStatisticsList } from "@/services/mangadex";
 import { LayoutGrid, List, StretchHorizontal } from "lucide-react";
-import React from "react";
 
 type Props = {
     searchParams: {
@@ -56,10 +55,27 @@ const page = async ({ searchParams: { page = 1, ...searchParams } }: Props) => {
 
     const totalPage =
         data.total - limit < 10000 ? Math.ceil(data.total / limit) : maxPage;
+    const isNotFound = data.data.length === 0;
+    const renderItem = (type: "list" | "stretch" | "grid") => {
+        if (isNotFound) return null;
+        const comps = {
+            list: RecentMangaListItem,
+            stretch: RecentMangaStretchItem,
+            grid: RecentMangaGridItem,
+        };
+        const Comp = comps[type];
+        return data.data.map((manga) => (
+            <Comp
+                statistic={statistics[manga.id]}
+                manga={manga}
+                key={manga.id}
+            />
+        ));
+    };
     return (
         <Wrapper className="mt-4">
             <BackNavigation title="Advanced Search" />
-            <div className="mt-4">
+            <div className="mt-10">
                 <SearchFilterProvider>
                     <SearchFilter />
                     <div className="mt-6">
@@ -98,42 +114,25 @@ const page = async ({ searchParams: { page = 1, ...searchParams } }: Props) => {
                             </div>
                             <div className="mt-4">
                                 <TabsContent value="list">
-                                    {data.data.length === 0 && <NotfoundData />}
+                                    {isNotFound && <NotfoundData />}
 
                                     <div className="space-y-2">
-                                        {data.data.map((manga) => (
-                                            <RecentMangaListItem
-                                                statistic={statistics[manga.id]}
-                                                manga={manga}
-                                                key={manga.id}
-                                            />
-                                        ))}
+                                        {renderItem("list")}
                                     </div>
                                 </TabsContent>
 
                                 <TabsContent value="stretch">
-                                    {data.data.length === 0 && <NotfoundData />}
+                                    {isNotFound && <NotfoundData />}
 
                                     <div className="grid gap-2 grid-cols-1 md:grid-cols-2">
-                                        {data.data.map((manga) => (
-                                            <RecentMangaStretchItem
-                                                statistic={statistics[manga.id]}
-                                                manga={manga}
-                                                key={manga.id}
-                                            />
-                                        ))}
+                                        {renderItem("stretch")}
                                     </div>
                                 </TabsContent>
                                 <TabsContent value="grid">
-                                    {data.data.length === 0 && <NotfoundData />}
+                                    {isNotFound && <NotfoundData />}
 
                                     <div className="grid gap-2 grid-cols-2 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3">
-                                        {data.data.map((manga) => (
-                                            <RecentMangaGridItem
-                                                manga={manga}
-                                                key={manga.id}
-                                            />
-                                        ))}
+                                        {renderItem("grid")}
                                     </div>
                                 </TabsContent>
                             </div>

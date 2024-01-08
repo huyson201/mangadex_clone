@@ -6,7 +6,6 @@ import { Search, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
 import { ChangeEvent, useEffect, useRef } from "react";
-import { IoClose } from "react-icons/io5";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 type Props = {
@@ -33,12 +32,13 @@ const HeadSearchForm = ({ onFocus, onBlur, onChange, onClickClear }: Props) => {
                 event.key.toLowerCase() === "k"
             ) {
                 event.preventDefault();
-                console.log("ctrl k");
                 headSearchState.setIsActive?.(true);
             }
         };
         window.addEventListener("keydown", handleKeyPress);
         return () => window.removeEventListener("keydown", handleKeyPress);
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleClickClear = () => {
@@ -112,7 +112,7 @@ const HeadSearchForm = ({ onFocus, onBlur, onChange, onClickClear }: Props) => {
                 size={"xs"}
                 onClick={() => headSearchState.setIsActive?.(false)}
             >
-                <IoClose />
+                <X />
             </Button>
         </form>
     );

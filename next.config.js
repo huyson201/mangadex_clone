@@ -24,12 +24,16 @@ const nextConfig = {
 
             // Rewrite for all paths excluding /api/auth
             {
-                source: '/api/:path((?!_next|auth|uploads).*)',
+                source: '/api/:path((?!_next|auth|uploads|.*\\..*).*)',
                 destination: 'https://api.mangadex.org/:path*', // Use the same destination as source
             },
             {
                 source: '/api/uploads/:path*',
                 destination: 'https://uploads.mangadex.org/covers/:path*'
+            },
+            {
+                source: '/api/author/:path*',
+                destination: "https://api.mangadex.org/author/:path*"
             }
 
         ]

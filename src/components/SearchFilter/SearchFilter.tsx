@@ -1,29 +1,18 @@
 "use client";
-import React, {
-    FormEvent,
-    useCallback,
-    useMemo,
-    useEffect,
-    useRef,
-    useState,
-} from "react";
-import MultipleSelection from "../ui/MultipleSelection";
-import FilterTag from "../FilterTag/FilterTag";
-import SingleSelection from "../ui/SingleSelection";
-import { sortByData, contentRating, demographics, publicStatus } from "@/data";
-import NumberInput from "../ui/NumberInput";
-import { cn } from "@/lib/utils";
-import { X } from "lucide-react";
-import AuthorOrArtistFilter from "./AuthorOrArtistFilter";
-import { ChevronDown, ChevronUp, Search } from "lucide-react";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import { useSearchFilter } from "@/contexts/SearchFilterContext";
-import { redirect, useRouter, useSearchParams } from "next/navigation";
-import queryString from "query-string";
 import { ADVANCED_SEARCH_URL } from "@/constants";
-import SingleFilter from "./SingleFilter";
-import MultipleFilter from "./MultipleFilter";
+import { useSearchFilter } from "@/contexts/SearchFilterContext";
+import { contentRating, demographics, publicStatus, sortByData } from "@/data";
+import { cn } from "@/lib/utils";
+import { ChevronDown, ChevronUp, Search, X } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import queryString from "query-string";
+import { FormEvent, useMemo, useRef, useState } from "react";
+import FilterTag from "../FilterTag/FilterTag";
+import NumberInput from "../ui/NumberInput";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import AuthorOrArtistFilter from "./AuthorOrArtistFilter";
+import FilterCombobox from "./FilterCombobox";
 
 type Props = {};
 const parseArray = (value?: string | string[]) => {
@@ -52,7 +41,6 @@ const SearchFilter = ({}: Props) => {
     const filterTagsRef = useRef<{ reset: () => void }>(null);
 
     const defaultValue = useMemo(() => {
-        console.log("parsed");
         const parsed = queryString.parse(searchParams.toString(), {
             arrayFormat: "comma",
         }) as Partial<FilterData>;
@@ -165,16 +153,31 @@ const SearchFilter = ({}: Props) => {
                 >
                     <div>
                         <FilterOptionTitle title={"Sort by"} />
-                        <SingleFilter
-                            key={defaultValue.order}
-                            data={sortByData}
+                        <FilterCombobox
+                            contentClass="space-y-2 max-h-[256px] custom-scrollbar pl-4 w-[var(--radix-popover-trigger-width)]"
+                            data={[...sortByData]}
                             defaultValue={defaultValue.order || ""}
+                            key={defaultValue.order}
                             onChange={(value) =>
                                 setData((prev) => ({
                                     ...prev,
                                     order: value,
                                 }))
                             }
+                            renderItems={(data, active) => {
+                                return (
+                                    <div
+                                        className={cn(
+                                            "cursor-pointer group flex items-center gap-2 hover:text-foreground transition-colors",
+                                            active
+                                                ? "text-primary"
+                                                : "text-midTone"
+                                        )}
+                                    >
+                                        {data.key}
+                                    </div>
+                                );
+                            }}
                         />
                     </div>
                     <div>
@@ -196,7 +199,9 @@ const SearchFilter = ({}: Props) => {
                     </div>
                     <div>
                         <FilterOptionTitle title={"Content Rating"} />
-                        <MultipleFilter
+                        <FilterCombobox
+                            contentClass="space-y-2 max-h-[256px] custom-scrollbar pl-4 w-[var(--radix-popover-trigger-width)]"
+                            multiple
                             key={defaultValue.rating?.join(",")}
                             data={contentRating}
                             defaultValue={defaultValue.rating || []}
@@ -206,11 +211,20 @@ const SearchFilter = ({}: Props) => {
                                     rating: data,
                                 }))
                             }
+                            renderLabel={(data) => {
+                                let label = "Any";
+                                if (data && data.length > 0) {
+                                    label = data.join(", ");
+                                }
+                                return <>{label}</>;
+                            }}
                         />
                     </div>
                     <div>
                         <FilterOptionTitle title={"Magazine Demographic"} />
-                        <MultipleFilter
+                        <FilterCombobox
+                            contentClass="space-y-2 max-h-[256px] custom-scrollbar pl-4 w-[var(--radix-popover-trigger-width)]"
+                            multiple
                             key={defaultValue.demos?.join(",")}
                             data={demographics}
                             defaultValue={defaultValue.demos || []}
@@ -220,11 +234,20 @@ const SearchFilter = ({}: Props) => {
                                     demos: data as string[],
                                 }))
                             }
+                            renderLabel={(data) => {
+                                let label = "Any";
+                                if (data && data.length > 0) {
+                                    label = data.join(", ");
+                                }
+                                return <>{label}</>;
+                            }}
                         />
                     </div>
                     <div>
                         <FilterOptionTitle title={"Publication Status"} />
-                        <MultipleFilter
+                        <FilterCombobox
+                            contentClass="space-y-2 max-h-[256px] custom-scrollbar pl-4 w-[var(--radix-popover-trigger-width)]"
+                            multiple
                             key={defaultValue.status?.join(",")}
                             data={publicStatus}
                             defaultValue={defaultValue.status || []}
@@ -234,11 +257,17 @@ const SearchFilter = ({}: Props) => {
                                     status: data as string[],
                                 }))
                             }
+                            renderLabel={(data) => {
+                                let label = "Any";
+                                if (data && data.length > 0) {
+                                    label = data.join(", ");
+                                }
+                                return <>{label}</>;
+                            }}
                         />
                     </div>
                     <div>
                         <FilterOptionTitle title={"Author"} />
-
                         <AuthorOrArtistFilter
                             type="author"
                             key={defaultValue.authors?.join(",")}
