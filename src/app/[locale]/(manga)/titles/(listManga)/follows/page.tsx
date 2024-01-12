@@ -42,7 +42,7 @@ async function page({ searchParams: { tab = "reading", page = 1 } }: Props) {
     return (
         <div className="mt-4">
             <Tabs defaultValue={tab} className="w-full ">
-                <TabsList className="py-1.5 rounded-none  h-auto ">
+                <TabsList className="py-1.5 block sm:inline-flex  h-auto rounded-none ">
                     {readingStatusData.map((value) => {
                         if (value === "none") return null;
                         return (
@@ -141,7 +141,7 @@ const FollowContent = async ({
     return (
         <div className="mt-10">
             <Tabs defaultValue="grid" className="w-full flex flex-col">
-                <TabsList className="p-0 rounded-none  h-auto ml-auto">
+                <TabsList className="p-0 rounded-none   h-auto ml-auto">
                     <TabsTrigger value="list" className="h-12">
                         <List />
                     </TabsTrigger>

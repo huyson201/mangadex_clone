@@ -1,5 +1,4 @@
 "use client";
-import { HOME_URL, MANGA_DETAIL_BASE_URL } from "@/constants";
 import { useHeadSearch } from "@/contexts/HeadSearchContext";
 import { cn } from "@/lib/utils";
 import { Search, X } from "lucide-react";
@@ -63,8 +62,6 @@ const HeadSearchForm = ({ onFocus, onBlur, onChange, onClickClear }: Props) => {
                 className={cn(
                     "peer/input  rounded-lg px-4 py-1 w-full peer",
                     !headSearchState.isActive &&
-                        (pathname === HOME_URL ||
-                            pathname.startsWith(`${MANGA_DETAIL_BASE_URL}/`)) &&
                         " group-[:not(.scrolling)]/navbar:opacity-[0.65] group-[:not(.scrolling)]/navbar:filter group-[:not(.scrolling)]/navbar:brightness-[1.1]"
                 )}
                 type="text"

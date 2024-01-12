@@ -4,7 +4,6 @@ import DetailDesc from "@/components/DetailDesc/DetailDesc";
 import { statusDotVariants } from "@/components/MangaStatus/MangaStatus";
 import StatisticInfo from "@/components/StatisticInfo/StatisticInfo";
 import Tag from "@/components/Tag/Tag";
-import { Button } from "@/components/ui/button";
 import Wrapper from "@/layouts/Wrapper/Wrapper";
 import { prisma } from "@/lib";
 import {
@@ -17,7 +16,6 @@ import {
 import { cn } from "@/lib/utils";
 import { getImageUrl, getMangaById, getStatistics } from "@/services/mangadex";
 import { Relationship } from "@/types";
-import { MoreHorizontal } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -234,12 +232,6 @@ const page = async ({ params }: Props) => {
                         isLoggedIn={!!session}
                         manga={manga.result.data}
                     />
-                    <Button
-                        variant={"secondary"}
-                        className="outline-none  border-none px-2 rounded-sm"
-                    >
-                        <MoreHorizontal />
-                    </Button>
 
                     <ReadButton mangaId={manga.result.data.id} />
                 </div>

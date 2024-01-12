@@ -1,5 +1,4 @@
 "use server";
-import avatar from "@/assets/avatar.png";
 import { signIn } from "@/auth";
 import { prisma } from "@/lib";
 import { hashSync } from "bcryptjs";
@@ -88,10 +87,8 @@ const handleRegister = async (data: {
                 email,
                 username,
                 password: hashPassword,
-                image: avatar.src,
             },
         });
-
         await signIn("credentials", {
             username,
             password: password,
@@ -105,6 +102,7 @@ const handleRegister = async (data: {
             message: "register successfully",
         };
     } catch (error) {
+        console.log(error);
         return {
             success: false,
             errors: {

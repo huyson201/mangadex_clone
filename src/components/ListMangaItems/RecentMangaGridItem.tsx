@@ -45,7 +45,7 @@ function RecentMangaGridItem({ manga }: Props) {
                             height={24}
                         />
                     )}
-                    <span>{title}</span>
+                    <span className="line-clamp-2">{title}</span>
                 </div>
             </Link>
         </div>

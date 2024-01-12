@@ -1,19 +1,17 @@
 {
-   
   "Home": {
-    "titles":{
+    "titles": {
       "popular": "Phổ Biến",
       "latestList": "Mới Cập Nhật",
       "seasonalList": "Theo Mùa",
       "recentlyList": "Truyện Mới"
-
     }
   },
-  "search":{
+  "search": {
     "placeholder": "Tìm Kiếm",
     "resultDefault": "Nhập từ khóa để tìm kiếm..."
   },
-  "accountMenu":{
+  "accountMenu": {
     "defaultMenu": {
       "guest": "Khách",
       "settings": "Cài Đặt",
@@ -23,22 +21,31 @@
       "signIn": "Đăng Nhập",
       "register": "Đăng Ký"
     },
-    "themeSelections":{
+    "themeSelections": {
       "title": "Chọn Chủ Đề",
       "light": "Sáng",
       "dark": "Tối",
+      "dracula": "dracula",
       "system": "Hệ Thống"
     },
-    "languageSelections":{
+    "languageSelections": {
       "english": "Tiếng anh",
       "vietnamese": "Tiếng việt",
       "title": "Ngôn Ngữ Hiển Thị"
     }
   },
-  "drawerMenu":{
+  "drawerMenu": {
     "home": "Trang chủ",
     "title": "Tiêu đề",
     "recently": "Truyện mới",
-    "latest": "Mới cập nhật"
+    "latest": "Mới cập nhật",
+    "follows": "Theo dõi",
+    "history": "Lịch sử đọc truyện",
+    "library": "Thư viện",
+    "advancedSearch": "Tìm kiếm nâng cao",
+    "community": "Cộng đồng",
+    "forums": "Diễn đàn",
+    "groups": "DS nhóm",
+    "users": "DS user"
   }
 }

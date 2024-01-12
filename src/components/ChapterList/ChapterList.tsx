@@ -77,12 +77,12 @@ const ChapterList = ({ manga }: Props) => {
                             {manga.attributes.availableTranslatedLanguages
                                 .length !== 0 && (
                                 <div
-                                    className="flex gap-2 justify-between"
+                                    className="flex gap-8 justify-between"
                                     ref={scrollRef}
                                 >
                                     <Button
                                         variant={"secondary"}
-                                        className="py-1 px-4 h-auto "
+                                        className="py-1 w-2/4 sm:w-[140px] px-4 h-auto "
                                         onClick={() =>
                                             setSortBy((prev) =>
                                                 prev === "chapter.desc"

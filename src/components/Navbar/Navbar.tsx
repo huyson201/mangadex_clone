@@ -1,27 +1,30 @@
 "use client";
-import Wrapper from "@/layouts/Wrapper/Wrapper";
-import { cn } from "@/lib/utils";
-import React, { useEffect, useRef } from "react";
-import { HiMiniBars3BottomLeft } from "react-icons/hi2";
-import { Button } from "../ui/button";
-import Link from "next/link";
-import Logo from "../Logo/Logo";
-import HeadSearch from "../HeadSearch/HeadSearch";
-import { useDrawerMenu } from "@/contexts/DrawerMenuContext";
-type Props = {};
-import AccountMenu from "../AccountMenu/AccountMenu";
-import StackMenuProvider from "@/contexts/StackMenuContext";
-import { useChapterMenu } from "@/contexts/ChapterMenuContext";
-import { usePathname } from "next/navigation";
 import { MANGA_DETAIL_BASE_URL, READ_CHAPTER_URL } from "@/constants";
+import { useChapterMenu } from "@/contexts/ChapterMenuContext";
+import { useDrawerMenu } from "@/contexts/DrawerMenuContext";
+import StackMenuProvider from "@/contexts/StackMenuContext";
+import Wrapper from "@/layouts/Wrapper/Wrapper";
+import { cn, createRegexMathRoutesWithLocales } from "@/lib/utils";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef } from "react";
+import { HiMiniBars3BottomLeft } from "react-icons/hi2";
+import AccountMenu from "../AccountMenu/AccountMenu";
+import HeadSearch from "../HeadSearch/HeadSearch";
+import Logo from "../Logo/Logo";
+import { Button } from "../ui/button";
+type Props = {};
 const Navbar = (props: Props) => {
     const drawerMenu = useDrawerMenu();
     const navbarBgRef = useRef<HTMLDivElement>(null);
     const navbarWrapper = useRef<HTMLDivElement>(null);
     const { headerType } = useChapterMenu();
     const pathname = usePathname();
+    const matchReadChapterRoute = createRegexMathRoutesWithLocales([
+        READ_CHAPTER_URL,
+    ]).test(pathname);
     useEffect(() => {
-        if (pathname.startsWith(READ_CHAPTER_URL) && headerType === "hidden") {
+        if (matchReadChapterRoute && headerType === "hidden") {
             if (!navbarBgRef.current) return;
             navbarBgRef.current.style.opacity = `1`;
             return;
@@ -44,13 +47,13 @@ const Navbar = (props: Props) => {
         handleScroll();
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
-    }, [headerType, pathname]);
+    }, [headerType, matchReadChapterRoute]);
     return (
         <div
             ref={navbarWrapper}
             className={cn(
                 "h-[var(--navbar-height)]  group/navbar w-full fixed  top-0 left-0 z-[var(--navbar-index)]",
-                pathname.startsWith(READ_CHAPTER_URL) && headerType === "hidden"
+                matchReadChapterRoute && headerType === "hidden"
                     ? "relative"
                     : "fixed"
             )}
@@ -59,8 +62,7 @@ const Navbar = (props: Props) => {
                 ref={navbarBgRef}
                 className={cn(
                     "absolute  transition-opacity opacity-0 top-0 left-0 right-0 bottom-0 bg-background  ",
-                    (!pathname.startsWith(READ_CHAPTER_URL) ||
-                        headerType === "shown") &&
+                    (!matchReadChapterRoute || headerType === "shown") &&
                         "border-b border-primary"
                 )}
             ></div>

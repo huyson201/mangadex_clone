@@ -1,7 +1,8 @@
-import { type ClassValue, clsx } from "clsx";
-import { twMerge } from "tailwind-merge";
+import { LOCALES } from "@/i18n.config";
+import { clsx, type ClassValue } from "clsx";
 import jwt from "jsonwebtoken";
 import moment from "moment";
+import { twMerge } from "tailwind-merge";
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
 }
@@ -149,4 +150,13 @@ export const formatNumber = (value: number) => {
     } else {
         return value.toString();
     }
+};
+
+export const createRegexMathRoutesWithLocales = (routes: string[]) => {
+    return RegExp(
+        `^(/(${LOCALES.join("|")}))?(${routes
+            .flatMap((p) => (p === "/" ? ["", "/"] : p))
+            .join("|")})/?$`,
+        "i"
+    );
 };

@@ -1,6 +1,5 @@
 import { AlertTriangle, ChevronsLeft } from "lucide-react";
 import Link from "next/link";
-import React from "react";
 
 type Props = {
     email?: string;
@@ -49,7 +48,7 @@ const VerifyNotification = ({ email, type }: Props) => {
                 </div>
                 <div>
                     <Link href={"/"} className="text-[#ff6740] hover:underline">
-                        Click here
+                        Click here{" "}
                     </Link>
                     to re-send the email.
                 </div>

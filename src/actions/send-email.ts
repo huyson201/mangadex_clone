@@ -21,7 +21,9 @@ export const sendVerifyEmail = async (userId: string) => {
     user.verifyCode = verifyMailToken;
     await prisma.user.update({
         where: { id: userId },
-        data: user,
+        data: {
+            verifyCode: verifyMailToken,
+        },
     });
 
     // send email to user
