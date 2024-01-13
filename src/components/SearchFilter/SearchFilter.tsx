@@ -103,6 +103,7 @@ const SearchFilter = ({}: Props) => {
                     <Input
                         className="h-10 rounded pl-10 pr-2"
                         onChange={(e) => setSearchKey(e.currentTarget.value)}
+                        placeholder="Search"
                     />
                 </form>
                 <div className="hidden md:block">

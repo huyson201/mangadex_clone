@@ -1,3 +1,4 @@
+"use client";
 import mangaLinkIcons from "@/data/mangaLinkIcon.json";
 import {
     cn,
@@ -6,6 +7,7 @@ import {
     getStatisticsLink,
     getTagName,
 } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
 import { Manga } from "../../types";
@@ -15,6 +17,7 @@ type Props = {
 };
 
 const DetailInfo = ({ manga, className }: Props) => {
+    const t = useTranslations("detailManga");
     const authors = manga.relationships.filter(
         (relation) => relation.type === "author"
     );
@@ -33,8 +36,8 @@ const DetailInfo = ({ manga, className }: Props) => {
     const links = getStatisticsLink(manga.attributes.links);
 
     return (
-        <div className={cn("flex flex-wrap gap-4", className)}>
-            {authors.length > 1 && (
+        <div className={cn("flex flex-wrap gap-4 mt-2", className)}>
+            {authors.length > 0 && (
                 <div>
                     <div className=" font-bold">Author</div>
                     {authors.map((author) => (
@@ -48,7 +51,7 @@ const DetailInfo = ({ manga, className }: Props) => {
                     ))}
                 </div>
             )}
-            {artists.length > 1 && (
+            {artists.length > 0 && (
                 <div>
                     <div className=" font-bold">Artist</div>
                     {artists.map((author) => (
@@ -62,9 +65,9 @@ const DetailInfo = ({ manga, className }: Props) => {
                     ))}
                 </div>
             )}
-            {genres.length > 1 && (
+            {genres.length > 0 && (
                 <div>
-                    <div className=" font-bold">Genres</div>
+                    <div className=" font-bold">{t("genresTitle")}</div>
                     <div className="flex items-center flex-wrap gap-2">
                         {genres.map((value) => (
                             <Link
@@ -78,9 +81,9 @@ const DetailInfo = ({ manga, className }: Props) => {
                     </div>
                 </div>
             )}
-            {themes.length > 1 && (
+            {themes.length > 0 && (
                 <div>
-                    <div className=" font-bold">Themes</div>
+                    <div className=" font-bold">{t("themesTitle")}</div>
                     <div className="flex items-center flex-wrap gap-2">
                         {themes.map((value) => (
                             <Link
@@ -96,7 +99,7 @@ const DetailInfo = ({ manga, className }: Props) => {
             )}
             {manga.attributes.publicationDemographic && (
                 <div>
-                    <div className=" font-bold">Demographic</div>
+                    <div className=" font-bold">{t("demographic")}</div>
                     <div className="flex items-center flex-wrap gap-2">
                         <Link
                             className="bg-accent hover:bg-primary hover:text-primary-foreground text-xs rounded py-1 px-2 mt-2 inline-block transition-colors"
@@ -108,9 +111,9 @@ const DetailInfo = ({ manga, className }: Props) => {
                 </div>
             )}
 
-            {formats.length > 1 && (
+            {formats.length > 0 && (
                 <div>
-                    <div className=" font-bold">Format</div>
+                    <div className=" font-bold">{t("formatTitle")}</div>
                     <div className="flex items-center flex-wrap gap-2">
                         {formats.map((value) => (
                             <Link
@@ -124,9 +127,9 @@ const DetailInfo = ({ manga, className }: Props) => {
                     </div>
                 </div>
             )}
-            {links.readOrBuy.length > 1 && (
+            {links.readOrBuy.length > 0 && (
                 <div>
-                    <div className=" font-bold">Read or Buy</div>
+                    <div className=" font-bold">{t("readOrBuyTitle")}</div>
                     <div className="flex items-center flex-wrap gap-2">
                         {links.readOrBuy.map((value) => (
                             <Link
@@ -152,9 +155,9 @@ const DetailInfo = ({ manga, className }: Props) => {
                     </div>
                 </div>
             )}
-            {links.track.length > 1 && (
+            {links.track.length > 0 && (
                 <div>
-                    <div className=" font-bold">Track</div>
+                    <div className=" font-bold">{t("trackTitle")}</div>
                     <div className="flex items-center flex-wrap gap-2">
                         {links.track.map((value) => (
                             <Link
@@ -176,7 +179,7 @@ const DetailInfo = ({ manga, className }: Props) => {
             )}
             {manga.attributes.altTitles.length > 0 && (
                 <div className="w-full">
-                    <div className=" font-bold">Alternative Titles</div>
+                    <div className=" font-bold">{t("alternativeTitles")}</div>
                     <div className="text-sm divide-y-2 divide-accent">
                         {manga.attributes.altTitles.map((title, index) => {
                             const key = Object.keys(title)[0];

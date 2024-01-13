@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { getChapters, getStatisticsList } from "@/services/mangadex";
 import { BookOpen, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import useSWR from "swr";
 import useSWRMutation from "swr/mutation";
 
@@ -18,6 +19,7 @@ type Props = {
 };
 
 const ReadButton = ({ mangaId }: Props) => {
+    const t = useTranslations("detailManga");
     const { data, isMutating, trigger } = useSWRMutation(
         `/manga/${mangaId}/first-chapters`,
         () =>
@@ -49,7 +51,9 @@ const ReadButton = ({ mangaId }: Props) => {
                     ) : (
                         <>
                             <BookOpen />
-                            <span className="sm:hidden">Read</span>
+                            <span className="sm:hidden">
+                                {t("readChapterBtn")}
+                            </span>
                         </>
                     )}
                 </Button>

@@ -2,6 +2,7 @@
 import { cn, getDataByLocale } from "@/lib/utils";
 import { Manga } from "@/types";
 import { ChevronsDown, ChevronsUp } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useRef, useState } from "react";
 import { Button } from "../ui/button";
 import DetailInfo from "./DetailInfo";
@@ -12,7 +13,7 @@ interface DetailDescProps {
 const DetailDesc = ({ manga }: DetailDescProps) => {
     const [isCollapsed, setIsCollapsed] = useState(true);
     const descRef = useRef<HTMLDivElement>(null);
-
+    const t = useTranslations("detailManga");
     return (
         <div className="relative">
             <div
@@ -51,7 +52,7 @@ const DetailDesc = ({ manga }: DetailDescProps) => {
                 ) : (
                     <ChevronsDown size={14} />
                 )}
-                See more
+                {t("seeMoreDescBtn")}
                 <ChevronsDown size={14} />
             </Button>
         </div>

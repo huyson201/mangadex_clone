@@ -35,8 +35,8 @@ function HeadSearch({}: Props) {
         setSearchKey(event.currentTarget.value);
     };
 
-    const { data, isLoading, error } = useSwr(
-        searchKey !== "" ? `/search?title=${debounceSearchKey}` : null,
+    const { data, isLoading } = useSwr(
+        debounceSearchKey !== "" ? `/search?title=${debounceSearchKey}` : null,
         () =>
             advancedSearch(debounceSearchKey, {
                 includes: ["cover_art"],

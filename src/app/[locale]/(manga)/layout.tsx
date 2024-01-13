@@ -1,3 +1,4 @@
+import PageWrapper from "@/layouts/PageWrapper";
 import React from "react";
 
 type Props = {
@@ -5,11 +6,7 @@ type Props = {
 };
 
 const layout = ({ children }: Props) => {
-    return (
-        <div className="pt-[var(--navbar-height)] pb-6 relative">
-            {children}
-        </div>
-    );
+    return <PageWrapper>{children}</PageWrapper>;
 };
 
 export default layout;

@@ -2,6 +2,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getMangaFeed } from "@/services/mangadex";
 import { Manga } from "@/types";
+import { useTranslations } from "next-intl";
 import { useRef, useState } from "react";
 import useSWR from "swr";
 import DetailInfo from "../DetailDesc/DetailInfo";
@@ -16,6 +17,7 @@ type Props = {
 };
 
 const ChapterList = ({ manga }: Props) => {
+    const t = useTranslations("chapterList");
     const [chapterPage, setChapterPage] = useState(1);
     const [sortBy, setSortBy] = useState<"chapter.desc" | "chapter.asc">(
         "chapter.desc"
@@ -59,13 +61,13 @@ const ChapterList = ({ manga }: Props) => {
                         className="hover:text-foreground text-gray-500 font-semibold"
                         value="chapters"
                     >
-                        Chapters
+                        {t("chaptersTab")}
                     </TabsTrigger>
                     <TabsTrigger
                         className="hover:text-foreground text-gray-500 font-semibold"
                         value="comment"
                     >
-                        Comment
+                        {t("commentsTab")}
                     </TabsTrigger>
                 </TabsList>
                 <div className="grid grid-cols-12 gap-x-4 mt-4">
@@ -92,8 +94,8 @@ const ChapterList = ({ manga }: Props) => {
                                         }
                                     >
                                         {sortBy === "chapter.desc"
-                                            ? "Descending"
-                                            : "Ascending"}
+                                            ? t("sortDescBtn")
+                                            : t("sortAscBtn")}
                                     </Button>
                                     <SelectChapterLang
                                         onChange={(value) =>

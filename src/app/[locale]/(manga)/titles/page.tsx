@@ -12,6 +12,7 @@ import { SearchFilterProvider } from "@/contexts/SearchFilterContext";
 import Wrapper from "@/layouts/Wrapper/Wrapper";
 import { advancedSearch, getStatisticsList } from "@/services/mangadex";
 import { LayoutGrid, List, StretchHorizontal } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 
 type Props = {
     searchParams: {
@@ -33,7 +34,7 @@ const page = async ({ searchParams: { page = 1, ...searchParams } }: Props) => {
     const limit = 32;
     const maxPage = 312;
     const offset = (page - 1) * limit;
-
+    const t = await getTranslations("listMangaTitles");
     const data = await advancedSearch(searchParams.q, {
         order: searchParams.order,
         excludedTags: searchParams.excludes?.split(","),
@@ -74,7 +75,7 @@ const page = async ({ searchParams: { page = 1, ...searchParams } }: Props) => {
     };
     return (
         <Wrapper className="mt-4">
-            <BackNavigation title="Advanced Search" />
+            <BackNavigation title={t("advancedSearch")} />
             <div className="mt-10">
                 <SearchFilterProvider>
                     <SearchFilter />

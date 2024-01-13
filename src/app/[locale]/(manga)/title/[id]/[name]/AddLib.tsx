@@ -19,8 +19,8 @@ import { getImageUrl } from "@/services/mangadex";
 import { Manga, ReadingStatus, readingStatusData } from "@/types";
 import { Bookmark, ChevronDown, X } from "lucide-react";
 import { signIn } from "next-auth/react";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
 import { useRef, useState, useTransition } from "react";
 
 type Props = {
@@ -34,10 +34,11 @@ const AddLib = ({ manga, follow, isLoggedIn }: Props) => {
     const [statusValue, setStatusValue] = useState<ReadingStatus>(
         follow ? (follow.status as ReadingStatus) : "none"
     );
-    const coverArt = getCoverArtFromManga(manga);
     const [pending, startTransition] = useTransition();
-    const pathname = usePathname();
+    const t = useTranslations("detailManga");
     const closeRef = useRef<HTMLButtonElement>(null);
+
+    const coverArt = getCoverArtFromManga(manga);
 
     if (!isLoggedIn) {
         return (
@@ -47,7 +48,7 @@ const AddLib = ({ manga, follow, isLoggedIn }: Props) => {
                     className="hidden min-w-[164px] sm:flex capitalize gap-x-2 rounded px-8"
                     variant={"primary"}
                 >
-                    {pending ? "..." : "Add To Library"}
+                    {pending ? "..." : t("addToLibBtn")}
                 </Button>
                 <Button
                     onClick={() => startTransition(signIn)}
@@ -65,23 +66,23 @@ const AddLib = ({ manga, follow, isLoggedIn }: Props) => {
                 <DialogTrigger asChild>
                     <div>
                         <Button
-                            className="hidden sm:flex capitalize gap-x-2 rounded px-8"
+                            className="gap-x-2 rounded-sm sm:rounded px-2 sm:px-8"
                             variant={"primary"}
                         >
-                            {follow ? (
-                                <>
-                                    <BellCheck />
-                                    {follow.status}
-                                </>
-                            ) : (
-                                "Add To Library"
-                            )}
-                        </Button>
-                        <Button
-                            variant={"primary"}
-                            className="sm:hidden px-2 rounded-sm"
-                        >
-                            {follow ? <BellCheck /> : <Bookmark />}
+                            <div className="hidden sm:flex capitalize ">
+                                {follow ? (
+                                    <>
+                                        <BellCheck />
+                                        {follow.status}
+                                    </>
+                                ) : (
+                                    t("addToLibBtn")
+                                )}
+                            </div>
+
+                            <div className="sm:hidden">
+                                {follow ? <BellCheck /> : <Bookmark />}
+                            </div>
                         </Button>
                     </div>
                 </DialogTrigger>
@@ -89,7 +90,9 @@ const AddLib = ({ manga, follow, isLoggedIn }: Props) => {
                     <div className=" bg-background p-4 rounded-md">
                         <DialogHeader>
                             <div className="flex justify-between items-center">
-                                <span className="text-xl">Add to Library</span>
+                                <span className="text-xl">
+                                    {t("addToLibDialogTitle")}
+                                </span>
                                 <DialogClose asChild>
                                     <Button
                                         type="button"
@@ -201,7 +204,7 @@ const AddLib = ({ manga, follow, isLoggedIn }: Props) => {
                                     className=" w-full sm:w-2/5 rounded-sm"
                                     variant={"secondary"}
                                 >
-                                    Cancel
+                                    {t("cancelBtn")}
                                 </Button>
                             </DialogClose>
 
@@ -222,7 +225,11 @@ const AddLib = ({ manga, follow, isLoggedIn }: Props) => {
                                     })
                                 }
                             >
-                                {pending ? "..." : follow ? "Update" : "Add"}
+                                {pending
+                                    ? "..."
+                                    : follow
+                                    ? t("UpdateBtn")
+                                    : t("addBtn")}
                             </Button>
                         </div>
                     </div>

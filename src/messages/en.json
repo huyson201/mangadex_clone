@@ -48,5 +48,41 @@
     "forums": "forums",
     "groups": "groups",
     "users": "users"
+  },
+  "detailManga": {
+    "publication": "PUBLICATION",
+    "addToLibBtn": "Add To Library",
+    "addToLibDialogTitle": "Add To Library",
+    "readChapterBtn": "Read",
+    "seeMoreDescBtn": "See more",
+    "cancelBtn": "Cancel",
+    "addBtn": "Add",
+    "updateBtn": "Update",
+    "genresTitle": "Genres",
+    "themesTitle": "Themes",
+    "demographic": "Demographic",
+    "formatTitle": "Format",
+    "readOrBuyTitle": "Read or Buy",
+    "trackTitle": "Track",
+    "alternativeTitles": "Alternative Titles"
+  },
+  "chapterList": {
+    "sortDescBtn": "Descending",
+    "sortAscBtn": "Ascending",
+    "chaptersTab": "Chapters",
+    "commentsTab": "Comment"
+  },
+  "listMangaTitles": {
+    "recently": "Recently added",
+    "latest": "Latest Updates",
+    "history": "Reading History",
+    "library": "Library",
+    "advancedSearch": "Advanced Search"
+  },
+  "common": {
+    "requiredLoginMessage": "You need to sign in to access this page.",
+    "signInBtn": "Sign in",
+    "registerBtn": "Register",
+    "settingsPageTitle": "Settings"
   }
 }

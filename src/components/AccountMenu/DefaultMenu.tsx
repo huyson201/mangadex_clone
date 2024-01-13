@@ -1,6 +1,11 @@
 "use client";
 import { signOutAction } from "@/actions/signout-action";
-import { FOLLOW_URL, PROFILE_URL, SING_UP_URL } from "@/constants";
+import {
+    FOLLOW_URL,
+    PROFILE_URL,
+    SETTINGS_URL,
+    SING_UP_URL,
+} from "@/constants";
 import { useStackMenu } from "@/contexts/StackMenuContext";
 import { cn } from "@/lib/utils";
 import { Bookmark, Droplet, LogOut, Settings, User, X } from "lucide-react";
@@ -91,11 +96,13 @@ function DefaultMenu({}: Props) {
             >
                 <div className="flex gap-2">
                     <MenuOption
+                        asChild
                         className="gap-2 w-2/4  hover:bg-accent"
-                        onClick={() => stackMenu?.push(THEME_SELECTION_MENU_ID)}
                     >
-                        <Settings />
-                        {t("settings")}
+                        <Link href={SETTINGS_URL}>
+                            <Settings />
+                            {t("settings")}
+                        </Link>
                     </MenuOption>
                     <MenuOption
                         className="gap-2 w-2/4 hover:bg-accent"

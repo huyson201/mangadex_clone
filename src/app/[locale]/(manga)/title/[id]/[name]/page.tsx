@@ -5,7 +5,7 @@ import { statusDotVariants } from "@/components/MangaStatus/MangaStatus";
 import StatisticInfo from "@/components/StatisticInfo/StatisticInfo";
 import Tag from "@/components/Tag/Tag";
 import Wrapper from "@/layouts/Wrapper/Wrapper";
-import { prisma } from "@/lib";
+import { Follow, prisma } from "@/lib";
 import {
     createTagLink,
     getCoverArtFromManga,
@@ -16,6 +16,7 @@ import {
 import { cn } from "@/lib/utils";
 import { getImageUrl, getMangaById, getStatistics } from "@/services/mangadex";
 import { Relationship } from "@/types";
+import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -30,7 +31,7 @@ type Props = {
 };
 
 const page = async ({ params }: Props) => {
-    const [manga, statisticsResult, session] = await Promise.all([
+    const [manga, statisticsResult, session, t] = await Promise.all([
         getMangaById(params.id, [
             "artist",
             "author",
@@ -41,6 +42,7 @@ const page = async ({ params }: Props) => {
         ]),
         getStatistics("manga", params.id),
         auth(),
+        getTranslations("detailManga"),
     ]);
     if (!manga) notFound();
 
@@ -163,9 +165,7 @@ const page = async ({ params }: Props) => {
                         <div className="flex items-center gap-2 ">
                             <AddLib
                                 isLoggedIn={!!session}
-                                follow={
-                                    follow && JSON.parse(JSON.stringify(follow))
-                                }
+                                follow={follow as Follow | undefined}
                                 manga={manga.result.data}
                             />
                             <ReadButton mangaId={manga.result.data.id} />
@@ -190,8 +190,8 @@ const page = async ({ params }: Props) => {
                                 )}
                             ></span>
                             <span className="uppercase sm:font-semibold text-foreground text-xs">
-                                PUBLICATION: {manga.result.data.attributes.year}
-                                ,{" "}
+                                {t("publication")}:{" "}
+                                {manga.result.data.attributes.year},{" "}
                                 <span>
                                     {manga.result.data.attributes.status}
                                 </span>
